@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "65f574e9669921c1bde28521"
+  },
+  "name": "CheeseBurgers",
+  "description": "Burger with cheese xD",
+  "price": 50000,
+  "image_url": "02a864b32c9647793a7fb0e7c7afb85e.png",
+  "createdAt": {
+    "$date": "2024-03-16T10:31:05.060Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-16T10:31:05.060Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65f575d5371378485bd1ada5"
+  },
+  "name": "Pizza BlackPepper",
+  "description": "Pizza",
+  "price": 50000,
+  "image_url": "34c562c2a884539dd2b494cd9ade40b6.png",
+  "createdAt": {
+    "$date": "2024-03-16T10:35:01.713Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-18T09:50:56.650Z"
+  },
+  "__v": 0
+}]

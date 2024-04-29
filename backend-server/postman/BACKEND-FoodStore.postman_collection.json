@@ -1,0 +1,510 @@
+{
+	"info": {
+		"_postman_id": "ee2cccbf-9de8-4a9c-b75b-9bcb45119585",
+		"name": "BACKEND-FoodStore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11321149"
+	},
+	"item": [
+		{
+			"name": "product",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZmZWQ0Y2M0MmRiYTQxNGE0NzU3NmEiLCJmdWxsTmFtZSI6InRlc3QiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ0b2tlbiI6W10sImNyZWF0ZWRBdCI6IjIwMjQtMDMtMjRUMDk6MDc6MjQuMzY0WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDMtMjRUMDk6MDc6MjQuMzY0WiIsImN1c3RvbWVySWQiOjIsIl9fdiI6MCwiaWF0IjoxNzExMjcxNjU3fQ.padxIXIw9QdppvWU413LAYvhtiIyyBn-8g9Ne5DOang",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Pizza",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Asss",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "50000",
+							"type": "text"
+						},
+						{
+							"key": "image_url",
+							"type": "file",
+							"src": "postman-cloud:///1eed1a35-cfdd-4ec0-bc4a-a7fb11cbfd22"
+						},
+						{
+							"key": "category",
+							"value": "Makanan",
+							"type": "text"
+						},
+						{
+							"key": "tags[]",
+							"value": "Drink",
+							"type": "text"
+						},
+						{
+							"key": "tags[]",
+							"value": "Food",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "categories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZiZjM1NjM5ODdkZDJhYzQ5YmViYTIiLCJmdWxsTmFtZSI6Ilpha3kiLCJlbWFpbCI6Inpha3kxMjNAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ0b2tlbiI6W10sImNyZWF0ZWRBdCI6IjIwMjQtMDMtMjFUMDg6NDQ6MDYuMzQxWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDMtMjNUMTI6NTQ6MzMuOTg3WiIsImN1c3RvbWVySWQiOjEsIl9fdiI6MCwiaWF0IjoxNzExMTk4NDg0fQ.1r30j1EwUnmOE6onyu5fVZMerAZzl63CvbGlt5lESZ4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Junk Food",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/categories/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"categories",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tag",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Drink",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/tags",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "fullName",
+							"value": "test",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						},
+						{
+							"key": "role",
+							"value": "user",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/auth/register/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZmZWQ0Y2M0MmRiYTQxNGE0NzU3NmEiLCJmdWxsTmFtZSI6InRlc3QiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ0b2tlbiI6W10sImNyZWF0ZWRBdCI6IjIwMjQtMDMtMjRUMDk6MDc6MjQuMzY0WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDMtMjRUMDk6MDc6MjQuMzY0WiIsImN1c3RvbWVySWQiOjIsIl9fdiI6MCwiaWF0IjoxNzExMjcxNjU3fQ.padxIXIw9QdppvWU413LAYvhtiIyyBn-8g9Ne5DOang",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "fullName",
+							"value": "Zaky",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "test@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						},
+						{
+							"key": "role",
+							"value": "user",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/auth/login/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "aut",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZiZjM1NjM5ODdkZDJhYzQ5YmViYTIiLCJmdWxsTmFtZSI6Ilpha3kiLCJlbWFpbCI6Inpha3kxMjNAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ0b2tlbiI6W10sImNyZWF0ZWRBdCI6IjIwMjQtMDMtMjFUMDg6NDQ6MDYuMzQxWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDMtMjFUMDk6MjY6MzYuNzQ3WiIsImN1c3RvbWVySWQiOjEsIl9fdiI6MCwiaWF0IjoxNzExMDE5NTEzfQ.AjWK5bmUJXPMgugtVvT9t9ttH6phRDVfFxY_AUF2CIM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:3000/auth/me/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"me",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZiZjM1NjM5ODdkZDJhYzQ5YmViYTIiLCJmdWxsTmFtZSI6Ilpha3kiLCJlbWFpbCI6Inpha3kxMjNAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ0b2tlbiI6W10sImNyZWF0ZWRBdCI6IjIwMjQtMDMtMjFUMDg6NDQ6MDYuMzQxWiIsInVwZGF0ZWRBdCI6IjIwMjQtMDMtMjNUMTI6NTQ6MzMuOTg3WiIsImN1c3RvbWVySWQiOjEsIl9fdiI6MCwiaWF0IjoxNzExMTk4NDg0fQ.1r30j1EwUnmOE6onyu5fVZMerAZzl63CvbGlt5lESZ4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/auth/logout/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"logout",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deliveryAddress",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZmZWQ0Y2M0MmRiYTQxNGE0NzU3NmEiLCJmdWxsTmFtZSI6InRlc3QiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ0b2tlbiI6W10sImNyZWF0ZWRBdCI6IjIwMjQtMDMtMjRUMDk6MDc6MjQuMzY0WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDMtMjRUMDk6MDc6MjQuMzY0WiIsImN1c3RvbWVySWQiOjIsIl9fdiI6MCwiaWF0IjoxNzExMjcxNjU3fQ.padxIXIw9QdppvWU413LAYvhtiIyyBn-8g9Ne5DOang",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "nama",
+							"value": "Jl Mawars12",
+							"type": "text"
+						},
+						{
+							"key": "kelurahan",
+							"value": "X",
+							"type": "text"
+						},
+						{
+							"key": "kecamatan",
+							"value": "Tabanan",
+							"type": "text"
+						},
+						{
+							"key": "kabupaten",
+							"value": "Tabanan",
+							"type": "text"
+						},
+						{
+							"key": "provinsi",
+							"value": "Bali",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/delivery-address/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"delivery-address",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cart",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZmZWQ0Y2M0MmRiYTQxNGE0NzU3NmEiLCJmdWxsTmFtZSI6InRlc3QiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ0b2tlbiI6W10sImNyZWF0ZWRBdCI6IjIwMjQtMDMtMjRUMDk6MDc6MjQuMzY0WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDMtMjRUMDk6MDc6MjQuMzY0WiIsImN1c3RvbWVySWQiOjIsIl9fdiI6MCwiaWF0IjoxNzExMjcxNjU3fQ.padxIXIw9QdppvWU413LAYvhtiIyyBn-8g9Ne5DOang",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"product\": { \"_id\": \"65f574e9669921c1bde28521\" },\r\n      \"qty\": 2\r\n    },\r\n    {\r\n      \"product\": { \"_id\": \"65f575d5371378485bd1ada5\" },\r\n      \"qty\": 3\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/carts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"carts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZmZWQ0Y2M0MmRiYTQxNGE0NzU3NmEiLCJmdWxsTmFtZSI6InRlc3QiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ0b2tlbiI6WyJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKZmFXUWlPaUkyTldabVpXUTBZMk0wTW1SaVlUUXhOR0UwTnpVM05tRWlMQ0ptZFd4c1RtRnRaU0k2SW5SbGMzUWlMQ0psYldGcGJDSTZJblJsYzNSQVoyMWhhV3d1WTI5dElpd2ljbTlzWlNJNkluVnpaWElpTENKMGIydGxiaUk2VzEwc0ltTnlaV0YwWldSQmRDSTZJakl3TWpRdE1ETXRNalJVTURrNk1EYzZNalF1TXpZMFdpSXNJblZ3WkdGMFpXUkJkQ0k2SWpJd01qUXRNRE10TWpSVU1EazZNRGM2TWpRdU16WTBXaUlzSW1OMWMzUnZiV1Z5U1dRaU9qSXNJbDlmZGlJNk1Dd2lhV0YwSWpveE56RXhNamN4TmpVM2ZRLnBhZHhJWEl3OVFkcHB2V1U0MTNMQVl2aHRpSXl5Qm4tOGc5TmU1RE9hbmciXSwiY3JlYXRlZEF0IjoiMjAyNC0wMy0yNFQwOTowNzoyNC4zNjRaIiwidXBkYXRlZEF0IjoiMjAyNC0wMy0yNFQwOToxNDoxNy45MjVaIiwiY3VzdG9tZXJJZCI6MiwiX192IjowLCJpYXQiOjE3MTE2Nzc4Mzh9.bxMGYgmEWqypfQerslmR5FTMG5S9nQdgVsB7TX_TXpI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"delivery_fee\": 10000,\r\n  \"delivery_address\": \"65ffef040d4a631d2c8384bf\"// Replace with actual user ID\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/order",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "invoice",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZmZWQ0Y2M0MmRiYTQxNGE0NzU3NmEiLCJmdWxsTmFtZSI6InRlc3QiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJ0b2tlbiI6W10sImNyZWF0ZWRBdCI6IjIwMjQtMDMtMjRUMDk6MDc6MjQuMzY0WiIsInVwZGF0ZWRBdCI6IjIwMjQtMDMtMjRUMDk6MDc6MjQuMzY0WiIsImN1c3RvbWVySWQiOjIsIl9fdiI6MCwiaWF0IjoxNzExMjcxNjU3fQ.padxIXIw9QdppvWU413LAYvhtiIyyBn-8g9Ne5DOang",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/invoice/66079249f45c6fc177498369",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"invoice",
+						"66079249f45c6fc177498369"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

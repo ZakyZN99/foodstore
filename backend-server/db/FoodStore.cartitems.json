@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "66062345bce66602bce2583f"
+  },
+  "user": {
+    "$oid": "65ffed4cc42dba414a47576a"
+  },
+  "product": {
+    "$oid": "65f574e9669921c1bde28521"
+  },
+  "__v": 0,
+  "image_url": "02a864b32c9647793a7fb0e7c7afb85e.png",
+  "name": "CheeseBurgers",
+  "price": 50000,
+  "qty": 2
+},
+{
+  "_id": {
+    "$oid": "66062345bce66602bce25840"
+  },
+  "user": {
+    "$oid": "65ffed4cc42dba414a47576a"
+  },
+  "product": {
+    "$oid": "65f575d5371378485bd1ada5"
+  },
+  "__v": 0,
+  "image_url": "34c562c2a884539dd2b494cd9ade40b6.png",
+  "name": "Pizza BlackPepper",
+  "price": 50000,
+  "qty": 3
+}]
