@@ -15,6 +15,7 @@ import { Navbar } from 'react-bootstrap'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
+     <Navbar />
       <Routes>
         <Route path='/' element={<App/>}>
           <Route index element={<Dashboard/>}/>
