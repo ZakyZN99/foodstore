@@ -10,23 +10,27 @@ import { AccountDetails } from './pages/detailAccount/index.jsx'
 import { Address } from './pages/address/index.jsx'
 import { AddNewAddress } from './pages/address/newaddress.jsx'
 import { Cart } from './pages/cart/index.jsx'
-import { Navbar } from 'react-bootstrap'
+import { Checkout } from './pages/cart/checkout.jsx'
+import { OrderData } from './pages/order/index.jsx'
+import { Invoice } from './pages/invoice/index.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<App/>}>
-          <Route index element={<App />}/>
+          <Route index element={<Dashboard />}/>
           <Route path="/categories/:id" element={<Dashboard/>} />
           <Route path="/tags/:id" element={<Dashboard/>} />
           <Route path="/logout" element={<Dashboard/>} />
-
+          <Route path='carts' element={<Cart/>}/>
+          <Route path='checkout' element={<Checkout/>}/>
           <Route path='login' element={<Login/>}/>
+          <Route path='/order' element={<OrderData/>}/>
+          <Route path='/invoice/:order_id' element={<Invoice/>}/>
 
           <Route path='register' element={<Register/>}/>
           <Route path='me' element={<AccountDetails/>}/>
-          <Route path='carts' element={<Cart/>}/>
           <Route path='address' element={<Address/>}/>
             <Route path='address/new-address' element={<AddNewAddress/>}/>
         </Route>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -28,9 +29,8 @@ export const Checkout = () => {
   };
 
   return (
-    <form
-      className=" text-white pl-20 max-w-[1440px] mx-auto border-1 p-3 mx-40 mt-10"
-      onSubmit={""}
+    <div
+      className=" text-white pl-20 max-w-[1440px] mx-auto border-1 p-3 mt-10"
     >
       <h1 className=" text-lg pb-4 text-left font-semibold">Checkout</h1>
       <div className="border-1 p-2 gap-1">
@@ -80,6 +80,6 @@ export const Checkout = () => {
           </form>
         </div>
       </div>
-    </form>
+    </div>
   );
 };

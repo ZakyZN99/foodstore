@@ -5,7 +5,8 @@ const {policyFor} = require('../../utils/index')
 const show = async (req, res, next) => {
     try {
         let {order_id} = req.params
-        let invoice = await Invoice.findOne({order: order_id})
+        let invoice = await Invoice
+                    .findOne({order: order_id})
                     .populate('order')
                     .populate('user')
         

@@ -1,7 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const [email, setEmail] = useState("")
@@ -13,7 +13,6 @@ export const Login = () => {
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
-  let navigate = useNavigate();
 
 
   const handleSubmit = async (e) => {
@@ -28,14 +27,14 @@ export const Login = () => {
         email,
         password,
       });
-      console.log(res.data.user);
+      console.log(JSON.stringify(res.data.user));
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
-      // setUserData(res.data.user);
+      setUserData(res.data.user);
       setIsLoggedIn(true);
 
       alert("Login Successful");
-      navigate("/", { replace: true });  
+      window.location.href= "/"
 
     } catch (e) {
       console.error("Error logging in:", e);  
@@ -50,7 +49,9 @@ export const Login = () => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
-      navigate("/", { replace: true });
+      window.location.href= "/"
+    }else{
+      setIsLoggedIn(false);
     }
   }, []);
 

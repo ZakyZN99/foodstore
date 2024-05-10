@@ -30,6 +30,11 @@ const deliveryAddressSchema = new Schema({
         required: [true, 'Provinsi harus diisi'],
         maxLength: [255, 'Maksimal karakter 255 karakter'] 
     },
+    detail: {
+        type: String,
+        required: [true, 'Detail harus diisi'],
+        maxLength: [1000, 'Maksimal karakter 255 karakter'] 
+    },
 
     user: {
         type: Schema.Types.ObjectId,

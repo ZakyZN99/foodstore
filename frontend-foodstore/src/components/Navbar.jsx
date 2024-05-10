@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import {
   IoPersonCircleOutline,
@@ -13,30 +14,42 @@ const Navbar = () => {
   const [searchInput, setSearchInput] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
 
     //Route ADD ITEM
     let navigate = useNavigate();
 
-    const  Carts = () =>{
+
+    const dummyCartItems = [
+      { id: 1, name: "Product 1", quantity: 1 },
+      { id: 2, name: "Product 2", quantity: 2 },
+    ];
+
+    const  handleViewCart = () =>{
       let path = '/carts';
       navigate(path);
+    }
+    const handleProfile = () =>{
+      // navigate('/me')
+      window.location.href = '/me'
     }
     
     const checkLoginStatus = async () => {
       try {
+        const token = localStorage.getItem('token');
+        
         const res = await axios.get("http://localhost:3000/auth/me", {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,
           },
         });
-        console.log(res)
         if (res.data.loggedIn) {
           setIsLoggedIn(true);
           setUserData(res.data.user);
         } else {
           setIsLoggedIn(false);
           setUserData(null);
-          navigate("/login");
+          window.location.href= "/login"
         }
       } catch (e) {
         console.error("Error checking login status:", e);
@@ -51,18 +64,19 @@ const Navbar = () => {
 
   useEffect(() =>{
     const token = localStorage.getItem('token');
-    const userDataFromStorage = localStorage.getItem('userData');
+    const userDataFromStorage = localStorage.getItem('user');
 
     if (token && userDataFromStorage) {
       setIsLoggedIn(true);
       setUserData(JSON.parse(userDataFromStorage));
+      setCartItems(dummyCartItems);
+      localStorage.setItem("cartItems", JSON.stringify(dummyCartItems));
     }
 
       const fetchCategories = async () => {
         try {
           const res = await axios.get('http://localhost:3000/api/categories');
           setCategories(res.data);
-          console.log(res.data);
         } catch (e) {
           console.error("Error fetching categories:", e);
         }
@@ -78,7 +92,6 @@ const Navbar = () => {
     try {
       const res = await axios.get(`http://localhost:3000/api/product?search=${searchInput}`)
       setProducts(res.data);
-      console.log(res.data)
     }catch(e){
       console.e('Error searching items:', e);
     }
@@ -88,7 +101,7 @@ const Navbar = () => {
     
     try {
       const token = localStorage.getItem('token');
-      console.log('Token:', token);
+      // console.log('Token:', token);
 
       if (!token) {
         throw new Error('Token not found in localStorage');
@@ -102,6 +115,7 @@ const Navbar = () => {
       console.log('Logout response:', response.data);
       
       localStorage.removeItem('token'); // Remove the token from localStorage
+      localStorage.removeItem('user'); // Remove the token from localStorage
       setIsLoggedIn(false);
       setUserData(null);
     navigate('/login'); // Redirect to the login page after logout
@@ -130,7 +144,13 @@ const Navbar = () => {
           />
         </div>
         <button>
-          <IoCart size={30} onClick={Carts} />
+          
+          {cartItems.length > 0 && (
+            <span className="bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-end justify-center">
+              {cartItems.length}
+            </span>
+          )}
+          <IoCart size={30} onClick={handleViewCart} />
         </button>
         {isLoggedIn ? (
           <button
@@ -149,11 +169,26 @@ const Navbar = () => {
               size={30}
               title="Nama"
             /></button>}
-        {isDropdownOpen && isLoggedIn && (
-          <div className="absolute right-[200px] mt-[150px] w-40 bg-white border border-gray-200 shadow-lg rounded-md z-10 text-white bg-transparent">
+        {isDropdownOpen && isLoggedIn && userData.role === "user" &&(
+          <div className="absolute right-[10%] mt-[160px] w-40 bg-white border border-gray-200 shadow-lg rounded-md z-10 text-white bg-transparent">
             <ul className="py-1">
-              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleProfile}>
                 Profile
+              </li>
+              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
+                Logout
+              </li>
+            </ul>
+          </div>
+        )}
+        {isDropdownOpen && isLoggedIn && userData.role === "admin" &&(
+          <div className="absolute right-[10%] mt-[160px] w-40 bg-white border border-gray-200 shadow-lg rounded-md z-10 text-white bg-transparent">
+            <ul className="py-1">
+              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleProfile}>
+                Profile
+              </li>
+              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                Administrator
               </li>
               <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
                 Logout

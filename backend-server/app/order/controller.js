@@ -8,7 +8,7 @@ const {Types} = require('mongoose');
     const store = async (req, res, next) => {
         try {
             let{delivery_fee, delivery_address} = req.body
-            let items = await CartItem.find({user: req.user._id})
+            let items = await CartItem.find({user: req.user._id}).populate('product')
             if(!items){
                 return res.json({
                     error: 1,
@@ -44,6 +44,7 @@ const {Types} = require('mongoose');
             order.save();
             await CartItem.deleteMany({user: req.user._id});
             return res.json(order);
+
         } catch (err) {
             if(err && err.name === 'Validation Error'){
                 return res.json({
@@ -63,6 +64,7 @@ const index = async (req, res, next) => {
         let order = await Order.find({user: req.user._id})
         .skip(parseInt(skip))
         .limit(parseInt(limit))
+        .populate('order_item')
         .sort('-createdAt');
 
         return res.json({

@@ -1,47 +1,98 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const AccountDetails = () => {
-  const [email, setEmail] = useState("")
+  const [userData, setUserData] = useState([])
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userDataFromStorage = localStorage.getItem('user');
+    if(token && userDataFromStorage){
+      setUserData(JSON.parse(userDataFromStorage))
+      setIsLoggedIn(true);
+    }
+    const handleGetProfile = async () => {
+    
+      try {
+        const res = await axios.get("http://localhost:3000/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserData(res.data)
+      } catch (error) {
+        console.error(error)
+      }
+    };
+    handleGetProfile();
+  },[])
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Perform login logic here
-    console.log('Email:', email);
-  };
+  let navigate = useNavigate();
+
+  const handleAddress = () => {
+    navigate('/address')
+  }
+
+  const handleProfile = () => {
+    navigate('/me')
+  }
+
+  const handleOrder = () => {
+    navigate('/order')
+  }
+  
+  const handleCategories = () => {
+    navigate('/category')
+  }
+
+  const handleTags = () => {
+    navigate('/tags')
+  }
+
+  const handleLogout = () => {
+    console.log('logout')
+  }
 
   return (
     <div className="text-white pl-20 max-w-[1440px] mx-auto">
-      <form className="max-w-[900px] border-1 p-3 mx-40 mt-10" onSubmit={handleSubmit}>
+      <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10" >
         <h1 className=" text-lg pb-8 text-left font-semibold">
           Account
         </h1>
         <div className="border-1 p-2 flex gap-1">
             <div className="flex flex-col w-[20%]">
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] bg-blue-600">Profil</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px]">Order</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px]">Address</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px]">Logout</button>
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] bg-blue-600 transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProfile}>Profil</button>
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleOrder}>Order</button>
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleAddress}>Address</button>
+                {isLoggedIn && userData.role === "admin" && (
+                  <>
+                    <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleCategories}>Categories</button>
+                    <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleTags}>Tags</button>
+                  </>
+                )}
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleLogout}>Logout</button>
             </div>
             <div className="border-1 p-2 w-[80%]">
-              <form>
+              <form >
                 <h1 className="text-center pb-3 border-b-2">Detail Akun</h1>
                 <div className="">
                   <span className="pr-[150px]">Nama</span>
-                  <span className="">Zaky Zamani</span>
+                  <span className="">{userData.fullName}</span>
                 </div>
                 <div className="">
                   <span className="pr-[155px]">Email</span>
-                  <span className="">zakyzn1999@gmail.com</span>
+                  <span className="">{userData.email}</span>
                 </div>
                 <div className="">
                   <span className="pr-[162px]">Role</span>
-                  <span className="">User</span>
+                  <span className="">{userData.role}</span>
                 </div>
               </form>
             </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

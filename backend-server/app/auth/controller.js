@@ -23,6 +23,29 @@ const register = async(req, res, next) => {
         next(err);
     }
 }
+// const cekEmail = async(req, res, next) => {
+//     try {
+//         const { email } = req.params;
+
+//         const existingUser = await User.findOne({ email });
+//         if (existingUser) {
+//         return res.status(400).json({
+//             error: 1,
+//             message: 'Email already exists. Please use a different email.',
+//             fields: err.errors
+//         });
+//         }
+//     } catch (err) {
+//         if(err & err.name === 'ValidationError'){
+//             return res.json({
+//                 error: 1,
+//                 message: err.message,
+//                 fields: err.errors
+//             });
+//         }
+//         next(err);
+//     }
+// }
 
 const localStrategy = async (email, password, done) => {
     try {

@@ -1,31 +1,107 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Dropdown, DropdownMenu, DropdownToggle } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
 
 export const AddNewAddress = () => {
-  const [email, setEmail] = useState("")
+  const [userData, setUserData] = useState([])
+  const [addressProvinces, setAddressProvinces] = useState([])
+  const [addressProvincesId, setAddressProvincesId] = useState([])
+  const [addressKabupaten, setAddressKabupaten] = useState([])
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [selectedProvince, setSelectedProvince] = useState(null);
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Perform login logic here
-    console.log('Email:', email);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userDataFromStorage = localStorage.getItem('user');
+    if(token ){
+      setIsLoggedIn(true);
+      setUserData(JSON.parse(userDataFromStorage))
+    }
+    const handleAddressProv = async() => {
+      try {
+        const resProv = await axios.get("https://zakyzn99.github.io/api-wilayah-indonesia/api/provinces.json");
+        setAddressProvinces(resProv.data);
+        setAddressProvincesId(resProv.data.map((province) => province.name));
+        console.log(resProv.data);
+
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    handleAddressProv();
+  },[])
+
+  useEffect(() => {
+    const handleAddressKab = async () => {
+      if (selectedProvince) {
+        try {
+          const resKab = await axios.get(
+            `http://zakyzn99.github.io/api-wilayah-indonesia/api/regencies/${selectedProvince}.json`
+          );
+          setAddressKabupaten(resKab.data);
+          console.log(resKab);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+    handleAddressKab();
+  }, [selectedProvince])
+
+  const handleProvinceSelect = (province) => {
+    setSelectedProvince(province);
   };
+
+  let navigate = useNavigate();
+
+  const handleAddress = () => {
+    navigate('/address')
+  }
+
+  const handleProfile = () => {
+    navigate('/me')
+  }
+
+  const handleOrder = () => {
+    navigate('/order')
+  }
+  
+  const handleCategories = () => {
+    navigate('/category')
+  }
+
+  const handleTags = () => {
+    navigate('/tags')
+  }
+
+  const handleLogout = () => {
+    console.log('logout')
+  }
 
   return (
     <div className="text-white pl-20 max-w-[1440px] mx-auto">
-      <form className="max-w-[900px] border-1 p-3 mx-40 mt-10" onSubmit={handleSubmit}>
+      <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10" >
         <h1 className=" text-lg pb-8 text-left font-semibold">
           Account
         </h1>
         <div className="border-1 p-2 flex gap-1">
-            <div className="flex flex-col w-[20%]">
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1">Profil</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1">Order</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out bg-blue-600 hover:bg-blue-600 hover:translate-y-1">Address</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1">Logout</button>
+        <div className="flex flex-col w-[20%]">
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProfile}>Profil</button>
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleOrder}>Order</button>
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] bg-blue-600 transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleAddress}>Address</button>
+                {isLoggedIn && userData.role === "admin" && (
+                  <>
+                    <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleCategories}>Categories</button>
+                    <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleTags}>Tags</button>
+                  </>
+                )}
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleLogout}>Logout</button>
             </div>
             <div className="border-1 p-2 w-[80%]">
-              <form>
+              <div>
                 <h1 className="text-center pb-3 border-b-2">New Address</h1>
                 <div className="flex gap-4">
                   <div className="pt-2 flex flex-col  w-[50%]">
@@ -39,10 +115,20 @@ export const AddNewAddress = () => {
                     <label>Provinsi</label>
                     <Dropdown className="pb-3">
                     <DropdownToggle className=" w-full flex justify-between items-center  ">
-                        Pilih lokasi...
+                    {selectedProvince ? selectedProvince.name : "Pilih provinsi"}
                       </DropdownToggle>
                       <DropdownMenu>
-
+                      {addressProvinces.map((province) => (
+                        <button
+                          key={province.id}
+                          onClick={() => {
+                            handleProvinceSelect(province);
+                          }}
+                          className="dropdown-item"
+                        >
+                          {province.name}
+                        </button>
+                      ))}
                       </DropdownMenu>
                     </Dropdown>
 
@@ -79,10 +165,10 @@ export const AddNewAddress = () => {
                 </div>
                 <button className=" bg-red-500 w-full h-[30px] rounded-md">Simpan</button>
                 
-              </form>
+              </div>
             </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

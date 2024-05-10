@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axios from 'axios';
 
 const Register = () => {
   const [fullName, setfullName] = useState("");
@@ -11,12 +12,48 @@ const Register = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Perform login logic here
-    console.log("Email:", email);
-    console.log("Password:", password);
+
+    if (!fullName || !email || !password) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      const checkEmailResponse = await axios.get(`http://localhost:3000/auth/cekEmail/${email}`);
+      if (checkEmailResponse.data.message == "Email already exists. Please use a different email.") {
+        alert('Email already exists. Please use a different email.');
+        return;
+      }
+      const response = await axios.post("http://localhost:3000/auth/register", {
+        fullName,
+        email,
+        password,
+      });
+      console.log("Registration successful:", response.data);
+      alert("Registration successful!");
+      // Optionally, you can redirect to another page or perform other actions
+    } catch (error) {
+      console.error("Error registering:", error);
+      if (error.response) {
+        alert("Response data: ", error.response.data.message);
+      }
+      alert('Registration failed. Please try again.');
+    }
   };
+
+  const validateEmail = (email) => {
+    // Email validation logic
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
   return (
     <div className="text-white pl-20 max-w-[1440px] mx-auto pt-10">
       <form
