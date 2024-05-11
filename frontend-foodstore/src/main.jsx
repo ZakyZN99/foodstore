@@ -13,6 +13,8 @@ import { Cart } from './pages/cart/index.jsx'
 import { Checkout } from './pages/cart/checkout.jsx'
 import { OrderData } from './pages/order/index.jsx'
 import { Invoice } from './pages/invoice/index.jsx'
+import AddCategories from './pages/admin/category/index.jsx'
+import AddTag from './pages/admin/tag/index.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -28,6 +30,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='login' element={<Login/>}/>
           <Route path='/order' element={<OrderData/>}/>
           <Route path='/invoice/:order_id' element={<Invoice/>}/>
+          <Route path='/add-category' element={<AddCategories/>}/>
+          <Route path='/add-tag' element={<AddTag/>}/>
 
           <Route path='register' element={<Register/>}/>
           <Route path='me' element={<AccountDetails/>}/>

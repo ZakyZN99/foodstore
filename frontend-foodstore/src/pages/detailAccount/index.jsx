@@ -44,17 +44,17 @@ export const AccountDetails = () => {
   }
   
   const handleCategories = () => {
-    navigate('/category')
+    navigate('/add-category')
   }
 
   const handleTags = () => {
-    navigate('/tags')
+    navigate('/add-tag')
   }
 
-  const handleLogout = () => {
-    console.log('logout')
-  }
-
+  const handleProduct = () => {
+    navigate("/add-product");
+    };
+    
   return (
     <div className="text-white pl-20 max-w-[1440px] mx-auto">
       <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10" >
@@ -70,9 +70,9 @@ export const AccountDetails = () => {
                   <>
                     <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleCategories}>Categories</button>
                     <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleTags}>Tags</button>
+                    <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProduct}>Product</button>
                   </>
                 )}
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleLogout}>Logout</button>
             </div>
             <div className="border-1 p-2 w-[80%]">
               <form >

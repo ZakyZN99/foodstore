@@ -49,35 +49,35 @@ export const Address = () => {
   }
   
   const handleCategories = () => {
-    navigate('/category')
+    navigate('/add-category')
   }
 
   const handleTags = () => {
-    navigate('/tags')
+    navigate('/add-tag')
   }
 
-  const handleLogout = () => {
-    console.log('logout')
-  }
+  const handleProduct = () => {
+    navigate("/add-product");
+    };
 
   return (
     <div className="text-white pl-20 max-w-[1440px] mx-auto">
       <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10" >
         <h1 className=" text-lg pb-8 text-left font-semibold">
-          Account
+          Address
         </h1>
         <div className="border-1 p-2 flex gap-1">
             <div className="flex flex-col w-[20%]">
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProfile}>Profil</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleOrder}>Order</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] bg-blue-600 transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleAddress}>Address</button>
-                {isLoggedIn && userData.role === "admin" && (
-                  <>
-                    <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleCategories}>Categories</button>
-                    <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleTags}>Tags</button>
-                  </>
-                )}
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleLogout}>Logout</button>
+            <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProfile}>Profil</button>
+            <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleOrder} >Order</button>
+            <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] bg-blue-600  transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleAddress}>Address</button>
+            {isLoggedIn && userData.role === "admin" && (
+            <>
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleCategories}>Categories</button>
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleTags}>Tags</button>
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProduct}>Product</button>
+            </>
+            )}
             </div>
             <div className="border-1 p-2 w-[80%]">
               <form>

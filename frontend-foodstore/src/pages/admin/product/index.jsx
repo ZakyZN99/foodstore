@@ -1,15 +1,14 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const AddTag = () => {
+const AddProduct = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userData, setUserData] = useState([])
-    const [tagData, setTagData] = useState([])
-    const [addTagName, setAddTagName] = useState([])
-    const [editTagId, setEditTagId] = useState(null);
-    const [editTagName, setEditTagName] = useState("");
-
+    const [categoryData, setCategoryData] = useState([])
+    const [addCategoryName, setAddCategoryName] = useState([])
+    const [editCategoryId, setEditCategoryId] = useState(null);
+    const [editCategoryName, setEditCategoryName] = useState("");
 
     useEffect(()=> {
         const token = localStorage.getItem('token');
@@ -18,23 +17,22 @@ const AddTag = () => {
             setUserData(JSON.parse(userDataFromStorage))
             setIsLoggedIn(true);
         }
-        const fetchTags= async () => {
+        const fetchCategories= async () => {
             try {
-                const res = await axios.get('http://localhost:3000/api/tags');
-                setTagData(res.data);
-                console.log(res.data);
+                const res = await axios.get('http://localhost:3000/api/categories');
+                setCategoryData(res.data);
             } catch (e) {
                 console.error(e)
             }
         }
-        fetchTags()
+        fetchCategories()
     },[])
 
-    const handleAddTags = async () => {
+    const handleAddCategory = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.post("http://localhost:3000/api/tags/", {
-                name: addTagName,
+            const response = await axios.post("http://localhost:3000/api/categories/", {
+                name: addCategoryName,
             },
             {
             headers: {
@@ -42,27 +40,27 @@ const AddTag = () => {
                 },
             });
             console.log(`New Category: ${response.data}`);
-            setTagData([...tagData, response.data]);
-            setAddTagName("");
+            setCategoryData([...categoryData, response.data]);
+            setAddCategoryName("");
         } catch (e) {
             console.error(e)
         }
     }
 
-    const handleDeleteTags = async (tagId) => {
-        if (window.confirm("Are you sure you want to delete this tag?")) {
+    const handleDeleteCategory = async (categoryId) => {
+        if (window.confirm("Are you sure you want to delete this category?")) {
             try {
                 const token = localStorage.getItem("token");
                 await axios.delete(
-                `http://localhost:3000/api/tags/${tagId}`,
+                `http://localhost:3000/api/categories/${categoryId}`,
                 {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
                 }
             );
-            setTagData((prevCategories) =>
-            prevCategories.filter((tag) => tag._id !== tagId)
+        setCategoryData((prevCategories) =>
+        prevCategories.filter((cat) => cat._id !== categoryId)
         );
             alert("Category deleted successfully.");
         } catch (error) {
@@ -71,31 +69,31 @@ const AddTag = () => {
         }
     };
 
-    const handleEditTag = async () => {
-        const token = localStorage.getItem("token");
-        try {
-            const response = await axios.put(
-            `http://localhost:3000/api/tags/${editTagId}`,
-            {
-                name: editTagName,
-            },{
-                headers: {
-                Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-            console.log(`Updated Category: ${response.data}`);
-            setTagData((prevCategories) =>
-            prevCategories.map((tag) =>
-            tag._id === editTagId ? response.data : tag
-        )
-        );
-            setEditTagId(null);
-            setEditTagName("");
-        } catch (e) {
-            console.error(e);
-            }
-        };
+    const handleEditCategory = async () => {
+    const token = localStorage.getItem("token");
+    try {
+        const response = await axios.put(
+        `http://localhost:3000/api/categories/${editCategoryId}`,
+        {
+            name: editCategoryName,
+        },{
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    console.log(`Updated Category: ${response.data}`);
+    setCategoryData((prevCategories) =>
+        prevCategories.map((cat) =>
+        cat._id === editCategoryId ? response.data : cat
+    )
+    );
+        setEditCategoryId(null);
+        setEditCategoryName("");
+    } catch (e) {
+        console.error(e);
+        }
+    };
 
     let navigate = useNavigate();
 
@@ -118,15 +116,14 @@ const AddTag = () => {
     const handleTags = () => {
     navigate("/add-tag");
     };
-
     const handleProduct = () => {
         navigate("/add-product");
-    };
+        };
 
 return (
-<div className="text-white pl-20 max-w-[1440px] mx-auto">
+    <div className="text-white pl-20 max-w-[1440px] mx-auto">
     <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10">
-        <h1 className=" text-lg pb-8 text-left font-semibold">Tags</h1>
+        <h1 className=" text-lg pb-8 text-left font-semibold">Product</h1>
         <div className="border-1 p-2 flex gap-1">
             <div className="flex flex-col w-[20%]">
             <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProfile}>Profil</button>
@@ -135,75 +132,75 @@ return (
             {isLoggedIn && userData.role === "admin" && (
             <>
                 <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleCategories}>Categories</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] bg-blue-600 transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleTags}>Tags</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProduct}>Product</button>
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleTags}>Tags</button>
+                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] bg-blue-600 transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProduct}>Product</button>
             </>
             )}
             </div>
         <div className="border-1 p-2 w-[80%]">
             <form>
-            <h1 className="text-center pb-3 border-b-2">Tags</h1>
-                <div className="pt-2">
-                <label>Add Tag: </label>
+            <h1 className="text-center pb-3 border-b-2">New Product</h1>
+            <div className="pt-2">
+                <label>Add Category: </label>
                 <span> </span>
-                <input className="w-[35%] text-black pl-2 rounded-md" type="text" value={addTagName} onChange={(e) => setAddTagName(e.target.value)}/>
+                <input className="w-[35%] text-black pl-2 rounded-md" type="text" value={addCategoryName} onChange={(e) => setAddCategoryName(e.target.value)}/>
                 <span> </span>
-                <button className=" bg-green-600 text-black h-[25px] w-[150px] transition duration-200 ease-in-out hover:bg-blue-600 rounded-md" onClick={handleAddTags}>Save</button>
-                </div>
-            <div>
-                <table className="w-full border-collapse">
-                <thead className=" border-b-2">
-                    <tr>
-                        <th className="p-2">No.</th>
-                        <th className="p-2">Tag Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {tagData.map((tag, index)=> (
-                        <tr key={tag._id}>
+                <button className=" bg-green-600 text-black h-[25px] w-[150px] transition duration-200 ease-in-out hover:bg-blue-600 rounded-md" onClick={handleAddCategory}>Save</button>
+            </div>
+                <div>
+                    <table className="w-full border-collapse">
+                    <thead className=" border-b-2">
+                        <tr>
+                            <th className="p-2">No.</th>
+                            <th className="p-2">Category Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {categoryData.map((catg, index)=> (
+                        <tr key={catg._id}>
                         <td className="p-2">{index +1}</td>
                         <td className="p-2">
-                            {editTagId === tag._id ? (
+                            {editCategoryId === catg._id ? (
                             <input
                             type="text"
                             className="text-black"
-                            value={editTagName}
+                            value={editCategoryName}
                             onChange={(e) =>
-                                setEditTagName(e.target.value)
+                                setEditCategoryName(e.target.value)
                             }
                             />
                         ) : (
-                            tag.name
+                            catg.name
                         )}
                         </td>
                         <td className="p-2">
-                        {editTagId === tag._id ? (
+                        {editCategoryId === catg._id ? (
                             <button type="button" className="bg-blue-600 text-white h-[25px] px-[10px] rounded-md"
-                            onClick={handleEditTag}>Update</button>
+                            onClick={handleEditCategory}>Update</button>
                         ) : (
                             <>
                                 <button type="button" className="bg-yellow-500 text-black h-[25px] px-[10px] rounded-md"
                                 onClick={() => {
-                                setEditTagId(tag._id);
-                                setEditTagName(tag.name);
+                                setEditCategoryId(catg._id);
+                                setEditCategoryName(catg.name);
                                 }}>Edit</button>
                                 <span> </span>
                                 <button className="bg-red-600 text-white h-[25px] px-[10px] rounded-md"
-                                onClick={() => handleDeleteTags(tag._id)}>Delete</button>
+                                onClick={() => handleDeleteCategory(catg._id)}>Delete</button>
                             </>
                         )}
                         </td>
                     </tr>
                     ))}
-                </tbody>
-                </table>
-            </div>
+                    </tbody>
+                    </table>
+                </div>
             </form>
         </div>
         </div>
-        </div>
+        </div>  
     </div>
-    );
+);
 };
 
-export default AddTag;
+export default AddProduct;
