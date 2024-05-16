@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { formatPrice } from "../../utils";
 
 export const Dashboard = () => {
   const [products, setProducts] = useState([]);
@@ -46,6 +47,7 @@ export const Dashboard = () => {
         console.error("Error fetching categories:", e);
       }
     };
+    
     fetchTags();
     fetchProducts();
   }, []);
@@ -184,12 +186,4 @@ export const Dashboard = () => {
       </div>
     </div>
   );
-};
-
-const formatPrice = (price) => {
-  const parts = price.toString().split(".");
-  const formattedPrice =
-    parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
-    (parts[1] ? "," + parts[1] : "");
-  return `Rp. ${formattedPrice}`;
 };

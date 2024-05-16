@@ -4,11 +4,11 @@ const config = require('../config');
 const Product = require('./model');
 const Category = require('../category/model');
 const Tag = require('../tag/model');
+const { ObjectId } = require('mongoose').Types;
 
 const store = async(req, res, next) => {
     try{
         let payload = req.body;
-        // console.log(payload)
 
         // Update karna ada relasi dengan category
         if(payload.category){
@@ -23,16 +23,31 @@ const store = async(req, res, next) => {
         }
         
         // Update karna ada relasi dengan tags
-        if(payload.tags && payload.tags.length > 0){
-            let tags = 
-                await Tag.find({
-                    name: {$in: payload.tags}});
-                    if(tags.length){
-                        payload = {...payload, tags: tags.map(tag => tag._id)};
-                    }else{
-                        delete payload.tags;
-                    }
-        }
+        // if(payload.tags && payload.tags.length > 0){
+        //     let tags = 
+        //         await Tag.find({
+        //             name: {$in: payload.tags}});
+        //             if(tags.length){
+        //                 payload = {...payload, tags: tags.map(tag => tag._id)};
+        //             }else{
+        //                 delete payload.tags;
+        //             }
+        // }
+        if (payload.tags && Array.isArray(payload.tags) && payload.tags.length > 0) {
+            let tagIds = [];
+            for (const tagName of payload.tags) {
+              let tag = await Tag.findOne({ name: tagName });
+              if (tag) {
+                tagIds.push(tag._id);
+              }
+            }
+            if (tagIds.length > 0) {
+              payload.tags = tagIds; // Assign the array of ObjectIds to payload.tags
+            } else {
+              delete payload.tags; // Remove tags field if no valid tags found
+            }
+          }
+        
 
 
         if(req.file){
@@ -186,7 +201,7 @@ const destroy = async (req, res, next) => {
 
 const index = async(req, res, next) => {
     try {
-        let{skip=0, limit=10, q= '', category='', tags=[], search} = req.query;
+        let{skip=0, q= '', category='', tags=[], search} = req.query;
 
         let criteria = {};
         if(q.length){
@@ -224,7 +239,6 @@ const index = async(req, res, next) => {
         let count  = await Product.find().countDocuments();
         let product = await Product.find(criteria)
         .skip(parseInt(skip))
-        .limit(parseInt(limit))
         .populate('category')
         .populate('tags')
         return res.json({

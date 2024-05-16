@@ -89,10 +89,39 @@ const search = async (req, res, next) => {
     }
 }
 
+const showTagByCategory = async (req, res, next) => {
+    try {
+        const { category } = req.params;
+        const category_id = await Category.findOne({name: {$regex: category, $options: 'i'}});
+        const products = await Product.find({category: category_id});
+        let tagIds = [];
+        products.forEach(product => {
+        product.tags.forEach(tag => {
+            if(!tagIds.includes(tag)) {
+            tagIds.push(tag)
+            }
+        });
+        });
+        const tags = await Tag.find({_id: { $in: tagIds}});
+        res.json(tags);
+        }catch(err) {
+            if(err && err.name === 'ValidationError'){
+                return res.json({
+            error: 1, 
+            message: err.message, 
+            fields: err.errors
+            });
+        }
+        next(err);
+        }
+    }
+
+
 module.exports = {
     store,
     index,
     update,
     search,
-    destroy
+    destroy,
+    showTagByCategory
 }

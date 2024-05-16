@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { DropdownButton } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { formatPrice } from "../../utils";
 
 export const OrderData = () => {
     const [userData, setUserData] = useState([]);
@@ -158,10 +159,3 @@ export const OrderData = () => {
     </div>
     );
 };
-const formatPrice = (price) => {
-    const parts = price.toString().split(".");
-    const formattedPrice =
-        parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
-        (parts[1] ? "," + parts[1] : "");
-    return `Rp. ${formattedPrice}`;
-};  
