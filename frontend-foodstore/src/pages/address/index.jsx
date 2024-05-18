@@ -6,7 +6,7 @@ export const Address = () => {
   const [userData, setUserData] = useState([])
   const [addressDeliv, setAddressDeliv] = useState([])
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [editAddressId, setEditAddressId] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -29,6 +29,45 @@ export const Address = () => {
     }
     handleAddress();
   },[])
+
+  const handleDeleteAddress = async (addressId) => {
+    try {
+        const res = await axios.delete(`http://localhost:3000/api/delivery-address/${addressId}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+        if (res.status === 200) {
+            // Filter out the deleted address from the addressDeliv state
+            setAddressDeliv(addressDeliv.filter((address) => address._id !== addressId));
+        }
+    } catch (error) {
+        console.error("Error deleting address:", error);
+    }
+};
+
+const handleEditAddress = (addressId, event) => {
+  event.preventDefault();
+  setEditAddressId(addressId);
+};
+
+const handleSaveAddress = async (addressId, updatedAddress) => {
+  try {
+    const res = await axios.put(`http://localhost:3000/api/delivery-address/${addressId}`, updatedAddress, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    if (res.status === 200) {
+      setAddressDeliv(addressDeliv.map(address =>
+        address._id === addressId ? { ...address, ...updatedAddress } : address
+      ));
+      setEditAddressId(null);
+    }
+  } catch (error) {
+    console.error("Error updating address:", error);
+  }
+}
   
   let navigate = useNavigate();
 
@@ -93,14 +132,23 @@ export const Address = () => {
                                 <th className="p-2">Detail</th>
                             </tr>
                         </thead>
-                        {addressDeliv.map((address) => (
-                        <tbody key={address._id}>
-                            <tr >
-                                <td className="p-2">{address.nama}</td>
-                                <td className="p-2">{address.detail} {address.kelurahan}, {address.kecamatan}, {address.kabupaten}, {address.provinsi}</td>
+                                <tbody>
+                          {addressDeliv.map((address) => (
+                            <tr key={address._id}>
+                              <td className="p-2">{editAddressId === address._id ? <input type="text" className="text-black" value={address.nama} onChange={(e) => setAddressDeliv(addressDeliv.map(a => a._id === address._id ? { ...a, nama: e.target.value } : a))} /> : address.nama}</td>
+                              <td className="p-2">{editAddressId === address._id ? <input type="text" className="text-black" value={address.detail} onChange={(e) => setAddressDeliv(addressDeliv.map(a => a._id === address._id ? { ...a, detail: e.target.value } : a))} /> : `${address.detail} ${address.kelurahan}, ${address.kecamatan}, ${address.kabupaten}, ${address.provinsi}`}</td>
+                              <td className="p-2">
+                                {editAddressId === address._id ? (
+                                  <button className="bg-blue-600 text-white pl-[10px] pr-[10px] pt-1 pb-1 rounded-md font-medium transition duration-200 ease-in-out hover:bg-red-700 hover:translate-y-1" onClick={() => handleSaveAddress(address._id, { nama: address.nama, detail: address.detail })}>Save</button>
+                                ) : (
+                                  <button className="bg-blue-600 text-white pl-[10px] pr-[10px] pt-1 pb-1 rounded-md font-medium transition duration-200 ease-in-out hover:bg-red-700 hover:translate-y-1" onClick={(e) => handleEditAddress(address._id, e)}>Edit</button>
+                                )}
+                                <span> </span>
+                                <button className="bg-red-600 text-white pl-[10px] pr-[10px] pt-1 pb-1 rounded-md font-medium transition duration-200 ease-in-out hover:bg-blue-700 hover:translate-y-1" onClick={() => handleDeleteAddress(address._id)}>Delete</button>
+                              </td>
                             </tr>
+                          ))}
                         </tbody>
-                        ))}
                     </table>
               </div>
               </form>

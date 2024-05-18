@@ -40,6 +40,8 @@ const Navbar = () => {
         if (res.data.loggedIn) {
           setIsLoggedIn(true);
           setUserData(res.data.user);
+          localStorage.removeItem('token'); // Remove the token from localStorage
+      localStorage.removeItem('user');
         } else {
           setIsLoggedIn(false);
           setUserData(null);
@@ -57,42 +59,48 @@ const Navbar = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  useEffect(() =>{
+  useEffect(() => {
     const token = localStorage.getItem('token');
     const userDataFromStorage = localStorage.getItem('user');
 
     if (token && userDataFromStorage) {
-      setIsLoggedIn(true);
-      setUserData(JSON.parse(userDataFromStorage));
+        setIsLoggedIn(true);
+        setUserData(JSON.parse(userDataFromStorage));
     }
 
-      const fetchCategories = async () => {
+    const fetchCategories = async () => {
         try {
-          const res = await axios.get('http://localhost:3000/api/categories');
-          setCategories(res.data);
+            const res = await axios.get('http://localhost:3000/api/categories');
+            setCategories(res.data);
         } catch (e) {
-          console.error("Error fetching categories:", e);
+            console.error("Error fetching categories:", e);
         }
-      };
+    };
 
-      const fetchCartItems = async () => {
+    const fetchCartItems = async () => {
         try {
-          const token = localStorage.getItem('token');
-          const res = await axios.get("http://localhost:3000/api/carts", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setCartItems(res.data);
-          console.log(res.data);
+            if (token) {
+                const res = await axios.get("http://localhost:3000/api/carts", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setCartItems(res.data);
+            } else {
+                // If not logged in, set cart items to an empty array or handle as needed
+                setCartItems([]);
+                // Or you could redirect to the login page here if desired
+                // window.location.href = "/login";
+            }
         } catch (e) {
-          console.error("Error fetching cart items:", e);
+            console.error("Error fetching cart items:", e);
         }
-      };
-      fetchCategories();
-      fetchCartItems();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+    };
+
+    fetchCategories();
+    fetchCartItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
 
   

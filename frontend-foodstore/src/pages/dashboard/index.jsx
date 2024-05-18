@@ -115,6 +115,14 @@ export const Dashboard = () => {
   const addToCart = async (productId, event) => {
     
     const token = localStorage.getItem("token");
+
+    if (!token) {
+      // Redirect to the login page
+      window.location.href = "/login"; 
+      localStorage.removeItem("token");
+    // Modify the URL as needed
+      return; // Stop further execution
+  }
   
     try {
       const existingItem = cart.find((item) => item.product._id === productId);
