@@ -19,12 +19,6 @@ const Navbar = () => {
     //Route ADD ITEM
     let navigate = useNavigate();
 
-
-    const dummyCartItems = [
-      { id: 1, name: "Product 1", quantity: 1 },
-      { id: 2, name: "Product 2", quantity: 2 },
-    ];
-
     const  handleViewCart = () =>{
       let path = '/carts';
       navigate(path);
@@ -58,6 +52,7 @@ const Navbar = () => {
   
 
 
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -69,8 +64,6 @@ const Navbar = () => {
     if (token && userDataFromStorage) {
       setIsLoggedIn(true);
       setUserData(JSON.parse(userDataFromStorage));
-      setCartItems(dummyCartItems);
-      localStorage.setItem("cartItems", JSON.stringify(dummyCartItems));
     }
 
       const fetchCategories = async () => {
@@ -81,21 +74,38 @@ const Navbar = () => {
           console.error("Error fetching categories:", e);
         }
       };
+
+      const fetchCartItems = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          const res = await axios.get("http://localhost:3000/api/carts", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setCartItems(res.data);
+          console.log(res.data);
+        } catch (e) {
+          console.error("Error fetching cart items:", e);
+        }
+      };
       fetchCategories();
+      fetchCartItems();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
 
   
-  const handleSearch = async (e) => {
-    const searchInput = e.target.value;
-    setSearchInput(searchInput);
-    try {
-      const res = await axios.get(`http://localhost:3000/api/product?search=${searchInput}`)
-      setProducts(res.data);
-    }catch(e){
-      console.e('Error searching items:', e);
-    }
-  }
+  // const handleSearch = async (e) => {
+  //   const searchInput = e.target.value;
+  //   setSearchInput(searchInput);
+  //   try {
+  //     const res = await axios.get(`http://localhost:3000/api/product?search=${searchInput}`)
+  //     setProducts(res.data);
+  //   }catch(e){
+  //     console.e('Error searching items:', e);
+  //   }
+  // }
 
   const handleLogout = async () => {
     
@@ -126,7 +136,7 @@ const Navbar = () => {
     
   };
 
-
+  const totalCartItems = cartItems.reduce((total, item) => total + item.qty, 0);
 
   return (
     <div className="flex justify-between items-center h-20 max-w-[1440px] mx-auto bg-gray-900 text-white pl-10 pr-10">
@@ -139,15 +149,15 @@ const Navbar = () => {
       </div>
       <div className="flex justify-between items-center gap-3">
         <div className="flex gap-3">
-          <input type="text" placeholder="Cari di FoodStore" className=" placeholder-black w-100 h-7 p-2 text-black" value={searchInput}
+          {/* <input type="text" placeholder="Cari di FoodStore" className=" placeholder-black w-100 h-7 p-2 text-black" value={searchInput}
             onChange={handleSearch}
-          />
+          /> */}
         </div>
         <button>
           
-          {cartItems.length > 0 && (
+          {totalCartItems > 0 && (
             <span className="bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-end justify-center">
-              {cartItems.length}
+              {totalCartItems}
             </span>
           )}
           <IoCart size={30} onClick={handleViewCart} />
@@ -169,26 +179,11 @@ const Navbar = () => {
               size={30}
               title="Nama"
             /></button>}
-        {isDropdownOpen && isLoggedIn && userData.role === "user" &&(
+        {isDropdownOpen && isLoggedIn &&(
           <div className="absolute right-[10%] mt-[160px] w-40 bg-white border border-gray-200 shadow-lg rounded-md z-10 text-white bg-transparent">
             <ul className="py-1">
               <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleProfile}>
                 Profile
-              </li>
-              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
-                Logout
-              </li>
-            </ul>
-          </div>
-        )}
-        {isDropdownOpen && isLoggedIn && userData.role === "admin" &&(
-          <div className="absolute right-[10%] mt-[160px] w-40 bg-white border border-gray-200 shadow-lg rounded-md z-10 text-white bg-transparent">
-            <ul className="py-1">
-              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleProfile}>
-                Profile
-              </li>
-              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                Administrator
               </li>
               <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
                 Logout

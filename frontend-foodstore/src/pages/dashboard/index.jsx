@@ -8,15 +8,35 @@ import {
   FaTag,
 } from "react-icons/fa";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { formatPrice } from "../../utils";
 
 export const Dashboard = () => {
+  const { categoryId } = useParams();
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [cartItemsCount,setCartItemsCount] = useState(0)
   const [products, setProducts] = useState([]);
   const [tags, setTags] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
+  const [selectedTag, setSelectedTag] = useState(null);
+  const [cart, setCart] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const nextPage = () => setCurrentPage((prevPage) => prevPage + 1);
+  const prevPage = () => setCurrentPage((prevPage) => prevPage - 1);
+    
+  // Go to specific page
+  const goToPage = (page) => setCurrentPage(page);
 
   let navigate = useNavigate();
 
@@ -32,7 +52,6 @@ export const Dashboard = () => {
       try {
         const res = await axios.get("http://localhost:3000/api/product");
         setProducts(res.data.data);
-        console.log(res.data.data)
       } catch (e) {
         console.error("Error fetching categories:", e);
       }
@@ -47,61 +66,34 @@ export const Dashboard = () => {
         console.error("Error fetching categories:", e);
       }
     };
-    
     fetchTags();
     fetchProducts();
+    
   }, []);
 
-  const addToCart = async (productId, qty) => {
-    // Add logic to add the product to the cart
-    try {
-      const update = {
-        items: [{ product: { _id: productId }, qty }],
-      };
+  useEffect(() => {
+    const filterProducts = () => {
+      let filtered = products;
 
-      const res = await axios.put("http://localhost:3000/api/carts", update, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      // console.log(res.data)
-      if (res.data.message !== "jwt malformed") {
-        const updatedCart = res.data
-        console.log("Updated Cart:", updatedCart);
-        const existingItemIndex = updatedCart.findIndex(
-          (item) => item.product._id === productId
-        );
-        const updatedItems = [...updatedCart];
-        
-
-        if (existingItemIndex !== -1) {
-          // Product already exists in the cart, increment quantity
-          const updatedItems = [...updatedCart];
-          updatedItems[existingItemIndex].qty += 1;
-          
-  
-          const updatedCartData = {
-            items: updatedItems,
-          };
-  
-          await axios.put(
-            "http://localhost:3000/api/carts",
-            updatedCartData,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          );
-        }
-        
-      }else{
-        window.location.href='/login'
+      // Filter by category if categoryId is provided
+      if (categoryId) {
+        filtered = filtered.filter((product) => product.category._id === categoryId);
       }
-    } catch (e) {
-      console.error("Error checking login status:", e);
-    }
-  };
+
+      // Filter by selected tag if selectedTag is provided
+      if (selectedTag) {
+        filtered = filtered.filter((product) =>
+          product.tags.some((tag) => tag._id === selectedTag)
+        );
+      }
+
+      setFilteredProducts(filtered);
+    };
+
+    filterProducts();
+  }, [categoryId, products, selectedTag]);
+
+
 
   const getImageUrl = (imageName) => {
     try {
@@ -115,12 +107,52 @@ export const Dashboard = () => {
     }
   };
 
-  const handleNextSlide = () => {
-    setStartIndex(startIndex + 8);
+  const handleResetFilter = () => {
+    setSelectedTag(null);
+    setCurrentPage(1);
   };
 
-  const handlePrevSlide = () => {
-    setStartIndex(Math.max(0, startIndex - 8));
+  const addToCart = async (productId) => {
+    const token = localStorage.getItem("token");
+  
+    try {
+      const existingItem = cart.find((item) => item.product._id === productId);
+      let updatedCart;
+  
+      if (existingItem) {
+        updatedCart = cart.map((item) =>
+          item.product._id === productId ? { ...item, qty: item.qty + 1 } : item
+        );
+      } else {
+        const productToAdd = products.find((product) => product._id === productId);
+        const newItem = { product: productToAdd, qty: 1 };
+        updatedCart = [...cart, newItem];
+      }
+  
+      const itemsToUpdate = updatedCart.map(({ product, qty }) => ({
+        product: { _id: product._id },
+        qty,
+      }));
+  
+      const res = await axios.put(
+        "http://localhost:3000/api/carts",
+        { items: itemsToUpdate },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (res.status === 200) {
+        setCart(updatedCart);
+        setCartItemsCount(cartItemsCount + 1);
+        console.log("Cart updated successfully:", updatedCart);
+        console.log("Cart items count incremented:", cartItemsCount + 1);
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
   };
 
   return (
@@ -128,19 +160,23 @@ export const Dashboard = () => {
       <h1 className=" text-lg pb-4 underline font-bold">Dashboard</h1>
       <div className="pt-2 flex gap-3">
         <h1 className="font-bold ">Tags:</h1>
-        <button className="flex items-center">
           {tags.map((tag) => (
-            <div key={tag._id} className="flex">
-              <div className="flex border-1 rounded-xl mr-3">
+            <button key={tag._id} className={`flex items-center border-1 rounded-xl p-1  ${
+                selectedTag === tag._id ? 'bg-gray-600 '  : 'bg-gray-200 text-black'
+              }`} onClick={() => setSelectedTag(tag._id)}>
+            <div  className="flex">
+              <div className="flex">
                 <FaTag size={15} />
-                <h3 className="pr-3">{tag.name}</h3>
+                <h3 className="pl-1 pr-1">{tag.name}</h3>
               </div>
             </div>
+            </button>
           ))}
-        </button>
+          <button className="bg-red-500 text-white px-2 rounded-md"
+          onClick={handleResetFilter}>Reset Filter</button>
       </div>
       <div className="flex flex-wrap gap-3">
-        {products.slice(startIndex, startIndex + 8).map((product) => (
+        {filteredProducts.slice(startIndex, startIndex + 8).map((product) => (
           <div
             key={product._id}
             className=" bg-gray-800 w-72 h-105 border-gray-300 shadow rounded-lg mt-10"
@@ -153,37 +189,38 @@ export const Dashboard = () => {
               style={{ width: "100%", height: "200px" }}
             />
             <div className="p-3">
-              <a href="#">
-                <span className="text-lg font-semibold ">{product.name}</span>
-              </a>
-              <h2 className="pt-2">{product.category.name}</h2>
-              <div className="flex items-center pt-2">
-                <FaTag size={10} />
-                <h3>{product.tags.name}</h3>
+              <span className="text-lg font-semibold ">{product.name}</span>
+              <p className="text-md font-normal ">{product.description}</p>
+              <p className="pt-2 text-sm">{`Category: ${product.category.name}`}</p>
+              {product.tags.map((tag)=>
+              <div key={tag._id} className="flex inline-flex pt-1">
+                <div className="flex border-1 rounded-xl p-1 items-center mr-1">
+                  <FaTag size={10}  className="mr-1"  />
+                  <span className="text-sm">{tag.name}</span>
+                </div>
               </div>
+              )}
               <h5 className="mt-2 text-lg">{formatPrice(product.price)}</h5>
-              <button className="flex justify-center border-1 w-20 h-10 items-center align-middle rounded-lg mt-8" onClick={() => addToCart(product._id, 1)} >
+              <button className="flex justify-center border-1 w-20 h-10 items-center align-middle rounded-lg mt-8" onClick={() => addToCart(product._id)} >
                 <FaCartPlus size={25} />
               </button>
             </div>
           </div>
         ))}
       </div>
-      <div className="flex inline-flex mt-4 gap-2">
-        <button
-          className="px-4 py-2 bg-gray-800 text-white rounded-lg"
-          onClick={handlePrevSlide}
-        >
-          <FaChevronLeft /> Prev
-        </button>
-        <button
-          className="px-4 py-2 bg-gray-800 text-white rounded-lg"
-          onClick={handleNextSlide}
-        >
-          <FaChevronRight />
-          Next
-        </button>
-      </div>
+      <div className="pagination pt-2 gap-1">
+            <button className="bg-blue-600 text-white h-[25px] px-[10px] rounded-md" onClick={prevPage} disabled={currentPage === 1}>
+              Prev
+            </button>
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+              <button key={page} className={`bg-blue-600 text-white h-[25px] px-[10px] rounded-md ${currentPage === page ? 'bg-blue-800' : ''}`} onClick={() => goToPage(page)}>
+                {page}
+              </button>
+            ))}
+            <button className="bg-blue-600 text-white h-[25px] px-[10px] rounded-md" onClick={nextPage} disabled={currentPage === totalPages}>
+              Next
+            </button>
+          </div>
     </div>
   );
 };

@@ -25,6 +25,7 @@ export const OrderData = () => {
                     }
                 })
                 setOrderData(res.data.data)
+                console.log(res.data.data)
             } catch (e) {
                 console.error(e)
             }

@@ -2,10 +2,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { formatPrice } from "../../utils";
 
 export const Cart = () => {
   const [count, setCount] = useState(1);
   const [carts, setCarts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(()=> {
     const fetchCarts = async() => {
@@ -26,17 +28,66 @@ export const Cart = () => {
     fetchCarts();
   },[])
 
-  const handleIncrement = (e) => {
-    e.preventDefault();
-    setCount(count + 1);
-  };
+  const handleIncrement = async (itemId) => {
+    const updatedCartItems = carts.map((item) =>
+      item._id === itemId ? { ...item, qty: item.qty + 1 } : item
+    );
+    setCarts(updatedCartItems);
 
-  const handleDecrement = (e) => {
-    e.preventDefault();
-    if (count > 1) {
-      setCount(count - 1);
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const payload = {
+          items: updatedCartItems.map((item) => ({
+            product: { _id: item.product._id },
+            qty: item.qty,
+          })),
+        }
+        await axios.put(
+          `http://localhost:3000/api/carts`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Error updating quantity:", error);
     }
   };
+
+  const handleDecrement = async (itemId) => {
+    const updatedCartItems = carts.map((item) =>
+      item._id === itemId && item.qty > 1 ? { ...item, qty: item.qty - 1 } : item
+    );
+    setCarts(updatedCartItems);
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const payload = {
+          items: updatedCartItems.map((item) => ({
+            product: { _id: item.product._id },
+            qty: item.qty,
+          })),
+        }
+
+        await axios.put(
+          `http://localhost:3000/api/carts`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+    }
+  };
+
   const getImageUrl = (imageName) => {
     try {
       if (imageName && imageName.trim() !== "") {
@@ -51,7 +102,7 @@ export const Cart = () => {
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     carts.forEach((item) => {
-      totalPrice += item.price * count;
+      totalPrice += item.price * item.qty;
     });
     return totalPrice;
   };
@@ -70,7 +121,7 @@ export const Cart = () => {
       </h1>
       <div className="border-1 p-2 gap-1">
         <div className="flex flex-col w-full pb-4 text-[20px] font-bold">
-          <span>Total Belanja: Rp. {calculateTotalPrice()}</span>
+          <span>Total Belanja: {formatPrice(calculateTotalPrice())}</span>
         </div>
         <div className="border-1 p-2 w-full">
           <form>
@@ -96,18 +147,18 @@ export const Cart = () => {
                     style={{ width: "100%", height: "50px" }}
                   /></td>
                   <td className="p-2">{item.name}</td>
-                  <td className="p-2">{item.price}</td>
+                  <td className="p-2">{formatPrice(item.price)}</td>
                   <td className="p-2">
-                  <button className=" bg-blue-500 w-6 h-6" onClick={handleDecrement}>-</button>
-                  <span className="pr-2 pl-2">{count}</span>
-                  <button className="bg-blue-500 w-6 h-6" onClick={handleIncrement}>+</button>
+                  <button className=" bg-blue-500 w-6 h-6" onClick={() => handleDecrement(item._id)}>-</button>
+                  <span className="pr-2 pl-2">{item.qty}</span>
+                  <button className="bg-blue-500 w-6 h-6" onClick={() => handleIncrement(item._id)}>+</button>
                   </td>
-                  <td className="p-2">{item.price * count}</td>
+                  <td className="p-2">{formatPrice(item.price * item.qty)}</td>
                 </tr>
               ))}
               </tbody>
             </table>
-            <button className=" bg-blue-500 w-full col-span-5 mt-3 h-9 rounded-md" onClick={checkout}>Checkout</button>
+            <button className=" bg-blue-500 w-full col-span-5 mt-3 h-9 rounded-md" onClick={()=> checkout()}>Checkout</button>
           </form>
         </div>
       </div>

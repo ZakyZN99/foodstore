@@ -249,14 +249,22 @@ const index = async(req, res, next) => {
         next(err)
     }
 }
-const search = async(req, res, next) => {
-    try {
-        let product = await Product.findOne({_id: req.params.id})
-        return res.json(product);
-    } catch (err) {
-        next(err)
+const search = async (req, res, next) => {
+try {
+    const searchTerm = req.query.search;
+    let products;
+    if (searchTerm) {
+        products = await Product.find({
+            name: { $regex: searchTerm, $options: "i" }
+        });
+    } else {
+        products = await Product.find();
     }
+    return res.json(products);
+} catch (err) {
+    next(err);
 }
+};
 
 module.exports = {
     store,

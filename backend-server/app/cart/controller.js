@@ -49,6 +49,7 @@ const index = async (req, res, next) => {
     try {
         let items = await CartItem
         .find({user: req.user._id})
+        .populate('product');
 
         return res.json(items);
 

@@ -8,14 +8,14 @@ export const Invoice = () => {
   const [userData, setUserData] = useState([]);
   const [deliveryAddress, setDeliveryAddress] = useState([]);
 
-  const { order_id } = useParams();
+  const { orderId } = useParams();
 
   useEffect(()=> {
     const token = localStorage.getItem('token') 
 
     const fetchInvoice  = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/invoice/${order_id}`, {
+        const res = await axios.get(`http://localhost:3000/api/invoice/${orderId}`, {
           headers:{
             Authorization: `Bearer ${token}`
           }
@@ -30,7 +30,7 @@ export const Invoice = () => {
       }
     }
     fetchInvoice()
-  },[order_id])
+  },[orderId])
 
   
   if (!orderData || !orderData.total) {

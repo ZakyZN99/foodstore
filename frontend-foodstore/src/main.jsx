@@ -23,17 +23,18 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path='/' element={<App/>}>
           <Route index element={<Dashboard />}/>
-          <Route path="/categories/:id" element={<Dashboard/>} />
+          <Route path="/categories/:categoryId" element={<Dashboard/>} />
           <Route path="/tags/:id" element={<Dashboard/>} />
-          <Route path="/logout" element={<Dashboard/>} />
-          <Route path='carts' element={<Cart/>}/>
-          <Route path='checkout' element={<Checkout/>}/>
+          <Route path="logout" element={<Dashboard/>} />
+          <Route path='/carts' element={<Cart/>}/>
+          <Route path='/checkout' element={<Checkout/>}/>
           <Route path='login' element={<Login/>}/>
-          <Route path='/order' element={<OrderData/>}/>
-          <Route path='/invoice/:order_id' element={<Invoice/>}/>
-          <Route path='/add-category' element={<AddCategories/>}/>
-          <Route path='/add-tag' element={<AddTag/>}/>
-          <Route path='/add-product' element={<AddProduct/>}/>
+          <Route path='order' element={<OrderData/>}/>
+          <Route path='/invoice/:orderId' element={<Invoice/>}/>
+          <Route path='add-category' element={<AddCategories/>}/>
+          <Route path='add-tag' element={<AddTag/>}/>
+          <Route path='add-product' element={<AddProduct/>}/>
+
 
           <Route path='register' element={<Register/>}/>
           <Route path='me' element={<AccountDetails/>}/>
