@@ -155,11 +155,11 @@ const Navbar = () => {
         </div>
         <button>
           
-          {totalCartItems > 0 && (
+          {/* {totalCartItems > 0 && (
             <span className="bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-end justify-center">
               {totalCartItems}
             </span>
-          )}
+          )} */}
           <IoCart size={30} onClick={handleViewCart} />
         </button>
         {isLoggedIn ? (

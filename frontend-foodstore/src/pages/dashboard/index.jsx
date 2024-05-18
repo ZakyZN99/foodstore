@@ -112,7 +112,8 @@ export const Dashboard = () => {
     setCurrentPage(1);
   };
 
-  const addToCart = async (productId) => {
+  const addToCart = async (productId, event) => {
+    
     const token = localStorage.getItem("token");
   
     try {
@@ -147,8 +148,6 @@ export const Dashboard = () => {
       if (res.status === 200) {
         setCart(updatedCart);
         setCartItemsCount(cartItemsCount + 1);
-        console.log("Cart updated successfully:", updatedCart);
-        console.log("Cart items count incremented:", cartItemsCount + 1);
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
