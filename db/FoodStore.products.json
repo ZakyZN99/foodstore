@@ -1,0 +1,111 @@
+[{
+  "_id": {
+    "$oid": "6646c867825333f7e7c58311"
+  },
+  "name": "Donut",
+  "description": "donut donut donut",
+  "price": 50000,
+  "image_url": "140734b272ff62a1b31ab87a422c81b8.png",
+  "category": {
+    "$oid": "663f6e634a6662dad51f4942"
+  },
+  "tags": [
+    {
+      "$oid": "663f6e8c4a6662dad51f4951"
+    },
+    {
+      "$oid": "6646b6f0dcf8f6ac177256d9"
+    },
+    {
+      "$oid": "6646b706dcf8f6ac177256e0"
+    },
+    {
+      "$oid": "662f4df2a088f7a66e09c503"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-05-17T03:00:55.939Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-17T03:00:55.939Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6646d080825333f7e7c5843e"
+  },
+  "name": "Pizza",
+  "description": "pizza pizza pizza",
+  "price": 50000,
+  "image_url": "e701714e6e2701d33edee71f5ca2354f.png",
+  "category": {
+    "$oid": "65f953822c9004e0536ece82"
+  },
+  "tags": [
+    {
+      "$oid": "6646b6f0dcf8f6ac177256d9"
+    },
+    {
+      "$oid": "6646b733dcf8f6ac177256f4"
+    },
+    {
+      "$oid": "662f4df2a088f7a66e09c503"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-05-17T03:35:28.529Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-17T03:35:28.529Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6646dc33825333f7e7c5867b"
+  },
+  "name": "Chicken Crispy",
+  "description": "delicious food",
+  "price": 20000,
+  "image_url": "0a3f6ebb19c42b4814c88586678d61ad.jpg",
+  "category": {
+    "$oid": "65f953822c9004e0536ece82"
+  },
+  "tags": [
+    {
+      "$oid": "6646b6f0dcf8f6ac177256d9"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-05-17T04:25:23.664Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-17T04:25:23.664Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6646dcd9825333f7e7c586a6"
+  },
+  "name": "Coca Cola",
+  "description": "colacolacola",
+  "price": 10000,
+  "image_url": "8ba17e899236721dd854129091faf002.png",
+  "category": {
+    "$oid": "65f951d7dcaac1908fd4d2d8"
+  },
+  "tags": [
+    {
+      "$oid": "65f991d7eac3a2cf3ea50471"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-05-17T04:28:09.326Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-17T04:28:09.326Z"
+  },
+  "__v": 0
+}]

@@ -117,11 +117,9 @@ export const Dashboard = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      // Redirect to the login page
       window.location.href = "/login"; 
       localStorage.removeItem("token");
-    // Modify the URL as needed
-      return; // Stop further execution
+      return; 
   }
   
     try {

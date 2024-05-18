@@ -7,9 +7,5 @@ router.post('/delivery-address', police_check('create', 'DeliveryAddress'), deli
 router.put('/delivery-address/:id', police_check('update', 'DeliveryAddress'), deliveryAddressController.update);
 router.delete('/delivery-address/:id', police_check('delete', 'DeliveryAddress'), deliveryAddressController.destroy);
 
-//dari tutorial
-//router.put('/delivery-address/:id', deliveryAddressController.update);
-//router.delete('/delivery-address/:id', deliveryAddressController.delete);
-
 
 module.exports = router;

@@ -1,0 +1,28 @@
+[{
+  "_id": {
+    "$oid": "65f951d7dcaac1908fd4d2d8"
+  },
+  "name": "Minuman",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65f953822c9004e0536ece82"
+  },
+  "name": "Makanan",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65f961a497b4fb9d2630ca35"
+  },
+  "name": "Snack",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "663f6e634a6662dad51f4942"
+  },
+  "name": "New Food",
+  "__v": 0
+}]

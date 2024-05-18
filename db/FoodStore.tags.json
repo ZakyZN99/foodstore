@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "65f991d7eac3a2cf3ea50471"
+  },
+  "name": "Drink",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "662f4df2a088f7a66e09c503"
+  },
+  "name": "Hot Product",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "663f6e8c4a6662dad51f4951"
+  },
+  "name": "New Food",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6646b6f0dcf8f6ac177256d9"
+  },
+  "name": "Food",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6646b706dcf8f6ac177256e0"
+  },
+  "name": "Favorite",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6646b733dcf8f6ac177256f4"
+  },
+  "name": "Junk Food",
+  "__v": 0
+}]
