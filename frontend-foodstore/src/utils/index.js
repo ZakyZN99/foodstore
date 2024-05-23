@@ -5,3 +5,8 @@ export const formatPrice = (price) => {
         (parts[1] ? "," + parts[1] : "");
     return `Rp. ${formattedPrice}`;
 };  
+
+export const setSearchQuery = (query) => ({
+    type: 'SET_SEARCH_QUERY',
+    payload: query,
+})

@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatPrice } from "../../utils";
+import { useSelector } from "react-redux";
 
 export const Dashboard = () => {
   const { categoryId } = useParams();
@@ -30,6 +31,7 @@ export const Dashboard = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
+  const searchQuery = useSelector(state => state.search.searchQuery);
 
   // Change page
   const nextPage = () => setCurrentPage((prevPage) => prevPage + 1);
@@ -72,6 +74,14 @@ export const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    const searchProducts = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/api/product?search=${searchQuery}`)
+        
+      } catch (e) {
+        console.error(e)
+      }
+    }
     const filterProducts = () => {
       let filtered = products;
 
@@ -196,7 +206,7 @@ export const Dashboard = () => {
             <div className="p-3">
               <span className="text-lg font-semibold ">{product.name}</span>
               <p className="text-md font-normal ">{product.description}</p>
-              <p className="pt-2 text-sm">{`Category: ${product.category.name}`}</p>
+              <p className="pt-2 text-sm">{`Category: ${product.category.name ? product.category.name : "null" }`}</p>
               {product.tags.map((tag)=>
               <div key={tag._id} className="flex inline-flex pt-1">
                 <div className="flex border-1 rounded-xl p-1 items-center mr-1">

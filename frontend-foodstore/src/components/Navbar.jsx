@@ -6,6 +6,8 @@ import {
 } from "react-icons/io5";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux'
+import { setSearchQuery } from "../utils/reduxSearch";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -103,7 +105,12 @@ const Navbar = () => {
 }, []);
 
 
-  
+  //create search product
+  const dispatch = useDispatch()
+
+  const handleSearch = (event) => {
+    dispatch(setSearchQuery(event.target.value))
+  }
   // const handleSearch = async (e) => {
   //   const searchInput = e.target.value;
   //   setSearchInput(searchInput);
@@ -157,9 +164,9 @@ const Navbar = () => {
       </div>
       <div className="flex justify-between items-center gap-3">
         <div className="flex gap-3">
-          {/* <input type="text" placeholder="Cari di FoodStore" className=" placeholder-black w-100 h-7 p-2 text-black" value={searchInput}
+          <input type="text" placeholder="Cari di FoodStore" className=" placeholder-black w-100 h-7 p-2 text-black" value={searchInput}
             onChange={handleSearch}
-          /> */}
+          />
         </div>
         <button>
           
