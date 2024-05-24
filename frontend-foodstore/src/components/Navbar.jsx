@@ -140,7 +140,7 @@ const Navbar = ({onSearch, cartItemsCount}) => {
   const isDashboard = location.pathname === "/";
 
   return (
-    <div className="flex justify-between items-center h-20 max-w-[1440px] mx-auto bg-gray-900 text-white pl-10 pr-10">
+    <div className="flex justify-between items-center h-20 mx-auto bg-gray-900 text-white pl-10 pr-10">
       <div className="flex items-center gap-4">
         <Link to="/"><h1>FOODSTORE</h1></Link>
         {categories.map((category) => (
