@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from 'axios';
+import Navbar from "../../components/Navbar";
 
 const Register = () => {
   const [fullName, setfullName] = useState("");
@@ -55,6 +56,7 @@ const Register = () => {
   };
 
   return (
+    <>
     <div className="text-white pl-20 max-w-[1440px] mx-auto pt-10">
       <form
         className="max-w-120px border-1 p-3 mx-96 mt-20"
@@ -105,12 +107,17 @@ const Register = () => {
             </button>
           </div>
         </div>
+        <div className="mb-4 ">
+          <div className="flex justify-end items-center gap-2">
+            <p >Have an account?</p><a href="/login">Login</a>
+          </div>
+        </div>
 
-        <button className="border-1 sm-full sm:w-36 h-8 ">Register</button>
+        <button className=" bg-blue-500 text-black rounded-md hover:bg-green-500 sm-full sm:w-36 h-8 ">Register</button>
       </form>
     </div>
+    </>
   );
 };
 
 export default Register;
-Register;

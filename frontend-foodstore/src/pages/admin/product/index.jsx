@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { formatPrice } from "../../../utils";
 import Image from "../../../assets/img/Image.jpg";
 import Multiselect from 'multiselect-react-dropdown';
+import Navbar from "../../../components/Navbar";
 
 const AddProduct = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -259,6 +260,8 @@ const AddProduct = () => {
         
 
 return (
+    <>
+    <Navbar/>
     <div className="text-white pl-20 max-w-[1440px] mx-auto">
     <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10">
         <h1 className=" text-lg pb-8 text-left font-semibold">Product</h1>
@@ -468,6 +471,7 @@ return (
         </div>
     </div>  
     </div>
+    </>
 )};
 
 export default AddProduct;

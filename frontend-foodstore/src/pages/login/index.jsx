@@ -60,8 +60,8 @@ export const Login = () => {
   }
 
   return (
-    <div className="text-white pl-20 max-w-[1440px] mx-auto pt-10">
-      <form className="max-w-120px border-1 p-3 mx-96 mt-20" onSubmit={handleSubmit}>
+    <div className="text-white w-[30%] mx-auto pt-20">
+      <form className="w-[100%] border-1 p-3" onSubmit={handleSubmit}>
         <h1 className=" text-lg pb-8 align-middle text-center font-semibold">
           Login
         </h1>
@@ -96,13 +96,13 @@ export const Login = () => {
           </button>
           </div>
         </div>
-        <div className="mb-4 pl-80">
-          <div className="flex justify-center items-center gap-2">
-            <h5 >Don`t have an account?</h5><a href="/register">Register</a>
+        <div className="mb-4 ">
+          <div className="flex justify-end items-center gap-2">
+            <p >Don`t have an account?</p><a href="/register">Register</a>
           </div>
         </div>
  
-        <button className="border-1 sm-full sm:w-36 h-8 ">Login</button>
+        <button className="sm-full sm:w-36 h-8 rounded-md bg-blue-500 text-black hover:bg-green-500">Login</button>
       </form>
     </div>
   );

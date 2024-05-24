@@ -65,7 +65,27 @@ const index = async (req, res, next) => {
     }
 }
 
+const deleteItem = async (req, res, next) => {
+    try {
+        let{id} = req.params
+
+        await CartItem.findOneAndDelete({_id: id, user :req.user._id})
+
+        return res.json({ message: 'Item deleted successfully' });
+    } catch (err) {
+        if (err && err.name === 'Validation Error') {
+            return res.json({
+                error: 1,
+                message: err.message,
+                fields: err.errors
+            });
+        }
+        next(err);
+    }
+};
+
 module.exports = {
     index,
-    update
+    update,
+    deleteItem
 }

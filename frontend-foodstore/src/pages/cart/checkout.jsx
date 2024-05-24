@@ -67,7 +67,9 @@ export const Checkout = () => {
       });
       console.log(res.data);
       const orderId = res.data._id; // Assuming the order ID is returned in the response
-      navigate(`/invoice/${orderId}`);
+      const invoiceUrl = `/invoice/${orderId}`;
+      window.open(invoiceUrl, '_blank')
+      navigate('/')
     } catch (e) {
       console.error(e)
     }

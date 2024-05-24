@@ -23,54 +23,6 @@ const store = async (req, res, next) => {
     }
 }
 
-// const update = async(req, res, next) => {
-//     try {
-//         let payload = req.body;
-//         let {id} = req.params;
-//         let user = req.user;
-
-//         if(payload.user){
-//             let address = await DeliveryAddress.findOne({
-//                 name: {$in: payload.user}});
-//                 if(address){
-//                     payload = {...payload, user: user.map(user => user._id)}
-//                 }else{
-//                     delete payload.user;
-//                 }
-//         }
-
-//         console.log(user);
-
-//         try {
-//             let address = await DeliveryAddress.findByIdAndUpdate(id, payload, {
-//                 new: true,
-//                 runValidators: true,
-//             })
-//             return res.json(address);
-//         } catch (err) {
-//             if(err && err.name === 'Validation Error'){
-//                 return res.json({
-//                     error:1,
-//                     message: err.message,
-//                     fields: err.errors
-//                     })
-//                 }
-//             next(err);
-//         }
-//     } catch (err) {
-//         if(err && err.name === 'Validation Error'){
-//             return res.json({
-//                 error:1,
-//                 message: err.message,
-//                 fields: err.errors
-//                 })
-//             }
-//         next(err);
-//     }
-// }
-
-/*=====Dari VIDEO Tutorial ======  */
-
 const update = async (req, res, next) => {
 let policy  = policyFor(req.user);
     try {
@@ -128,7 +80,7 @@ const destroy = async(req, res, next) => {
 
 const index = async(req, res, next) => {
     try {
-        let address = await DeliveryAddress.find()
+        let address = await DeliveryAddress.find({user: req.user._id})
         return res.json(address);
     } catch (err) {
         next(err)

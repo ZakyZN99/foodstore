@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../../../components/Navbar';
 
 const AddTag = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -124,7 +125,9 @@ const AddTag = () => {
     };
 
 return (
-<div className="text-white pl-20 max-w-[1440px] mx-auto">
+    <>
+    <Navbar/>
+    <div className="text-white pl-20 max-w-[1440px] mx-auto">
     <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10">
         <h1 className=" text-lg pb-8 text-left font-semibold">Tags</h1>
         <div className="border-1 p-2 flex gap-1">
@@ -203,6 +206,7 @@ return (
         </div>
         </div>
     </div>
+    </>
     );
 };
 

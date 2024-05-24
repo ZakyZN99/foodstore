@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../../components/Navbar";
 
 const AddCategories = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -122,6 +123,8 @@ const AddCategories = () => {
     };
 
 return (
+    <>
+    <Navbar/>
     <div className="text-white pl-20 max-w-[1440px] mx-auto">
     <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10">
         <h1 className=" text-lg pb-8 text-left font-semibold">Category</h1>
@@ -201,6 +204,7 @@ return (
         </div>
         </div>
     </div>
+    </>
 );
 };
 

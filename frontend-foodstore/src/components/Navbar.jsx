@@ -6,14 +6,11 @@ import {
 } from "react-icons/io5";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux'
-import { setSearchQuery } from "../utils/reduxSearch";
 
-const Navbar = () => {
+const Navbar = ({onSearch, cartItemsCount}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [Products, setProducts] = useState([]);
-  const [searchInput, setSearchInput] = useState();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [cartItems, setCartItems] = useState([]);
@@ -90,9 +87,8 @@ const Navbar = () => {
                 setCartItems(res.data);
             } else {
                 // If not logged in, set cart items to an empty array or handle as needed
-                setCartItems([]);
                 // Or you could redirect to the login page here if desired
-                // window.location.href = "/login";
+                window.location.href = "/login";
             }
         } catch (e) {
             console.error("Error fetching cart items:", e);
@@ -106,21 +102,9 @@ const Navbar = () => {
 
 
   //create search product
-  const dispatch = useDispatch()
-
-  const handleSearch = (event) => {
-    dispatch(setSearchQuery(event.target.value))
+  const handleSearch = async (e) => {
+    onSearch(e.target.value)
   }
-  // const handleSearch = async (e) => {
-  //   const searchInput = e.target.value;
-  //   setSearchInput(searchInput);
-  //   try {
-  //     const res = await axios.get(`http://localhost:3000/api/product?search=${searchInput}`)
-  //     setProducts(res.data);
-  //   }catch(e){
-  //     console.e('Error searching items:', e);
-  //   }
-  // }
 
   const handleLogout = async () => {
     
@@ -152,6 +136,7 @@ const Navbar = () => {
   };
 
   const totalCartItems = cartItems.reduce((total, item) => total + item.qty, 0);
+  const isDashboard = location.pathname === "/";
 
   return (
     <div className="flex justify-between items-center h-20 max-w-[1440px] mx-auto bg-gray-900 text-white pl-10 pr-10">
@@ -163,20 +148,24 @@ const Navbar = () => {
           }
       </div>
       <div className="flex justify-between items-center gap-3">
+      {isDashboard &&(
+        <>
         <div className="flex gap-3">
-          <input type="text" placeholder="Cari di FoodStore" className=" placeholder-black w-100 h-7 p-2 text-black" value={searchInput}
+          <input type="text" placeholder="Cari di FoodStore" className=" placeholder-black w-100 h-7 p-2 text-black"
             onChange={handleSearch}
           />
         </div>
         <button>
           
-          {/* {totalCartItems > 0 && (
+          {cartItemsCount > 0 && (
             <span className="bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-end justify-center">
-              {totalCartItems}
+              {cartItemsCount ? cartItemsCount : totalCartItems}
             </span>
-          )} */}
+          )}
           <IoCart size={30} onClick={handleViewCart} />
         </button>
+        </>
+      )}
         {isLoggedIn ? (
           <button
             className="flex items-center gap-1"
@@ -195,7 +184,7 @@ const Navbar = () => {
               title="Nama"
             /></button>}
         {isDropdownOpen && isLoggedIn &&(
-          <div className="absolute right-[10%] mt-[160px] w-40 bg-white border border-gray-200 shadow-lg rounded-md z-10 text-white bg-transparent">
+          <div className="absolute right-[0%] mt-[160px] w-40 bg-white border border-gray-200 shadow-lg rounded-md z-10 text-white bg-transparent">
             <ul className="py-1">
               <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleProfile}>
                 Profile

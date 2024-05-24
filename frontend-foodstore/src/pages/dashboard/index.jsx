@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatPrice } from "../../utils";
-import { useSelector } from "react-redux";
+import Navbar from "../../components/Navbar";
 
 export const Dashboard = () => {
   const { categoryId } = useParams();
@@ -20,18 +20,16 @@ export const Dashboard = () => {
   const [tags, setTags] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [startIndex, setStartIndex] = useState(0);
   const [selectedTag, setSelectedTag] = useState(null);
   const [cart, setCart] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [itemsPerPage] = useState(8);
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
-  const searchQuery = useSelector(state => state.search.searchQuery);
+  const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
   // Change page
   const nextPage = () => setCurrentPage((prevPage) => prevPage + 1);
@@ -39,8 +37,6 @@ export const Dashboard = () => {
     
   // Go to specific page
   const goToPage = (page) => setCurrentPage(page);
-
-  let navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -68,21 +64,34 @@ export const Dashboard = () => {
         console.error("Error fetching categories:", e);
       }
     };
+    const fetchCartItems = async () => {
+      try {
+          if (token) {
+              const res = await axios.get("http://localhost:3000/api/carts", {
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  },
+              });
+              setCart(res.data);
+              const newCartItemsCount = res.data.reduce((total, item) => total + item.qty, 0);
+              setCartItemsCount(newCartItemsCount);
+          } else {
+              // If not logged in, set cart items to an empty array or handle as needed
+              // Or you could redirect to the login page here if desired
+              window.location.href = "/login";
+          }
+      } catch (e) {
+          console.error("Error fetching cart items:", e);
+      }
+  };
     fetchTags();
     fetchProducts();
+    fetchCartItems();
     
   }, []);
 
   useEffect(() => {
-    const searchProducts = async () => {
-      try {
-        const res = await axios.get(`http://localhost:3000/api/product?search=${searchQuery}`)
-        
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    const filterProducts = () => {
+    const filterProducts = (searchInput) => {
       let filtered = products;
 
       // Filter by category if categoryId is provided
@@ -94,6 +103,11 @@ export const Dashboard = () => {
       if (selectedTag) {
         filtered = filtered.filter((product) =>
           product.tags.some((tag) => tag._id === selectedTag)
+        );
+      }
+      if (searchInput) {
+        filtered = filtered.filter((product) =>
+          product.name.toLowerCase().includes(searchInput.toLowerCase())
         );
       }
 
@@ -163,17 +177,30 @@ export const Dashboard = () => {
   
       if (res.status === 200) {
         setCart(updatedCart);
-        setCartItemsCount(cartItemsCount + 1);
+        const newCartItemsCount = updatedCart.reduce((total, item) => total + item.qty, 0);
+        setCartItemsCount(newCartItemsCount);
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
     }
   };
 
+  const handleSearch = async (searchInput) => {
+    try {
+      const url = searchInput ?  axios.get(`http://localhost:3000/api/product?search=${searchInput}`)
+                : axios.get('http://localhost:3000/api/product')
+            const res = await url
+            setFilteredProducts(res.data.data);
+        }catch(e){
+    console.error('Error searching items:', e);
+  }
+}
+
   return (
+    <>
+    <Navbar onSearch={handleSearch} cartItemsCount={cartItemsCount}/>
     <div className=" text-white pl-20 max-w-[1440px] mx-auto pt-10">
-      <h1 className=" text-lg pb-4 underline font-bold">Dashboard</h1>
-      <div className="pt-2 flex gap-3">
+      <div className="flex gap-3">
         <h1 className="font-bold ">Tags:</h1>
           {tags.map((tag) => (
             <button key={tag._id} className={`flex items-center border-1 rounded-xl p-1  ${
@@ -191,7 +218,7 @@ export const Dashboard = () => {
           onClick={handleResetFilter}>Reset Filter</button>
       </div>
       <div className="flex flex-wrap gap-3">
-        {filteredProducts.slice(startIndex, startIndex + 8).map((product) => (
+        {currentItems.map((product) => (
           <div
             key={product._id}
             className=" bg-gray-800 w-72 h-105 border-gray-300 shadow rounded-lg mt-10"
@@ -208,7 +235,7 @@ export const Dashboard = () => {
               <p className="text-md font-normal ">{product.description}</p>
               <p className="pt-2 text-sm">{`Category: ${product.category.name ? product.category.name : "null" }`}</p>
               {product.tags.map((tag)=>
-              <div key={tag._id} className="flex inline-flex pt-1">
+              <div key={tag._id} className="inline-flex pt-1">
                 <div className="flex border-1 rounded-xl p-1 items-center mr-1">
                   <FaTag size={10}  className="mr-1"  />
                   <span className="text-sm">{tag.name}</span>
@@ -237,5 +264,6 @@ export const Dashboard = () => {
             </button>
           </div>
     </div>
+    </>
   );
 };

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar";
 
 export const Address = () => {
   const [userData, setUserData] = useState([])
@@ -17,6 +18,7 @@ export const Address = () => {
     }
   const handleAddress = async() => {
       try {
+        const token = localStorage.getItem('token');
         const res = await axios.get("http://localhost:3000/api/delivery-address", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -100,6 +102,8 @@ const handleSaveAddress = async (addressId, updatedAddress) => {
     };
 
   return (
+    <>
+    <Navbar/>
     <div className="text-white pl-20 max-w-[1440px] mx-auto">
       <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10" >
         <h1 className=" text-lg pb-8 text-left font-semibold">
@@ -156,5 +160,6 @@ const handleSaveAddress = async (addressId, updatedAddress) => {
         </div>
       </div>
     </div>
+    </>
   );
 };

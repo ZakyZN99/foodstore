@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { formatPrice } from "../../utils";
+import Navbar from "../../components/Navbar";
 
 export const Cart = () => {
   const [count, setCount] = useState(1);
@@ -88,6 +89,24 @@ export const Cart = () => {
     }
   };
 
+  const handleDelete = async (itemId) => {
+    const updatedCartItems = carts.filter(item => item._id !== itemId);
+    setCarts(updatedCartItems);
+
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        await axios.delete(`http://localhost:3000/api/carts/${itemId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
+
   const getImageUrl = (imageName) => {
     try {
       if (imageName && imageName.trim() !== "") {
@@ -115,6 +134,8 @@ export const Cart = () => {
 
 
   return (
+    <>
+    <Navbar/>
     <div className=" text-white pl-20 max-w-[1440px] border-1 p-3 mx-auto mt-10">
       <h1 className=" text-lg pb-4 text-left font-semibold">
         Keranjang Belanja
@@ -140,11 +161,11 @@ export const Cart = () => {
               {carts.map((item, index) => (
                 <tr key={item._id} className="border-b ">
                   <td className="p-2">{index + 1}</td>
-                  <td className="p-2 items-center text-center"><img
+                  <td className=" flex p-2 justify-center items-center text-center"><img
                     alt={item.name}
                     src={getImageUrl ? getImageUrl(item.image_url) : Image}
                     crossOrigin="anonymous"
-                    style={{ width: "100%", height: "50px" }}
+                    style={{ width: "50%", height: "50px"}}
                   /></td>
                   <td className="p-2">{item.name}</td>
                   <td className="p-2">{formatPrice(item.price)}</td>
@@ -154,6 +175,10 @@ export const Cart = () => {
                   <button className="bg-blue-500 w-6 h-6" onClick={() => handleIncrement(item._id)}>+</button>
                   </td>
                   <td className="p-2">{formatPrice(item.price * item.qty)}</td>
+                  <td className="p-2">
+                    <button   className="bg-red-500 text-white w-6 h-6"
+                              onClick={() => handleDelete(item._id)}>X</button>
+                      </td>
                 </tr>
               ))}
               </tbody>
@@ -163,5 +188,6 @@ export const Cart = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
