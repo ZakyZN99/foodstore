@@ -1,0 +1,33 @@
+[{
+  "_id": {
+    "$oid": "6647ba83d9ce061f7ffa4457"
+  },
+  "status": "waiting_payment",
+  "delivery_fee": 30000,
+  "delivery_address": {
+    "provinsi": "Bali",
+    "kabupaten": "Tabanan",
+    "kecamatan": "Kediri",
+    "kelurahan": "X",
+    "detail": "Jl Mawar"
+  },
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order_item": [
+    {
+      "$oid": "6647ba83d9ce061f7ffa4459"
+    },
+    {
+      "$oid": "6647ba83d9ce061f7ffa445a"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-05-17T20:13:55.894Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-17T20:13:55.894Z"
+  },
+  "order_number": 27,
+  "__v": 0
+}]

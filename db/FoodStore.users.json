@@ -1,0 +1,39 @@
+[{
+  "_id": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "fullName": "Zaky",
+  "email": "zaky123@gmail.com",
+  "password": "$2b$10$qp4afxFj8rpk5sOf4u9YR.6pAAcB46.64razXIifm8zji7E9tzsLO",
+  "role": "admin",
+  "token": [
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZiZjM1NjM5ODdkZDJhYzQ5YmViYTIiLCJmdWxsTmFtZSI6Ilpha3kiLCJlbWFpbCI6Inpha3kxMjNAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwidG9rZW4iOltdLCJjcmVhdGVkQXQiOiIyMDI0LTAzLTIxVDA4OjQ0OjA2LjM0MVoiLCJ1cGRhdGVkQXQiOiIyMDI0LTA1LTE4VDAzOjUxOjA4LjM1NFoiLCJjdXN0b21lcklkIjoxLCJfX3YiOjAsImlhdCI6MTcxNjAwNDgzM30.CckvQtf5u1Cgu_U3Xc5YiWPnDwms_sdK-0aJV_Jvcm0",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWZiZjM1NjM5ODdkZDJhYzQ5YmViYTIiLCJmdWxsTmFtZSI6Ilpha3kiLCJlbWFpbCI6Inpha3kxMjNAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwidG9rZW4iOlsiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmZhV1FpT2lJMk5XWmlaak0xTmpNNU9EZGtaREpoWXpRNVltVmlZVElpTENKbWRXeHNUbUZ0WlNJNklscGhhM2tpTENKbGJXRnBiQ0k2SW5waGEza3hNak5BWjIxaGFXd3VZMjl0SWl3aWNtOXNaU0k2SW1Ga2JXbHVJaXdpZEc5clpXNGlPbHRkTENKamNtVmhkR1ZrUVhRaU9pSXlNREkwTFRBekxUSXhWREE0T2pRME9qQTJMak0wTVZvaUxDSjFjR1JoZEdWa1FYUWlPaUl5TURJMExUQTFMVEU0VkRBek9qVXhPakE0TGpNMU5Gb2lMQ0pqZFhOMGIyMWxja2xrSWpveExDSmZYM1lpT2pBc0ltbGhkQ0k2TVRjeE5qQXdORGd6TTMwLkNja3ZRdGY1dTFDZ3VfVTNYYzVZaVdQbkR3bXNfc2RLLTBhSlZfSnZjbTAiXSwiY3JlYXRlZEF0IjoiMjAyNC0wMy0yMVQwODo0NDowNi4zNDFaIiwidXBkYXRlZEF0IjoiMjAyNC0wNS0yNFQxMzoyNTowMi41NDNaIiwiY3VzdG9tZXJJZCI6MSwiX192IjowLCJpYXQiOjE3MTY1NTcxMTZ9.Ntzhp-Z6tzy-hqh07aHxoHt_rDORaXalQOZh6S_wamY"
+  ],
+  "createdAt": {
+    "$date": "2024-03-21T08:44:06.341Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-24T13:25:16.812Z"
+  },
+  "customerId": 1,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65ffed4cc42dba414a47576a"
+  },
+  "fullName": "test",
+  "email": "test@gmail.com",
+  "password": "$2b$10$Mbx50f0GLtFiBNrBIrZsJ.F9UwDpSPX7QWtwAVU2aU9/3mgW0cZAS",
+  "role": "user",
+  "token": [],
+  "createdAt": {
+    "$date": "2024-03-24T09:07:24.364Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-08T06:54:14.936Z"
+  },
+  "customerId": 2,
+  "__v": 0
+}]

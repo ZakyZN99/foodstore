@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "665095467830c9a1dea8d063"
+  },
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "product": {
+    "$oid": "6646dc33825333f7e7c5867b"
+  },
+  "__v": 0,
+  "image_url": "0a3f6ebb19c42b4814c88586678d61ad.jpg",
+  "name": "Chicken Crispy",
+  "price": 20000,
+  "qty": 6
+},
+{
+  "_id": {
+    "$oid": "665095467830c9a1dea8d064"
+  },
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "product": {
+    "$oid": "6646d080825333f7e7c5843e"
+  },
+  "__v": 0,
+  "image_url": "e701714e6e2701d33edee71f5ca2354f.png",
+  "name": "Pizza",
+  "price": 50000,
+  "qty": 2
+}]

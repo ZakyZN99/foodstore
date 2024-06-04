@@ -1,0 +1,63 @@
+[{
+  "_id": {
+    "$oid": "66482d5acd7d4c560420dff2"
+  },
+  "nama": "Rumah",
+  "kelurahan": "KESIMAN",
+  "kecamatan": "DENPASAR TIMUR",
+  "kabupaten": "KOTA DENPASAR",
+  "provinsi": "BALI",
+  "detail": "Jl X No.200",
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "createdAt": {
+    "$date": "2024-05-18T04:23:54.401Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-18T04:23:54.401Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66482d67cd7d4c560420dff9"
+  },
+  "nama": "tes211",
+  "kelurahan": "LATIUNG",
+  "kecamatan": "TEUPAH SELATAN",
+  "kabupaten": "KABUPATEN SIMEULUE",
+  "provinsi": "ACEH",
+  "detail": "tes",
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "createdAt": {
+    "$date": "2024-05-18T04:24:07.772Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-18T05:21:33.342Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66483048953f56f313587e4d"
+  },
+  "nama": "Homieee",
+  "kelurahan": "BAJERA",
+  "kecamatan": "SELEMADEG",
+  "kabupaten": "KABUPATEN TABANAN",
+  "provinsi": "BALI",
+  "detail": "Jl. XYZ No.2",
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "createdAt": {
+    "$date": "2024-05-18T04:36:24.733Z"
+  },
+  "updatedAt": {
+    "$date": "2024-05-18T05:20:50.756Z"
+  },
+  "__v": 0
+}]
