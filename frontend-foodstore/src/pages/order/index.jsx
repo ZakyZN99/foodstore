@@ -146,7 +146,7 @@ export const OrderData = () => {
                                         </form>
                                     </DropdownButton></td>
                                     {/* ORDER LIST */}
-                                <td  className="text-center pb-2 pt-2">{order._id}</td>
+                                <td  className="text-center pb-2 pt-2">{order.order_number}</td>
                                 <td  className="text-center pb-2 pt-2">{formatPrice(order.delivery_fee)}</td>
                                 <td  className="text-center pb-2 pt-2">{formatPrice(calculateTotal(order))}</td>
                                 <td  className="text-center pb-2 pt-2">{order.status}</td>
