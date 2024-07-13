@@ -1,29 +1,23 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../../components/Navbar';
+import { SideBar } from '../../../components/Sidebar';
+import tagService from '../../../services/tagService';
 
 const AddTag = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userData, setUserData] = useState([])
     const [tagData, setTagData] = useState([])
     const [addTagName, setAddTagName] = useState([])
     const [editTagId, setEditTagId] = useState(null);
     const [editTagName, setEditTagName] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(7);
 
 
     useEffect(()=> {
-        const token = localStorage.getItem('token');
-        const userDataFromStorage = localStorage.getItem('user');
-        if(token && userDataFromStorage){
-            setUserData(JSON.parse(userDataFromStorage))
-            setIsLoggedIn(true);
-        }
         const fetchTags= async () => {
             try {
-                const res = await axios.get('http://localhost:3000/api/tags');
+                const res = await tagService.getTags();
                 setTagData(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.error(e)
             }
@@ -31,40 +25,44 @@ const AddTag = () => {
         fetchTags()
     },[])
 
+    // Calculate total pages based on total tags and items per page
+    const totalPages = Math.ceil(tagData.length / itemsPerPage);
+
+    // Calculate index range for current page
+    const indexOfLastTag = currentPage * itemsPerPage;
+    const indexOfFirstTag = indexOfLastTag - itemsPerPage;
+    const paginatedTagData = tagData.slice(indexOfFirstTag, indexOfLastTag);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
     const handleAddTags = async () => {
-        const token = localStorage.getItem('token');
+        const normalizedTag = addTagName.trim().toLowerCase();
+        if (normalizedTag.length < 3 || normalizedTag.length > 21) {
+            alert("Tag name must be between 3 and 20 characters");
+            return;
+        }
+        if (tagData.some(tag => tag.name.toLowerCase() === normalizedTag)) {
+            alert("Tag already exists");
+            return;
+        }
         try {
-            const response = await axios.post("http://localhost:3000/api/tags/", {
-                name: addTagName,
-            },
-            {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                },
-            });
-            console.log(`New Category: ${response.data}`);
+            const response = await tagService.storeTag(addTagName.trim())
             setTagData([...tagData, response.data]);
             setAddTagName("");
         } catch (e) {
-            console.error(e)
+            console.error(e);
         }
-    }
+    };
 
     const handleDeleteTags = async (tagId) => {
         if (window.confirm("Are you sure you want to delete this tag?")) {
             try {
-                const token = localStorage.getItem("token");
-                await axios.delete(
-                `http://localhost:3000/api/tags/${tagId}`,
-                {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                }
-            );
-            setTagData((prevCategories) =>
-            prevCategories.filter((tag) => tag._id !== tagId)
-        );
+                await tagService.deleteTag(tagId)
+                setTagData((prevCategories) =>
+                    prevCategories.filter((tag) => tag._id !== tagId)
+                );
             alert("Category deleted successfully.");
         } catch (error) {
             console.error("Error deleting category:", error);
@@ -72,141 +70,120 @@ const AddTag = () => {
         }
     };
 
-    const handleEditTag = async () => {
-        const token = localStorage.getItem("token");
+    const handleEditTag = async (e) => {
+        e.preventDefault();
+        const normalizedTag = editTagName.trim().toLowerCase();
+        if (normalizedTag.length < 3 || normalizedTag.length > 21) {
+            alert("Tag name must be between 3 and 20 characters");
+            return;
+        }
+        if (tagData.some(tag => tag.name.toLowerCase() === normalizedTag)) {
+            alert("Tag name already exists");
+            return;
+        }
         try {
-            const response = await axios.put(
-            `http://localhost:3000/api/tags/${editTagId}`,
-            {
-                name: editTagName,
-            },{
-                headers: {
-                Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-            console.log(`Updated Category: ${response.data}`);
-            setTagData((prevCategories) =>
-            prevCategories.map((tag) =>
-            tag._id === editTagId ? response.data : tag
-        )
-        );
+            const response = await tagService.putTag(editTagId,  editTagName.trim())
+            console.log(`Updated Tag: ${response    }`);
+            setTagData((prevTags) =>
+                prevTags.map((tag) =>
+                    tag._id === editTagId ? response.data : tag
+                )
+            );
             setEditTagId(null);
             setEditTagName("");
         } catch (e) {
             console.error(e);
-            }
-        };
-
-    let navigate = useNavigate();
-
-    const handleAddress = () => {
-    navigate("/address");
+        }
     };
 
-    const handleProfile = () => {
-    navigate("/me");
-    };
-
-    const handleOrder = () => {
-    navigate("/order");
-    };
-
-    const handleCategories = () => {
-    navigate("/add-category");
-    };
-
-    const handleTags = () => {
-    navigate("/add-tag");
-    };
-
-    const handleProduct = () => {
-        navigate("/add-product");
+    const handleCancelEdit = () => {
+        setEditTagId(null);
+        setEditTagName("");
     };
 
 return (
-    <>
-    <Navbar/>
-    <div className="text-white pl-20 max-w-[1440px] mx-auto">
-    <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10">
-        <h1 className=" text-lg pb-8 text-left font-semibold">Tags</h1>
-        <div className="border-1 p-2 flex gap-1">
-            <div className="flex flex-col w-[20%]">
-            <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProfile}>Profil</button>
-            <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleOrder} >Order</button>
-            <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleAddress}>Address</button>
-            {isLoggedIn && userData.role === "admin" && (
-            <>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleCategories}>Categories</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] bg-blue-600 transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleTags}>Tags</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProduct}>Product</button>
-            </>
-            )}
-            </div>
-        <div className="border-1 p-2 w-[80%]">
-            <form>
-            <h1 className="text-center pb-3 border-b-2">Tags</h1>
-                <div className="pt-2">
-                <label>Add Tag: </label>
-                <span> </span>
-                <input className="w-[35%] text-black pl-2 rounded-md" type="text" value={addTagName} onChange={(e) => setAddTagName(e.target.value)}/>
-                <span> </span>
-                <button className=" bg-green-600 text-black h-[25px] w-[150px] transition duration-200 ease-in-out hover:bg-blue-600 rounded-md" onClick={handleAddTags}>Save</button>
-                </div>
-            <div>
-                <table className="w-full border-collapse">
-                <thead className=" border-b-2">
-                    <tr>
-                        <th className="p-2">No.</th>
-                        <th className="p-2">Tag Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {tagData.map((tag, index)=> (
-                        <tr key={tag._id}>
-                        <td className="p-2">{index +1}</td>
-                        <td className="p-2">
-                            {editTagId === tag._id ? (
-                            <input
-                            type="text"
-                            className="text-black"
-                            value={editTagName}
-                            onChange={(e) =>
-                                setEditTagName(e.target.value)
-                            }
-                            />
-                        ) : (
-                            tag.name
-                        )}
-                        </td>
-                        <td className="p-2">
-                        {editTagId === tag._id ? (
-                            <button type="button" className="bg-blue-600 text-white h-[25px] px-[10px] rounded-md"
-                            onClick={handleEditTag}>Update</button>
-                        ) : (
-                            <>
-                                <button type="button" className="bg-yellow-500 text-black h-[25px] px-[10px] rounded-md"
-                                onClick={() => {
-                                setEditTagId(tag._id);
-                                setEditTagName(tag.name);
-                                }}>Edit</button>
+    <div className="flex flex-row sm:flex-row">
+        <SideBar/>
+        <div className= "flex justify-center pt-10  md:pt-20 lg:pt-24 h-screen mx-auto">
+            <div className="">
+                <h1 className="text-center pb-3 font-poppins font-bold text-3xl md:text-4xl lg:text-5xl">Tags</h1>
+                <div className=" p-2 flex  justify-center gap-1 rounded-md">
+                    <div className="border-1 border-[#000] p-2 rounded-md">
+                        <form>
+                            <div className="pt-2">
+                                <label>Add Tag: </label>
                                 <span> </span>
-                                <button className="bg-red-600 text-white h-[25px] px-[10px] rounded-md"
-                                onClick={() => handleDeleteTags(tag._id)}>Delete</button>
-                            </>
-                        )}
-                        </td>
-                    </tr>
-                    ))}
-                </tbody>
-                </table>
+                                <input className="w-[35%] text-black pl-2 border-b border-gray-600" type="text" placeholder="empty"  value={addTagName} onChange={(e) => setAddTagName(e.target.value)}/>
+                                <span> </span>
+                                <button className=" bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal hover:bg-white hover:text-[#FA4A0C] h-[35px] w-[150px]" onClick={handleAddTags}>Save</button>
+                            </div>
+                        <div>
+                            <table className="w-full border-collapse">
+                            <thead className=" border-b-2">
+                                <tr>
+                                    <th className="p-2">No.</th>
+                                    <th className="p-2">Tag Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {paginatedTagData.map((tag, index)=> (
+                                    <tr key={tag._id}>
+                                    <td className="p-2">{indexOfFirstTag  + index +1}</td>
+                                    <td className="p-2">
+                                        {editTagId === tag._id ? (
+                                        <input
+                                        type="text"
+                                        className="text-black border-b border-gray-700"
+                                        value={editTagName}
+                                        onChange={(e) =>
+                                            setEditTagName(e.target.value)
+                                        }
+                                        />
+                                    ) : (
+                                        tag.name
+                                    )}
+                                    </td>
+                                    <td className="p-2">
+                                    {editTagId === tag._id ? (
+                                        <>
+                                            <button type="button" className="hover:bg-[#FA4A0C] hover:text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal bg-{#fff} text-[#FA4A0C] h-[30px] px-[10px]"
+                                                onClick={handleEditTag}>Update</button>
+                                            <span> </span>
+                                            <button type="button" className="bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal hover:bg-white hover:text-[#FA4A0C] h-[30px] px-[10px]"
+                                                onClick={handleCancelEdit}>Cancel</button>
+                                        </>
+                                        
+                                    ) : (
+                                        <>
+                                            <button type="button" className="hover:bg-[#FA4A0C] hover:text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal bg-{#fff} text-[#FA4A0C] h-[30px] px-[10px]"
+                                            onClick={() => {
+                                            setEditTagId(tag._id);
+                                            setEditTagName(tag.name);
+                                            }}>Edit</button>
+                                            <span> </span>
+                                            <button className="bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal hover:bg-white hover:text-[#FA4A0C] h-[30px] px-[10px]"   
+                                            onClick={() => handleDeleteTags(tag._id)}>Delete</button>
+                                        </>
+                                    )}
+                                    </td>
+                                </tr>
+                                ))}
+                            </tbody>
+                            </table>
+                            
+                        </div>
+                        </form>
+                        
+                    </div>
+                </div>
+                <div className="flex justify-center my-4">
+                {Array.from({ length: totalPages }, (_, i) => (
+                    <button key={i} onClick={() => handlePageChange(i + 1)} className={`mx-1 px-3 py-0 bg-[#FA4A0C] text-[#fff] rounded-full hover:bg-[#fff] hover:text-[#FA4A0C] border-[2px] border-[#FA4A0C] ${ currentPage === i + 1 && 'bg-[#FA4A0C]' }`}>{i + 1}</button>
+                ))}
             </div>
-            </form>
-        </div>
-        </div>
+            </div>
         </div>
     </div>
-    </>
     );
 };
 

@@ -10,7 +10,6 @@ const store = async(req, res, next) => {
     try{
         let payload = req.body;
 
-        // Update karna ada relasi dengan category
         if(payload.category){
             let category = 
                 await Category.findOne({
@@ -22,17 +21,6 @@ const store = async(req, res, next) => {
                     }
         }
         
-        // Update karna ada relasi dengan tags
-        // if(payload.tags && payload.tags.length > 0){
-        //     let tags = 
-        //         await Tag.find({
-        //             name: {$in: payload.tags}});
-        //             if(tags.length){
-        //                 payload = {...payload, tags: tags.map(tag => tag._id)};
-        //             }else{
-        //                 delete payload.tags;
-        //             }
-        // }
         if (payload.tags && Array.isArray(payload.tags) && payload.tags.length > 0) {
             let tagIds = [];
             for (const tagName of payload.tags) {
@@ -249,6 +237,7 @@ const index = async(req, res, next) => {
         next(err)
     }
 }
+
 const search = async (req, res, next) => {
 try {
     const searchTerm = req.query.search;

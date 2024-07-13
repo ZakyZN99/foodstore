@@ -38,36 +38,35 @@ export const Invoice = () => {
   }
 
   return (
-    <div className=" text-white pl-20 max-w-[1440px] mx-auto border-1 p-3 mt-10" >
-        <div className="border-1 p-2 gap-1">
-        <div className="flex flex-col w-full pb-4 text-[28px] font-bold">
+    <div className=" bg-[#FA4A0C] px-20 max-w-[1440px] mx-auto border-1 border-[#000] rounded-2xl p-4 mt-10" > 
+        <div className=" text-white flex flex-col w-full font-poppins pb-4 text-[28px] font-bold">
           <span>Invoice</span>
         </div>
-        <div className="border-1 p-2 w-[100%]">
-          <table className="w-full border-collapse items-center   text-center">
+        <div className="border-1 border-[#000] rounded-xl p-2 w-[100%] bg-white">
+          <table className="w-full border-collapse items-center font-poppins   text-center">
           <tbody >
             <tr className="border-b text-justify">
-                <td className="p-2">Status</td>
+                <td className="p-2 font-semibold">Status</td>
                 <td className="p-2">{orderData.payment_status}</td>
             </tr>
             <tr className="border-b text-justify">
-                <td className="p-2">Order ID</td>
+                <td className="p-2  font-semibold">Order ID</td>
                 <td className="p-2">{orderData1.order_number}</td>
             </tr>
             <tr className="border-b text-justify">
-                <td className="p-2">Total Amount</td>
+                <td className="p-2 font-semibold">Total Amount</td>
                 <td className="p-2 ">{formatPrice(orderData.total)}</td>
             </tr>
             <tr className="border-b ">
-                <td className="p-2 text-justify">Billed To</td>
+                <td className="p-2 font-semibold text-justify">Billed To</td>
                 <td className="p-2 ">
-                    <div className=" font-bold text-justify">{userData.fullName}</div>
+                    <div className=" text-justify">{userData.fullName}</div>
                     <div className=" text-justify">{userData.email}</div>
                     <div className=" text-justify">{deliveryAddress.detail} {deliveryAddress.kelurahan} {deliveryAddress.kecamatan}, {deliveryAddress.kabupaten}, {deliveryAddress.provinsi}</div>
                 </td>
             </tr>
             <tr className="">
-                <td className="p-2 text-justify">Payment To</td>
+                <td className="p-2 text-justify font-semibold">Payment To</td>
                 <td className="p-2 ">
                     <div className=" text-justify">Zaky Zamani Noor</div>
                     <div className=" text-justify">Zakyzn1999@gmail.com</div>
@@ -81,7 +80,6 @@ export const Invoice = () => {
               <button className="bg-green-500 w-[100px]" >Cetak</button>
             </div> */}
         </div>
-      </div>
     </div>
   );
 };

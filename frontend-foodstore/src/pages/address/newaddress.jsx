@@ -1,297 +1,255 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Dropdown, DropdownMenu, DropdownToggle } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import addressService from "../../services/addressService";
+import authService from "../../services/authService";
 
 
-export const AddNewAddress = () => {
-  const [userData, setUserData] = useState([])
-  const [addressProvinces, setAddressProvinces] = useState([])
-  const [addressKabupaten, setAddressKabupaten] = useState([])
-  const [addressKec, setAddressKec] = useState([])
-  const [addressKel, setAddressKel] = useState([])
-  const [addressProvincesId] = useState([])
-  const [addressKabupatenId] = useState([])
-  const [addressKecId] = useState([])
+export const NewAddress = ({ address, onClose, onSave }) => {
+  const [addedAddress, setAddedAddress] = useState({ nama: '',
+        detail: '',
+        provinsi: '',
+        provinsiId: '',
+        kabupaten: '',
+        kabupatenId: '',
+        kecamatan: '',
+        kecamatanId: '',
+        kelurahan: '',
+        kelurahanId: ''})
+  const [provAddress, setProvAddress] = useState([])
+  const [regAddress, setRegAddress] = useState([])
+  const [districtAddress, setDistrictAddress] = useState([])
+  const [villageAddress, setVillageAddress] = useState([])
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [selectedProvince, setSelectedProvince] = useState(null);
-  const [selectedKab, setSelectedKab] = useState(null);
-  const [selectedKec, setSelectedKec] = useState(null);
-  const [selectedKel, setSelectedKel] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState({
+    province: false,
+    regency: false,
+    district: false,
+    village: false,
+});
 
-  const [inputName, setinputName] = useState("");
-  const [inputDetailAddress, setinputDetailAddress] = useState("");
+  const toggleDropdown = (dropdown) => {
+    setDropdownOpen((prevState) => ({
+        ...prevState,
+        [dropdown] : !prevState[dropdown]
+    }))
+  }
 
-//PROVINSI
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userDataFromStorage = localStorage.getItem('user');
-    if(token ){
+    if(authService.getCurrentToken() ){
       setIsLoggedIn(true);
-      setUserData(JSON.parse(userDataFromStorage))
     }
-    const handleAddressProv = async() => {
+
+    const fetchProvinces = async() => {
       try {
-        const resProv = await axios.get("https://zakyzn99.github.io/api-wilayah-indonesia/api/provinces.json");
-        setAddressProvinces(resProv.data);
-      } catch (e) {
-        console.error(e)
+        const provResp = await addressService.getProvinces()
+        setProvAddress(provResp.data)
+      } catch (err) {
+        console.error(err)
       }
     }
-    handleAddressProv();
-  },[])
 
-//KABUPATEN
-  useEffect(() => {
-    const handleAddressKab = async () => {
-      if (selectedProvince) {
+    const fetchRegencies = async () => {
+      if(addedAddress.provinsiId){
         try {
-          const resKab = await axios.get(
-            `http://zakyzn99.github.io/api-wilayah-indonesia/api/regencies/${selectedProvince.id}.json`
-          );
-          setAddressKabupaten(resKab.data);
-        } catch (e) {
-          console.error(e);
+          const regResp = await addressService.getRegencies(addedAddress.provinsiId)
+          setRegAddress(regResp.data)
+        } catch (err) {
+          console.error(err)
         }
       }
     }
-    handleAddressKab();
-  }, [addressProvincesId, selectedProvince])
 
-  //KECAMATAN
-  useEffect(() => {
-    const handleAddressKec = async () => {
-      if (selectedKab) {
+    const fetchDistricts = async() => {
+      if(addedAddress.kabupatenId){
         try {
-          const resKec = await axios.get(
-            `http://zakyzn99.github.io/api-wilayah-indonesia/api/districts/${selectedKab.id}.json`
-          );
-          setAddressKec(resKec.data);
-        } catch (e) {
-          console.error(e);
+          const districtResp = await addressService.getDistricts(addedAddress.kabupatenId)
+          setDistrictAddress(districtResp.data)
+        } catch (err) {
+          console.error(err)
         }
       }
     }
-    handleAddressKec();
-  }, [addressKabupatenId, selectedKab])
 
-    //KELURAHAN
-    useEffect(() => {
-      const handleAddressKel = async () => {
-        if (selectedKec) {
-          try {
-            const resKel = await axios.get(
-              `http://zakyzn99.github.io/api-wilayah-indonesia/api/villages/${selectedKec.id}.json`
-            );
-            setAddressKel(resKel.data);
-          } catch (e) {
-            console.error(e);
-          }
+    const fetchVillages = async() => {
+      if(addedAddress.kecamatanId){
+        try {
+          const villageResp = await addressService.getVillages(addedAddress.kecamatanId)
+          setVillageAddress(villageResp.data)
+        } catch (err) {
+          console.error(err)
         }
       }
-      handleAddressKel();
-    }, [addressKecId, selectedKec])
+    }
 
-    const handleSaveAddress = async () => {
-    const token = localStorage.getItem('token');
-      try {
-        const response = await axios.post("http://localhost:3000/api/delivery-address/", {
-          nama: inputName, 
-          detail: inputDetailAddress, 
-          provinsi  : selectedProvince.name,
-          kabupaten: selectedKab.name,
-          kecamatan: selectedKec.name,
-          kelurahan: selectedKel.name,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log(response.data);
-        handleAddress();
-      } catch (error) {
-        console.error("Error saving address:", error);
-      }
-    };
+    fetchProvinces();
+    fetchRegencies();
+    fetchDistricts();
+    fetchVillages();
+  },[addedAddress.provinsiId, addedAddress.kabupatenId, addedAddress. kecamatanId])
 
-  const handleProvinceSelect = (provinceId) => {
-    const selectedProv = addressProvinces.find((prov) => prov.id === provinceId);
-    setSelectedProvince(selectedProv);
-  };
-
-  const handleKabSelect = (kabId) => {
-    const selectedKab = addressKabupaten.find((kab) => kab.id === kabId);
-    setSelectedKab(selectedKab);
-  };
-
-  const handleKecSelect = (kecId) => {
-    const selectedKec = addressKec.find((kec) => kec.id === kecId);
-    setSelectedKec(selectedKec);
-  };
-
-  const handleKelSelect = (kelId) => {
-    const selectedKel = addressKel.find((kel) => kel.id === kelId);
-    setSelectedKel(selectedKel);
-  };
-
-
-  let navigate = useNavigate();
-
-  const handleAddress = () => {
-    navigate('/address')
+    const handleChange = (e) =>{
+      const {name, value} = e.target
+      setAddedAddress((prev) => ({...prev, [name]: value}))
   }
 
-  const handleProfile = () => {
-    navigate('/me')
-  }
-
-  const handleOrder = () => {
-    navigate('/order')
-  }
-  
-  const handleCategories = () => {
-    navigate('/add-category')
-  }
-
-  const handleTags = () => {
-    navigate('/add-tag')
-  }
-
-  const handleProduct = () => {
-    navigate("/add-product");
-    };
-
+  const handleSaveAddress = (e) => {
+    onSave(addedAddress)
+    onClose();
+  } 
   return (
-    <div className="text-white pl-20 max-w-[1440px] mx-auto">
-      <div className="max-w-[1200px] border-1 p-3 mx-30 mt-10" >
-        <h1 className=" text-lg pb-8 text-left font-semibold">
-          Address
-        </h1>
-        <div className="border-1 p-2 flex gap-1">
-        <div className="flex flex-col w-[20%]">
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProfile}>Profil</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleOrder}>Order</button>
-                <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] bg-blue-600 transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleAddress}>Address</button>
-                {isLoggedIn && userData.role === "admin" && (
-                  <>
-                    <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleCategories}>Categories</button>
-                    <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleTags}>Tags</button>
-                    <button className="border-1 pl-[50px] pr-[50px] pt-[5px] pb-[5px] transition duration-200 ease-in-out hover:bg-blue-600 hover:translate-y-1" onClick={handleProduct}>Product</button>
-                  </>
-                )}
-            </div>
-            <div className="border-1 p-2 w-[80%]">
-              <div>
-                <h1 className="text-center pb-3 border-b-2">New Address</h1>
-                <div className="flex gap-4">
-                  <div className="pt-2 flex flex-col  w-[50%] pb-3">
-                    <label >Nama</label>
-                    <input
+      <div className="absolute inset-0 flex justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg my-14">
+          <h2 className="text-2xl mb-4">New Address</h2>
+          <form>
+            <div className='flex gap-4 flex-col'>
+              <div className='flex flex-col'>
+                  <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">Name</label>
+                      <input
                       type="text"
-                      id="inputName"
-                      value={inputName}
-                      onChange={(e) => setinputName(e.target.value)}
-                      placeholder="Masukan nama alamat!"
-                      className=" text-black w-100 h-8 items-center pl-2 rounded-md"
-                    />
-
-                    <label>Detail address</label>
-                    <textarea className=" pb-[200px] text-black w-100 items-start pl-2 rounded-md " 
-                      type="text"
-                      id="detailAddress"
-                      value={inputDetailAddress}
-                      onChange={(e) => setinputDetailAddress(e.target.value)}
-                      placeholder="Masukan detail alamat!"/>
+                      name="nama"
+                      value={addedAddress.nama}
+                      onChange={handleChange}
+                      className="mt-1 block w-full border-b border-gray-500 shadow-sm p-2"
+                      />
                   </div>
-                  <div className="pt-2 flex flex-col w-[50%]">
-                    <label>Provinsi</label>
-                    <Dropdown className="pb-3">
-                    <DropdownToggle className=" w-full flex justify-between items-center  ">
-                    {selectedProvince ? selectedProvince.name : "Pilih provinsi"}
+                  <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">Detail Address</label>
+                      <textarea
+                      type="text"
+                      name="detail"
+                      value={addedAddress.detail}
+                      onChange={handleChange}
+                      className="mt-1 px-2 pt-2 pb-[100px] block w-100 border-1 border-gray-500 rounded-md shadow-sm"
+                      />
+                  </div>
+              </div>
+              <div className='flex flex-col'>
+                  <div className="mb-3">
+                    <label className="block text-sm font-medium text-gray-700">Provinces</label>
+                    <Dropdown className="bg-[#FA4A0C]  rounded-md hover:text-[#FA4A0C] hover:bg-[#fff]" show={dropdownOpen.province} onToggle={() => toggleDropdown('province')}>
+                      <DropdownToggle className=" bg-[#FA4A0C] hover:bg-[#FFF] border-2 hover:text-[#FA4A0C] border-[#FA4A0C] hover:border-[#FA4A0C] rounded-md w-full flex justify-between items-center font-normal">
+                        {addedAddress.provinsi ? addedAddress.provinsi : "Select"}
                       </DropdownToggle>
-                      <DropdownMenu>
-                      {addressProvinces.map((province) => (
-                        <button
-                          key={province.id}
-                          onClick={() => {
-                            handleProvinceSelect(province.id);
-                          }}
-                          className="dropdown-item"
-                        >
-                          {province.name}
-                        </button>
-                      ))}
-                      </DropdownMenu>
-                    </Dropdown>
-
-                    <label>Kabupaten</label>
-                    <Dropdown className="pb-3">
-                    <DropdownToggle className=" w-full flex justify-between items-center  ">
-                    {selectedKab ? selectedKab.name : "Pilih kabupaten"}
-                      </DropdownToggle>
-                      <DropdownMenu>
-                      {addressKabupaten.map((kab) => (
-                        <button
-                          key={kab.id}
-                          onClick={() => {
-                            handleKabSelect(kab.id);
-                          }}
-                          className="dropdown-item"
-                        >
-                          {kab.name}
-                        </button>
-                      ))}
-                      </DropdownMenu>
-                    </Dropdown>
-
-                    <label>Kecamatan</label>
-                    <Dropdown className="pb-3">
-                    <DropdownToggle className=" w-full flex justify-between items-center  ">
-                    {selectedKec ? selectedKec.name : "Pilih kecamatan"}
-                      </DropdownToggle>
-                      <DropdownMenu>
-                      {addressKec.map((kec) => (
-                        <button
-                          key={kec.id}
-                          onClick={() => {
-                            handleKecSelect(kec.id);
-                          }}
-                          className="dropdown-item"
-                        >
-                          {kec.name}
-                        </button>
-                      ))}
-                      </DropdownMenu>
-                    </Dropdown>
-
-                    <label>Kelurahan</label>
-                    <Dropdown className="pb-3">
-                    <DropdownToggle className=" w-full flex justify-between items-center  ">
-                    {selectedKel ? selectedKel.name : "Pilih kecamatan"}
-                      </DropdownToggle>
-                      <DropdownMenu>
-                      {addressKel.map((kel) => (
-                        <button
-                          key={kel.id}
-                          onClick={() => {
-                            handleKelSelect(kel.id);
-                          }}
-                          className="dropdown-item"
-                        >
-                          {kel.name}
-                        </button>
-                      ))}
-                      </DropdownMenu>
+                      <DropdownMenu className='text-[15px] bg-[#FA4A0C] hover:text-[#FA4A0C] hover:bg-[#fff]'>
+                                {provAddress.map((province) => (
+                                    <button
+                                        key={province.id}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            setAddedAddress((prev) => ({
+                                                ...prev,
+                                                provinsi: province.name,
+                                                provinsiId: province.id}))
+                                            toggleDropdown('province')
+                                        }}
+                                        className="dropdown-item bg-[#FA4A0C] text-[#fff] hover:text-[#FA4A0C] hover:bg-[#fff]"
+                                    >
+                                        {province.name}
+                                    </button>
+                                ))}
+                            </DropdownMenu>
                     </Dropdown>
                   </div>
-                </div>
-                <button className=" bg-red-500 w-full h-[30px] rounded-md" onClick={handleSaveAddress}>Simpan</button>
-                
+                  <div className="mb-3">
+                    <label className="block text-sm font-medium text-gray-700">Regencies</label>
+                    <Dropdown className="bg-[#FA4A0C]  rounded-md hover:text-[#FA4A0C] hover:bg-[#fff]" show={dropdownOpen.regency} onToggle={() => toggleDropdown('regency')}>
+                      <DropdownToggle className=" bg-[#FA4A0C] hover:bg-[#FFF] border-2 hover:text-[#FA4A0C] border-[#FA4A0C] hover:border-[#FA4A0C] rounded-md w-full flex justify-between items-center font-normal">
+                        {addedAddress.kabupaten ? addedAddress.kabupaten : "Select"}
+                      </DropdownToggle>
+                      <DropdownMenu className='text-[15px] bg-[#FA4A0C] hover:text-[#FA4A0C] hover:bg-[#fff]'>
+                                {regAddress.map((regency) => (
+                                    <button
+                                        key={regency.id}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            setAddedAddress((prev) => ({
+                                                ...prev,
+                                                kabupaten: regency.name,
+                                                kabupatenId: regency.id}))
+                                            toggleDropdown('regency')
+                                        }}
+                                        className="dropdown-item bg-[#FA4A0C] text-[#fff] hover:text-[#FA4A0C] hover:bg-[#fff]"
+                                    >
+                                        {regency.name}
+                                    </button>
+                                ))}
+                            </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                  <div className="mb-3">
+                    <label className="block text-sm font-medium text-gray-700">District</label>
+                    <Dropdown className="bg-[#FA4A0C]  rounded-md hover:text-[#FA4A0C] hover:bg-[#fff]" show={dropdownOpen.district} onToggle={() => toggleDropdown('district')}>
+                      <DropdownToggle className=" bg-[#FA4A0C] hover:bg-[#FFF] border-2 hover:text-[#FA4A0C] border-[#FA4A0C] hover:border-[#FA4A0C] rounded-md w-full flex justify-between items-center font-normal">
+                        {addedAddress.kecamatan ? addedAddress.kecamatan : "Select"}
+                      </DropdownToggle>
+                      <DropdownMenu className='text-[15px] bg-[#FA4A0C] hover:text-[#FA4A0C] hover:bg-[#fff]'>
+                                {districtAddress.map((district) => (
+                                    <button
+                                        key={district.id}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            setAddedAddress((prev) => ({
+                                                ...prev,
+                                                kecamatan: district.name,
+                                                kecamatanId: district.id}))
+                                            toggleDropdown('district')
+                                        }}
+                                        className="dropdown-item bg-[#FA4A0C] text-[#fff] hover:text-[#FA4A0C] hover:bg-[#fff]"
+                                    >
+                                        {district.name}
+                                    </button>
+                                ))}
+                            </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                  <div className="mb-3">
+                    <label className="block text-sm font-medium text-gray-700">Villages</label>
+                    <Dropdown className="bg-[#FA4A0C]  rounded-md hover:text-[#FA4A0C] hover:bg-[#fff]" show={dropdownOpen.village} onToggle={() => toggleDropdown('village')}>
+                      <DropdownToggle className=" bg-[#FA4A0C] hover:bg-[#FFF] border-2 hover:text-[#FA4A0C] border-[#FA4A0C] hover:border-[#FA4A0C] rounded-md w-full flex justify-between items-center font-normal">
+                        {addedAddress.kelurahan ? addedAddress.kelurahan : "Select"}
+                      </DropdownToggle>
+                      <DropdownMenu className='text-[15px] bg-[#FA4A0C] hover:text-[#FA4A0C] hover:bg-[#fff]'>
+                                {villageAddress.map((village) => (
+                                    <button
+                                        key={village.id}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            setAddedAddress((prev) => ({
+                                                ...prev,
+                                                kelurahan: village.name,
+                                                kelurahanId: village.id}))
+                                            toggleDropdown('village')
+                                        }}
+                                        className="dropdown-item bg-[#FA4A0C] text-[#fff] hover:text-[#FA4A0C] hover:bg-[#fff]"
+                                    >
+                                        {village.name}
+                                    </button>
+                                ))}
+                            </DropdownMenu>
+                    </Dropdown>
+                  </div>
               </div>
             </div>
+            <div className="flex justify-center mt-3">
+                <button
+                type="button"
+                onClick={onClose}
+                className="mr-2 px-4 py-2 bg-[#fff] text-[#FA4A0C] border-1 border-[#FA4A0C] rounded-md hover:bg-[#FA4A0C] hover:text-[#fff]"
+                >
+                Cancel
+                </button>
+                <button
+                type="button"
+                onClick={handleSaveAddress}
+                className="px-4 py-2 bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] rounded-md hover:bg-[#fff] hover:text-[#FA4A0C]">
+                Save
+                </button>
+            </div>
+          </form>
         </div>
       </div>
-    </div>
   );
 };

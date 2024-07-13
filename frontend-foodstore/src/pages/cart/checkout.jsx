@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { formatPrice } from "../../utils";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar";
+import { FaArrowLeft } from "react-icons/fa6";
 
 export const Checkout = () => {
   const [showAddressOptions, setShowAddressOptions] = useState(false);
@@ -10,11 +12,17 @@ export const Checkout = () => {
 
   const [addresses, setAddresses] = useState([]);
   const [cartsPrice, setCartsPrice] = useState([]);
+  const [selectedDeliveryFee, setSelectedDeliveryFee] = useState();
 
   const data = {
     delivery_address: selectedAddress,
-    delivery_fee: 30000,
+    delivery_fee: selectedDeliveryFee,
   };
+
+  const deliveryFees = [
+    { id: 1, fee: 50000, label: 'Regular Rp 50,000' },
+    { id: 2, fee: 60000, label: 'Express Rp 60,000' },
+  ];
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -54,7 +62,25 @@ export const Checkout = () => {
     setSelectedAddress(_id);
     setShowAddressOptions(false);
   };
+
+  const handleDeliveryFeeChange = (fee) => {
+    setSelectedDeliveryFee(parseInt(fee));
+  };
+
   let navigate = useNavigate()
+
+
+
+  const backToCart = () => {
+    navigate('/carts')
+  }
+  const calculateSubTotalPrice = () => {
+    let totalPrice = 0;
+    cartsPrice.forEach((item) => {
+      totalPrice += item.price * item.qty;
+    });
+    return totalPrice;
+  };
 
   const handleBayar = async (event) => {
     event.preventDefault(); 
@@ -74,19 +100,6 @@ export const Checkout = () => {
       console.error(e)
     }
   }
-  const handleOrder = () => {
-    navigate('/order')
-  }
-  const backToCart = () => {
-    navigate('/carts')
-  }
-  const calculateSubTotalPrice = () => {
-    let totalPrice = 0;
-    cartsPrice.forEach((item) => {
-      totalPrice += item.price * item.qty;
-    });
-    return totalPrice;
-  };
 
   const calculateTotalPrice = () => {
       const subTotal = calculateSubTotalPrice();
@@ -96,52 +109,66 @@ export const Checkout = () => {
   }
 
   return (
-    <div
-      className=" text-white pl-20 max-w-[1440px] mx-auto border-1 p-3 mt-10"
-    >
-      <h1 className=" text-lg pb-4 text-left font-semibold">Checkout</h1>
-      <div className="border-1 p-2 gap-1">
-        <div className="flex flex-col w-full pb-4 text-[28px] font-bold">
-          <span>Konfirmasi Pesanan</span>
-        </div>
-        <div className="border-1 p-2 w-[100%]">
-          <form>
-            <div className="pb-3">
-              <span className="pr-[500px]">Alamat</span>
-              <select
-                className="cursor-pointer text-black"
-                value={selectedAddress}
-                onChange={(e) => handleAddressChange(e.target.value)}
-              >
-                  <option className="text-black" value="">Pilih Alamat</option>
-                {addresses.map((address) => (
-                  <option key={address._id} value={address._id} className="text-black">
-                    {address.detail} {address.kelurahan} {address.kecamatan}, {address.kabupaten}, {address.provinsi}
-                  </option>
-                ))}
-              </select>
+    <>
+      <Navbar/>
+      <div className="text-black px-[200px] mt-10">
+        <div className="text-[#fff] rounded-3xl border-[2px] border-[#FA4A0C] bg-[#FA4A0C] mt-10 px-5 pb-5">
+          <h1 className="  text-[20px] py-4 text-left font-semibold font-poppins">Checkout</h1>
+          <div className="border-1 p-3 rounded-xl border-[#fff] bg-[#fff] text-black gap-1">
+            <div className="flex flex-col w-full pb-4 text-[20px] font-bold">
+              <span>Order Confirmation</span>
             </div>
-            <div>
-              <div className="pb-3">
-                <span className="pr-[490px]">SubTotal</span>
-                <span className="">{formatPrice(calculateSubTotalPrice())}</span>
-              </div>
-              <div className="pb-3">
-                <span className="pr-[455px]">Ongkos Kirim</span>
-                <span className="">{formatPrice(data.delivery_fee)}</span>
-              </div>
-              <div className="pb-3">
-                <span className="pr-[518px]">Total</span>
-                <span className="">{formatPrice(calculateTotalPrice())}</span>
-              </div>
+            <div className="px-[100px] w-[100%]">
+              <form className="p-[20px] font-poppins ">
+                <div className="pb-3 px-[100px] flex gap-[200px] items-center">
+                  <span className="font-semibold">Address</span>
+                  <select
+                    className="cursor-pointer shadow-md w-[550px]  px-2 h-[35px] rounded-lg"
+                    value={selectedAddress}
+                    onChange={(e) => handleAddressChange(e.target.value)}
+                  >
+                      <option className="text-black " value="">Choose Address</option>
+                    {addresses.map((address) => (
+                      <option key={address._id} value={address._id} className="text-black">
+                        {address.detail} {address.kelurahan} {address.kecamatan}, {address.kabupaten}, {address.provinsi}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <div className="pb-3 px-[100px] flex gap-[200px] items-center">
+                    <span className="font-semibold">SubTotal</span>
+                    <span className="">{formatPrice(calculateSubTotalPrice())}</span>
+                  </div>
+                  <div className="pb-3 px-[100px] flex gap-[160px] items-center">
+                    <span className="font-semibold">Shipping Fee</span>
+                    <select
+                      className="cursor-pointer shadow-md p-2 h-[40px] rounded-lg"
+                      value={selectedDeliveryFee}
+                      onChange={(e) => handleDeliveryFeeChange(e.target.value)}
+                    >
+                      <option className="text-black " value="">Choose Shipping Fee</option>
+                      {deliveryFees.map((option) => (
+                        <option key={option.id} value={option.fee} className="text-black">
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="pb-3 px-[100px] flex gap-[230px] items-center">
+                    <span className="font-semibold">Total</span>
+                    <span className="">{formatPrice(calculateTotalPrice())}</span>
+                  </div>
+                </div>
+                <div className="mt-4 flex justify-between px-[20px]">
+                  <button className="bg-[#FA4A0C] flex items-center justify-center gap-[10px] border-[2px] border-[#FA4A0C] font-semibold text-[#fff] h-[35px] rounded-xl w-[120px] hover:bg-[#FFF] hover:text-[#FA4A0C]" onClick={backToCart}><FaArrowLeft /> Back</button>
+                  <button className="bg-[#FA4A0C] items-center justify-center border-[2px] border-[#FA4A0C] font-semibold text-[#fff] h-[35px] rounded-xl w-[120px] hover:bg-[#FFF] hover:text-[#FA4A0C]" onClick={handleBayar}>Pay Now</button>
+                </div>
+              </form>
             </div>
-            <div className="mt-4 flex justify-between">
-              <button className="bg-blue-500 w-[100px]" onClick={backToCart}>Kembali</button>
-              <button className="bg-green-500 w-[100px]" onClick={handleBayar}>Bayar</button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

@@ -10,7 +10,7 @@ const productSchema = Schema({
 
     description:{
         type: String,
-        maxLength: [100, 'Panjang maksimal deskripsi 1000 karakter']
+        maxLength: [5000, 'Panjang maksimal deskripsi 5000 karakter']
     },
 
     price:{
