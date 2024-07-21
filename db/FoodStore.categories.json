@@ -1,28 +1,21 @@
 [{
   "_id": {
-    "$oid": "65f951d7dcaac1908fd4d2d8"
+    "$oid": "667632b536e80f595c0bccda"
   },
-  "name": "Minuman",
+  "name": "Foods",
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "65f953822c9004e0536ece82"
+    "$oid": "667632cc36e80f595c0bcce1"
   },
-  "name": "Makanan",
+  "name": "Drinks",
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "65f961a497b4fb9d2630ca35"
+    "$oid": "6676333e36e80f595c0bcce6"
   },
-  "name": "Snack",
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "663f6e634a6662dad51f4942"
-  },
-  "name": "New Food",
+  "name": "Sauces & Condiments",
   "__v": 0
 }]

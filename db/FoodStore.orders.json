@@ -30,4 +30,223 @@
   },
   "order_number": 27,
   "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660c76be95121d4e3da2d74"
+  },
+  "status": "waiting_payment",
+  "delivery_fee": 30000,
+  "delivery_address": {
+    "provinsi": "ACEH",
+    "kabupaten": "KABUPATEN SIMEULUE",
+    "kecamatan": "SIMEULUE TIMUR",
+    "kelurahan": "AIR PINANG",
+    "detail": "test"
+  },
+  "user": {
+    "$oid": "65ffed4cc42dba414a47576a"
+  },
+  "order_item": [
+    {
+      "$oid": "6660c76be95121d4e3da2d76"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-06-05T20:15:39.171Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-05T20:15:39.171Z"
+  },
+  "order_number": 28,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660c81ae95121d4e3da2e35"
+  },
+  "status": "waiting_payment",
+  "delivery_fee": 30000,
+  "delivery_address": {
+    "provinsi": "BALI",
+    "kabupaten": "KOTA DENPASAR",
+    "kecamatan": "DENPASAR TIMUR",
+    "kelurahan": "KESIMAN",
+    "detail": "Jl X No.200"
+  },
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order_item": [
+    {
+      "$oid": "6660c81ae95121d4e3da2e37"
+    },
+    {
+      "$oid": "6660c81ae95121d4e3da2e38"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-06-05T20:18:34.583Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-05T20:18:34.583Z"
+  },
+  "order_number": 29,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6663de7ecef7e039d340523a"
+  },
+  "status": "waiting_payment",
+  "delivery_fee": 30000,
+  "delivery_address": {
+    "provinsi": "DKI JAKARTA",
+    "kabupaten": "KOTA JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "CILANDAK TIMUR",
+    "detail": "test"
+  },
+  "user": {
+    "$oid": "65ffed4cc42dba414a47576a"
+  },
+  "order_item": [
+    {
+      "$oid": "6663de7ecef7e039d340523c"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-06-08T04:30:54.457Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-08T04:30:54.457Z"
+  },
+  "order_number": 30,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66793263d6b3007e54df503f"
+  },
+  "status": "waiting_payment",
+  "delivery_fee": 50000,
+  "delivery_address": {
+    "provinsi": "ACEH",
+    "kabupaten": "KABUPATEN SIMEULUE",
+    "kecamatan": "TEUPAH SELATAN",
+    "kelurahan": "LATIUNG",
+    "detail": "tes"
+  },
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order_item": [
+    {
+      "$oid": "66793263d6b3007e54df5041"
+    },
+    {
+      "$oid": "66793263d6b3007e54df5042"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-06-24T08:46:27.785Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-24T08:46:27.785Z"
+  },
+  "order_number": 31,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66793298d6b3007e54df5102"
+  },
+  "status": "waiting_payment",
+  "delivery_fee": 60000,
+  "delivery_address": {
+    "provinsi": "ACEH",
+    "kabupaten": "KABUPATEN SIMEULUE",
+    "kecamatan": "TEUPAH SELATAN",
+    "kelurahan": "LATIUNG",
+    "detail": "tes"
+  },
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order_item": [
+    {
+      "$oid": "66793298d6b3007e54df5104"
+    },
+    {
+      "$oid": "66793298d6b3007e54df5105"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-06-24T08:47:20.262Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-24T08:47:20.262Z"
+  },
+  "order_number": 32,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669218cc7baafeed52e98a93"
+  },
+  "status": "waiting_payment",
+  "delivery_fee": 35000,
+  "delivery_address": {
+    "provinsi": "BALI",
+    "kabupaten": "KOTA DENPASAR",
+    "kecamatan": "DENPASAR SELATAN",
+    "kelurahan": "RENON",
+    "detail": "Jl X No. 1"
+  },
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order_item": [
+    {
+      "$oid": "669218cc7baafeed52e98a95"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-07-13T06:03:56.424Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-13T06:03:56.424Z"
+  },
+  "order_number": 33,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669231f2971484ef1f785804"
+  },
+  "status": "waiting_payment",
+  "delivery_fee": 50000,
+  "delivery_address": {
+    "provinsi": "BALI",
+    "kabupaten": "KOTA DENPASAR",
+    "kecamatan": "DENPASAR SELATAN",
+    "kelurahan": "RENON",
+    "detail": "Jl X No. 1"
+  },
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order_item": [
+    {
+      "$oid": "669231f2971484ef1f785806"
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-07-13T07:51:14.044Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-13T07:51:14.044Z"
+  },
+  "order_number": 34,
+  "__v": 0
 }]

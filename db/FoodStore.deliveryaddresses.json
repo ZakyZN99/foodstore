@@ -1,63 +1,84 @@
 [{
   "_id": {
-    "$oid": "66482d5acd7d4c560420dff2"
+    "$oid": "6660c73fe95121d4e3da2c9f"
   },
-  "nama": "Rumah",
-  "kelurahan": "KESIMAN",
-  "kecamatan": "DENPASAR TIMUR",
-  "kabupaten": "KOTA DENPASAR",
-  "provinsi": "BALI",
-  "detail": "Jl X No.200",
+  "nama": "Test",
+  "kelurahan": "CILANDAK TIMUR",
+  "kecamatan": "PASAR MINGGU",
+  "kabupaten": "KOTA JAKARTA SELATAN",
+  "provinsi": "DKI JAKARTA",
+  "detail": "test",
   "user": {
-    "$oid": "65fbf3563987dd2ac49beba2"
+    "$oid": "65ffed4cc42dba414a47576a"
   },
   "createdAt": {
-    "$date": "2024-05-18T04:23:54.401Z"
+    "$date": "2024-06-05T20:14:55.935Z"
   },
   "updatedAt": {
-    "$date": "2024-05-18T04:23:54.401Z"
+    "$date": "2024-06-05T20:14:55.935Z"
   },
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "66482d67cd7d4c560420dff9"
+    "$oid": "6660c750e95121d4e3da2cd2"
   },
-  "nama": "tes211",
-  "kelurahan": "LATIUNG",
-  "kecamatan": "TEUPAH SELATAN",
+  "nama": "test",
+  "kelurahan": "AIR PINANG",
+  "kecamatan": "SIMEULUE TIMUR",
   "kabupaten": "KABUPATEN SIMEULUE",
   "provinsi": "ACEH",
-  "detail": "tes",
+  "detail": "test",
   "user": {
-    "$oid": "65fbf3563987dd2ac49beba2"
+    "$oid": "65ffed4cc42dba414a47576a"
   },
   "createdAt": {
-    "$date": "2024-05-18T04:24:07.772Z"
+    "$date": "2024-06-05T20:15:12.245Z"
   },
   "updatedAt": {
-    "$date": "2024-05-18T05:21:33.342Z"
+    "$date": "2024-06-05T20:15:12.245Z"
   },
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "66483048953f56f313587e4d"
+    "$oid": "6692116e7baafeed52e98929"
   },
-  "nama": "Homieee",
-  "kelurahan": "BAJERA",
-  "kecamatan": "SELEMADEG",
-  "kabupaten": "KABUPATEN TABANAN",
+  "nama": "Home",
+  "kelurahan": "RENON",
+  "kecamatan": "DENPASAR SELATAN",
+  "kabupaten": "KOTA DENPASAR",
   "provinsi": "BALI",
-  "detail": "Jl. XYZ No.2",
+  "detail": "Jl X No. 1",
   "user": {
     "$oid": "65fbf3563987dd2ac49beba2"
   },
   "createdAt": {
-    "$date": "2024-05-18T04:36:24.733Z"
+    "$date": "2024-07-13T05:32:30.995Z"
   },
   "updatedAt": {
-    "$date": "2024-05-18T05:20:50.756Z"
+    "$date": "2024-07-13T05:32:30.995Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669230cd971484ef1f78560a"
+  },
+  "nama": "Home",
+  "kelurahan": "NIASO",
+  "kecamatan": "MARO SEBO",
+  "kabupaten": "KABUPATEN MUARO JAMBI",
+  "provinsi": "JAMBI",
+  "detail": "Jl. Test No 1",
+  "user": {
+    "$oid": "66923000971484ef1f785505"
+  },
+  "createdAt": {
+    "$date": "2024-07-13T07:46:21.586Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-13T07:46:21.586Z"
   },
   "__v": 0
 }]

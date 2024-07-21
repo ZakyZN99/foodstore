@@ -26,4 +26,207 @@
     "$date": "2024-05-17T20:13:55.917Z"
   },
   "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660c76be95121d4e3da2d7d"
+  },
+  "sub_total": 60000,
+  "delivery_fee": 30000,
+  "delivery_address": {
+    "provinsi": "ACEH",
+    "kabupaten": "KABUPATEN SIMEULUE",
+    "kecamatan": "SIMEULUE TIMUR",
+    "kelurahan": "AIR PINANG",
+    "detail": "test"
+  },
+  "total": 90000,
+  "payment_status": "waiting_payment",
+  "user": {
+    "$oid": "65ffed4cc42dba414a47576a"
+  },
+  "order": {
+    "$oid": "6660c76be95121d4e3da2d74"
+  },
+  "createdAt": {
+    "$date": "2024-06-05T20:15:39.183Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-05T20:15:39.183Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660c81ae95121d4e3da2e40"
+  },
+  "sub_total": 220000,
+  "delivery_fee": 30000,
+  "delivery_address": {
+    "provinsi": "BALI",
+    "kabupaten": "KOTA DENPASAR",
+    "kecamatan": "DENPASAR TIMUR",
+    "kelurahan": "KESIMAN",
+    "detail": "Jl X No.200"
+  },
+  "total": 250000,
+  "payment_status": "waiting_payment",
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order": {
+    "$oid": "6660c81ae95121d4e3da2e35"
+  },
+  "createdAt": {
+    "$date": "2024-06-05T20:18:34.593Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-05T20:18:34.593Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6663de7ecef7e039d3405256"
+  },
+  "sub_total": 250000,
+  "delivery_fee": 30000,
+  "delivery_address": {
+    "provinsi": "DKI JAKARTA",
+    "kabupaten": "KOTA JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "CILANDAK TIMUR",
+    "detail": "test"
+  },
+  "total": 280000,
+  "payment_status": "waiting_payment",
+  "user": {
+    "$oid": "65ffed4cc42dba414a47576a"
+  },
+  "order": {
+    "$oid": "6663de7ecef7e039d340523a"
+  },
+  "createdAt": {
+    "$date": "2024-06-08T04:30:54.672Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-08T04:30:54.672Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66793264d6b3007e54df505e"
+  },
+  "sub_total": 999997,
+  "delivery_fee": 50000,
+  "delivery_address": {
+    "provinsi": "ACEH",
+    "kabupaten": "KABUPATEN SIMEULUE",
+    "kecamatan": "TEUPAH SELATAN",
+    "kelurahan": "LATIUNG",
+    "detail": "tes"
+  },
+  "total": 1049997,
+  "payment_status": "waiting_payment",
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order": {
+    "$oid": "66793263d6b3007e54df503f"
+  },
+  "createdAt": {
+    "$date": "2024-06-24T08:46:28.087Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-24T08:46:28.087Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66793298d6b3007e54df510d"
+  },
+  "sub_total": 457800,
+  "delivery_fee": 60000,
+  "delivery_address": {
+    "provinsi": "ACEH",
+    "kabupaten": "KABUPATEN SIMEULUE",
+    "kecamatan": "TEUPAH SELATAN",
+    "kelurahan": "LATIUNG",
+    "detail": "tes"
+  },
+  "total": 517800,
+  "payment_status": "waiting_payment",
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order": {
+    "$oid": "66793298d6b3007e54df5102"
+  },
+  "createdAt": {
+    "$date": "2024-06-24T08:47:20.269Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-24T08:47:20.269Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669218cc7baafeed52e98a9c"
+  },
+  "sub_total": 400000,
+  "delivery_fee": 35000,
+  "delivery_address": {
+    "provinsi": "BALI",
+    "kabupaten": "KOTA DENPASAR",
+    "kecamatan": "DENPASAR SELATAN",
+    "kelurahan": "RENON",
+    "detail": "Jl X No. 1"
+  },
+  "total": 435000,
+  "payment_status": "waiting_payment",
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order": {
+    "$oid": "669218cc7baafeed52e98a93"
+  },
+  "createdAt": {
+    "$date": "2024-07-13T06:03:56.955Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-13T06:03:56.955Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669231f2971484ef1f78580d"
+  },
+  "sub_total": 599997,
+  "delivery_fee": 50000,
+  "delivery_address": {
+    "provinsi": "BALI",
+    "kabupaten": "KOTA DENPASAR",
+    "kecamatan": "DENPASAR SELATAN",
+    "kelurahan": "RENON",
+    "detail": "Jl X No. 1"
+  },
+  "total": 649997,
+  "payment_status": "waiting_payment",
+  "user": {
+    "$oid": "65fbf3563987dd2ac49beba2"
+  },
+  "order": {
+    "$oid": "669231f2971484ef1f785804"
+  },
+  "createdAt": {
+    "$date": "2024-07-13T07:51:14.052Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-13T07:51:14.052Z"
+  },
+  "__v": 0
 }]

@@ -237,4 +237,154 @@
     "$oid": "6647ba83d9ce061f7ffa4457"
   },
   "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660c76be95121d4e3da2d76"
+  },
+  "name": "Chicken Crispy",
+  "price": 20000,
+  "qty": 3,
+  "product": {
+    "$oid": "6646dc33825333f7e7c5867b"
+  },
+  "order": {
+    "$oid": "6660c76be95121d4e3da2d74"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660c81ae95121d4e3da2e37"
+  },
+  "name": "Chicken Crispy",
+  "price": 20000,
+  "qty": 6,
+  "product": {
+    "$oid": "6646dc33825333f7e7c5867b"
+  },
+  "order": {
+    "$oid": "6660c81ae95121d4e3da2e35"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660c81ae95121d4e3da2e38"
+  },
+  "name": "Pizza",
+  "price": 50000,
+  "qty": 2,
+  "product": {
+    "$oid": "6646d080825333f7e7c5843e"
+  },
+  "order": {
+    "$oid": "6660c81ae95121d4e3da2e35"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6663de7ecef7e039d340523c"
+  },
+  "name": "Pizza",
+  "price": 50000,
+  "qty": 5,
+  "product": {
+    "$oid": "6646d080825333f7e7c5843e"
+  },
+  "order": {
+    "$oid": "6663de7ecef7e039d340523a"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66793263d6b3007e54df5041"
+  },
+  "name": "Citrus Chicken Pizza",
+  "price": 199999,
+  "qty": 3,
+  "product": {
+    "$oid": "66765189d5a672bfdf94d396"
+  },
+  "order": {
+    "$oid": "66793263d6b3007e54df503f"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66793263d6b3007e54df5042"
+  },
+  "name": "Spicy Pepperoni Pizza",
+  "price": 200000,
+  "qty": 2,
+  "product": {
+    "$oid": "66765297d5a672bfdf94d3d3"
+  },
+  "order": {
+    "$oid": "66793263d6b3007e54df503f"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66793298d6b3007e54df5104"
+  },
+  "name": "Classic Margherita Pizza",
+  "price": 189900,
+  "qty": 2,
+  "product": {
+    "$oid": "66764abe36e80f595c0bd0ff"
+  },
+  "order": {
+    "$oid": "66793298d6b3007e54df5102"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66793298d6b3007e54df5105"
+  },
+  "name": "Orange-Mango Smoothies",
+  "price": 39000,
+  "qty": 2,
+  "product": {
+    "$oid": "66765ef0d5a672bfdf94d510"
+  },
+  "order": {
+    "$oid": "66793298d6b3007e54df5102"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669218cc7baafeed52e98a95"
+  },
+  "name": "Spicy Pepperoni Pizza",
+  "price": 200000,
+  "qty": 2,
+  "product": {
+    "$oid": "66765297d5a672bfdf94d3d3"
+  },
+  "order": {
+    "$oid": "669218cc7baafeed52e98a93"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669231f2971484ef1f785806"
+  },
+  "name": "Citrus Chicken Pizza",
+  "price": 199999,
+  "qty": 3,
+  "product": {
+    "$oid": "66765189d5a672bfdf94d396"
+  },
+  "order": {
+    "$oid": "669231f2971484ef1f785804"
+  },
+  "__v": 0
 }]
