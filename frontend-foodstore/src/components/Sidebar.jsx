@@ -41,7 +41,7 @@ export const SideBar = () => {
                 <li className='cursor-pointer hover:bg-[#ffff]  hover:text-[#FA4A0C] rounded-md pb-2 '>
                     <Link to={"/me"} className={`flex items-center gap-x-4 ${location.pathname === "/me" ? "text-[#FA4A0C] bg-[#ffff] rounded-md p-1" : ""} `}>
                         <IoPersonCircleOutline size={30}/>
-                        <span className={`sidebar-text duration-200 hidden origin-center`}>Profile</span>
+                        <span className={`sidebar-text duration-200 hidden origin-left`}>Profile</span>
                     </Link>
                 </li>
                 <li className='cursor-pointer hover:bg-[#ffff]  hover:text-[#FA4A0C] rounded-md pb-2  '>
@@ -52,38 +52,38 @@ export const SideBar = () => {
                 </li>
                 <li className='cursor-pointer hover:bg-[#ffff]  hover:text-[#FA4A0C] rounded-md pb-2'>
                     <Link to={"/address"} className={`flex items-center gap-x-4 ${location.pathname === "/address" ? "text-[#FA4A0C] bg-[#ffff] rounded-md p-1  " : ""} `}>
-                        <FaHome  size={20}/>
-                        <span className={`${!open  && "hidden"} origin-left duration-200`}>Address</span>
+                        <FaHome  size={30}/>
+                        <span className={`sidebar-text hidden origin-left duration-200`}>Address</span>
                     </Link>
                 </li>
                 {isLoggedIn && userData.role === 'admin' && (
                     <>
                     <li className='cursor-pointer hover:bg-[#ffff]  hover:text-[#FA4A0C] rounded-md pb-2 '>
                     <Link to={"/category"} className={`flex items-center gap-x-4 ${location.pathname === "/category" ? "text-[#FA4A0C] bg-[#ffff] rounded-md p-1  " : ""} `}>
-                        <BiCategory  size={20}/>
-                        <span className={`${!open  && "hidden"} origin-left duration-200`}>Categories</span>
+                        <BiCategory  size={30}/>
+                        <span className={`sidebar-text hidden origin-left duration-200`}>Categories</span>
                     </Link>
                     </li>
-                    <li className='cursor-pointer p-1 hover:bg-[#ffff]  hover:text-[#FA4A0C] rounded-md pb-2 '>
+                    <li className='cursor-pointer hover:bg-[#ffff]  hover:text-[#FA4A0C] rounded-md pb-2 '>
                         <Link to={"/tag"} className={`flex items-center gap-x-4 ${location.pathname === "/tag" ? "text-[#FA4A0C] bg-[#ffff] rounded-md p-1  " : ""} `}>
-                            <FaTags  size={20}/>
-                            <span className={`${!open  && "hidden"} origin-left duration-200`}>Tags</span>
+                            <FaTags  size={30}/>
+                            <span className={`sidebar-text hidden origin-left duration-200`}>Tags</span>
                         </Link>
                     </li>
-                    <li className='cursor-pointer p-1  hover:bg-[#ffff]  hover:text-[#FA4A0C] rounded-md pb-2 '>
-                        <Link to={"/product"} className={`flex items-center gap-x-4 ${location.pathname === "/product" ? "text-[#FA4A0C] bg-[#ffff] rounded-md p-1  " : ""} `}>
-                            <IoFastFood   size={20}/>
-                            <span className={`${!open  && "hidden"} origin-left duration-200`}>Products</span>
+                    <li className='cursor-pointer  hover:bg-[#ffff]  hover:text-[#FA4A0C] rounded-md pb-2 '>
+                        <Link to={"/product"} className={`flex items-center gap-x-4 ${location.pathname === "/product" ? "text-[#FA4A0C] bg-[#ffff] rounded-md p-1" : ""} `}>
+                            <IoFastFood   size={30}/>
+                            <span className={`sidebar-text hidden origin-left duration-200`}>Products</span>
                         </Link>
                     </li>
                     </>
                 )}
             </ul>
             <div className='mt-auto'>
-                <div className=' flex text-[16px] font-poppins font-medium text-[#000] items-center gap-x-4 hover:bg-[#ffff]  hover:text-[#FA4A0C] rounded-md cursor-pointer p-1 '>
+                <div className=' flex text-[16px] font-poppins font-medium text-[#000] items-center gap-x-4 hover:bg-[#ffff]  hover:text-[#FA4A0C] rounded-md cursor-pointer '>
                     <Link to={""} className={`flex items-center gap-x-4 `}>
-                        <IoLogOutOutline size={20} />
-                        <span className={`${!open  && "hidden"} origin-left duration-200`}>Logout</span>
+                        <IoLogOutOutline size={30} />
+                        <span className={`sidebar-text hidden origin-left duration-200`}>Logout</span>
                     </Link>
                 </div>
             </div>

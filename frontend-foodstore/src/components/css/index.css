@@ -2,6 +2,8 @@
     width: 5rem;
     transition: width 0.3s;
     overflow: hidden;
+    position: fixed;
+    z-index: 1000;
 }
 
 .sidebar:hover{
@@ -18,3 +20,4 @@
     display: inline;
     opacity: 1;
 }
+

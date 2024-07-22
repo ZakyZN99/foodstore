@@ -6,31 +6,15 @@
     import Multiselect from 'multiselect-react-dropdown';
     import Navbar from "../../../components/Navbar";
     import { SideBar } from "../../../components/Sidebar";
-import TableProducts from "../../../components/tables/TableProducts";
+    import TableProducts from "../../../components/tables/TableProducts";
+import { PrimaryButton } from "../../../components/button/PrimaryButton";
 
     const ListProduct = () => {
-        const [isLoggedIn, setIsLoggedIn] = useState(false);
-        const [userData, setUserData] = useState([])
         const [editProductId, setEditProductId] = useState(null);
 
         const [products, setProducts] = useState([])
         const [categories, setCategories] = useState([]);
         const [tags, setTags] = useState([]);
-
-        const [currentPage, setCurrentPage] = useState(1);
-        const [itemsPerPage] = useState(8);
-        const totalPages = Math.ceil(products.length / itemsPerPage);
-
-        const indexOfLastItem = currentPage * itemsPerPage;
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
-
-        // Change page
-        const nextPage = () => setCurrentPage((prevPage) => prevPage + 1);
-        const prevPage = () => setCurrentPage((prevPage) => prevPage - 1);
-
-        // Go to specific page
-        const goToPage = (page) => setCurrentPage(page);
 
 
         const [editProductNam, setEditProductNam] = useState("");
@@ -49,26 +33,6 @@ import TableProducts from "../../../components/tables/TableProducts";
         const [productImage, setProductImage] = useState(null);
 
         useEffect(()=> {
-            const token = localStorage.getItem('token');
-            const userDataFromStorage = localStorage.getItem('user');
-            if(token && userDataFromStorage){
-                setUserData(JSON.parse(userDataFromStorage))
-                setIsLoggedIn(true);
-            }
-            //PRODUCTS
-            const fetchProducts= async () => {
-                try {
-                    const res = await axios.get('http://localhost:3000/api/product',
-                    {
-                        headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                    setProducts(res.data.data);
-                } catch (e) {
-                    console.error(e)
-                }
-            }
             //CATEGORIES
             const fetchCategories = async () => {
                 try {
@@ -99,7 +63,6 @@ import TableProducts from "../../../components/tables/TableProducts";
 
             fetchTags()
             fetchCategories()
-            fetchProducts()
         },[])
 
         const handleEditPrice = (event) => {
@@ -150,18 +113,6 @@ import TableProducts from "../../../components/tables/TableProducts";
                 console.error(e)
             }
         }
-
-        const getImageUrl = (imageName) => {
-            try {
-            if (imageName && imageName.trim() !== "") {
-                return `http://localhost:3000/public/images/product/${imageName}`;
-            } else {
-                return Image;
-            }
-            } catch (error) {
-                console.error("Error fetching img:", error);
-            }
-        };
 
         const handleDeleteProduct = async (productId) => {
             if (window.confirm("Are you sure you want to delete this product?")) {
@@ -235,150 +186,11 @@ import TableProducts from "../../../components/tables/TableProducts";
     return (
         <div className="flex flex-row sm:flex-row">
             <SideBar />
-            <div className="mx-52 flex-1 justify-center pt-3  md:pt-20 lg:pt-24">
+            <div className=" mx-24 flex-1 justify-center pt-3  md:pt-20 lg:pt-24">
                 <div className="w-full  ">
-                    <h1 className="text-center pb-3 font-poppins font-bold text-xl md:text-2xl lg:text-3xl">List Product</h1>
+                    <h1 className="text-center pb-3 font-poppins font-bold text-xl md:text-2xl lg:text-3xl">List Products</h1>
+                        <PrimaryButton>Add Product</PrimaryButton>
                         <TableProducts/>
-                        
-                        {/* <table className="w-full">
-                                    <thead>
-                                        <tr>
-                                            <th className="border">No.</th>
-                                            <th className="border">Product Name</th>
-                                            <th className="border">Description</th>
-                                            <th className="border">Price</th>
-                                            <th className="border">Category</th>
-                                            <th className="border">Tag</th>
-                                            <th className="border">Image</th>
-                                            <th className="border">Option</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    {currentItems.map((product, index) => (
-                                        <tr key={product._id}>
-                                            <td className="border">{indexOfFirstItem + index+1}</td>
-                                            <td className="border">
-                                                {editProductId === product._id ? (
-                                                                    <input
-                                                                        type="text"
-                                                                        className="text-black"
-                                                                        value={editProductNam}
-                                                                        onChange={(e) =>
-                                                                            setEditProductNam(e.target.value)
-                                                                        }
-                                                                    />
-                                                                ) : (
-                                                                    product.name
-                                                )}</td>
-                                            <td className="border">
-                                            {editProductId === product._id ? (
-                                                                    <input
-                                                                        type="text"
-                                                                        className="text-black"
-                                                                        value={editProductDesc}
-                                                                        onChange={(e) =>
-                                                                            setEditProductDesc(e.target.value)
-                                                                        }
-                                                                    />
-                                                                ) : (
-                                                                    product.description
-                                            )}</td>
-                                            <td className="border">{editProductId === product._id ? (
-                                                                    <input
-                                                                        type="text"
-                                                                        className="text-black"
-                                                                        value={editProductPrice}
-                                                                        onChange={handleEditPrice}
-                                                                    />
-                                                                ) : (
-                                                                    formatPrice(product.price)
-                                            )}</td>
-                                            <td className="border">
-                                            {editProductId === product._id ? (
-                                                <select className="w-[100%] h-7 text-black"
-                                                    value={editProductCatg}
-                                                    onChange={(e) => setEditProductCatg(e.target.value)}>
-                                                        {categories.map((category) => (
-                                                        <option key={category._id} value={category.name}>{category.name}</option>
-                                                        ))}
-                                                </select>
-                                            ) : (
-                                                product.category.name
-                                            )}</td>
-                                            <td className="border">{editProductId === product._id ? (
-                                                <Multiselect
-                                                    className="text-black"
-                                                    options={tags}
-                                                    displayValue="name"
-                                                    onSelect={(selectedList) => setEditProductTag(selectedList)}
-                                                    onRemove={(selectedList) => setEditProductTag(selectedList)}
-                                                    selectedValues={editProductTag}
-                                                />
-                                            ) : (
-                                                product.tags.map((tag, index) => (index ? `, ${tag.name}` : tag.name))
-                                            )}</td>
-                                            <td className="border">{editProductId === product._id ? (
-                                                <input
-                                                    className="text-white pl-2 rounded-sm w-[100%]"
-                                                    type="file"
-                                                    accept=".jpg, .jpeg, .png"
-                                                    onChange={(e) => setEditProductImage(e.target.files[0])}
-                                                />
-                                            ) : (
-                                                <img
-                                                    src={getImageUrl ? getImageUrl(product.image_url) : Image}
-                                                    alt="Product"
-                                                    style={{ maxWidth: "100px", maxHeight: "100px", display: "block", margin: "auto" }}
-                                                />
-                                            )}</td>
-                                            <td className="border">
-                                            {editProductId === product._id ? (
-                                            <>
-                                                <button type="button" className="bg-blue-600 text-white h-[25px] px-[10px] rounded-md"
-                                                onClick={handleEditProduct}>Update</button>
-                                                <button type="button"
-                                                        className="bg-red-600 text-white h-[25px] px-[10px] rounded-md"
-                                                        onClick={() => {
-                                                            setEditProductId(null);
-                                                            setEditProductNam("");
-                                                            setEditProductDesc("");
-                                                            setEditProductPrice("");
-                                                            setEditProductImage("");
-                                                            setEditProductCatg("");
-                                                            setEditProductTag("");
-                                                        }}
-                                                    >
-                                                        Cancel
-                                                </button>
-                                            </>
-                                            ) : (
-                                                <>
-                                                    <button type="button" className="bg-yellow-500 text-black h-[25px] px-[10px] rounded-md"
-                                                    onClick={() => {
-                                                    setEditProductId(product._id);
-                                                    setProductName(product.name);
-                                                    }}>Edit</button>
-                                                    <span> </span>
-                                                    <button className="bg-red-600 text-white h-[25px] px-[10px] rounded-md"
-                                                    onClick={() => handleDeleteProduct(product._id)}>Delete</button>
-                                                </>
-                                            )}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                    </tbody>
-                        </table> */}
-                        <div className="pagination pt-2 gap-1">
-                            <button className="bg-blue-600 text-white h-[25px] px-[10px] rounded-md" onClick={prevPage} disabled={currentPage === 1}>Prev</button>
-                        {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
-                            <button className="bg-blue-600 text-white h-[25px] px-[10px] rounded-md" key={page} onClick={() => goToPage(page)}>
-                                    {page}
-                            </button>
-                        ))}
-                            <button className="bg-blue-600 text-white h-[25px] px-[10px] rounded-md" onClick={nextPage} disabled={currentPage === totalPages}>
-                                Next
-                            </button>
-                        </div>
                 </div>  
             </div>
         </div>

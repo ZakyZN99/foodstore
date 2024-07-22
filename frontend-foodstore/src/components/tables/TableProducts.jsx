@@ -5,6 +5,8 @@ import $ from 'jquery'
 import 'datatables.net-dt/css/dataTables.dataTables.css'
 import { formatPrice } from '../../utils'
 import Image from '../../assets/img/Image.jpg'
+import PrimaryActionButton from '../button/PrimaryActionButton'
+import SecondaryActionButton from '../button/SecondaryActionButton'
 
 const TableProducts = () => {
     const [products, setProducts] = useState([])
@@ -51,10 +53,11 @@ const TableProducts = () => {
     };
 
     return (
-        <div className='container mx-auto mt-5'>
-            <table id='example' className='display'>
-                <thead>
+        <div className=' table-container w-full mx-auto ' >
+            <table id='example' className=' display min-w-full' style={{ width: '100%', margin: 'auto', borderCollapse: 'collapse' }}>
+                <thead className='bg-gray-50' >
                     <tr>
+                        <th className='px-6 py-3'>No.</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Price</th>
@@ -65,11 +68,12 @@ const TableProducts = () => {
                     </tr>
                 </thead>
                 <tbody >
-                    {products.map((product) =>(                    
+                    {products.map((product, index) =>(                    
                         <tr key={product._id}>
+                            <td className='text-center'>{index + 1}</td>
                             <td>{product.name}</td>
                             <td>{product.description}</td>
-                            <td>{formatPrice(product.price)}</td>
+                            <td className='whitespace-nowrap'>{formatPrice(product.price)}</td>
                             <td>{product.category.name}</td>
                             <td>{product.tags.map((tag, index) => (index ? `, ${tag.name}`: tag.name))}</td>
                             <td>
@@ -80,15 +84,9 @@ const TableProducts = () => {
                                 />
                             </td>
                             <td>
-                                <div>
-                                    <button type="button" className="bg-blue-600 text-white h-[25px] px-[10px] rounded-md"
-                                        onClick={""}>Update</button>
-                                    <button type="button"
-                                        className="bg-red-600 text-white h-[25px] px-[10px] rounded-md"
-                                        onClick={""}
-                                    >
-                                            Cancel
-                                    </button>
+                                <div className='flex flex-row gap-2'>
+                                    <PrimaryActionButton>Edit</PrimaryActionButton>
+                                    <SecondaryActionButton>Delete</SecondaryActionButton>
                                 </div>
                             </td>
                         </tr>
