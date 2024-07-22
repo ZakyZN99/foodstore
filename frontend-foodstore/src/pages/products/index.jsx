@@ -5,6 +5,10 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { formatPrice } from "../../utils";
 import Navbar from "../../components/Navbar";
+import authService from "../../services/authService";
+import productService from "../../services/productService";
+import tagService from "../../services/tagService";
+import cartService from "../../services/cartService";
 
 export const Products = () => {
   const { categoryId } = useParams();
@@ -13,45 +17,36 @@ export const Products = () => {
   const [products, setProducts] = useState([]);
   const [tags, setTags] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState(null);
   const [selectedTag, setSelectedTag] = useState(null);
   const [cart, setCart] = useState([]);
 
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userDataFromStorage = localStorage.getItem('user');
-    if (token && userDataFromStorage) {
+    if (authService.getCurrentToken() && authService.getCurrentUser()) {
       setIsLoggedIn(true);
-      setUserData(JSON.parse(userDataFromStorage));
     }
 
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/product");
+        const res = await productService.getProducts()
         setProducts(res.data.data);
       } catch (e) {
-        console.error("Error fetching categories:", e);
+        console.error("Error fetching Products:", e);
       }
     };
 
     const fetchTags = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/tags");
+        const res = await tagService.getTags()
         setTags(res.data);
-        // console.log(res.data);
       } catch (e) {
-        console.error("Error fetching categories:", e);
+        console.error("Error fetching Tags:", e);
       }
     };
     const fetchCartItems = async () => {
       try {
-          if (token) {
-              const res = await axios.get("http://localhost:3000/api/carts", {
-                  headers: {
-                      Authorization: `Bearer ${token}`,
-                  },
-              });
+        if (authService.profile()) {
+              const res = await cartService.getCarts()
               setCart(res.data);
               const newCartItemsCount = res.data.reduce((total, item) => total + item.qty, 0);
               setCartItemsCount(newCartItemsCount);
@@ -115,12 +110,9 @@ export const Products = () => {
   };
 
   const addToCart = async (productId, event) => {
-    
-    const token = localStorage.getItem("token");
-
-    if (!token) {
+    if (!authService.getCurrentToken()) {
       window.location.href = "/login"; 
-      localStorage.removeItem("token");
+      authService.removeCurrentToken()
       return; 
   }
   
@@ -143,16 +135,7 @@ export const Products = () => {
         qty,
       }));
   
-      const res = await axios.put(
-        "http://localhost:3000/api/carts",
-        { items: itemsToUpdate },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-  
+      const res = await cartService.putCart(itemsToUpdate);
       if (res.status === 200) {
         setCart(updatedCart);
         const newCartItemsCount = updatedCart.reduce((total, item) => total + item.qty, 0);
@@ -165,8 +148,8 @@ export const Products = () => {
 
   const handleSearch = async (searchInput) => {
     try {
-      const url = searchInput ?  axios.get(`http://localhost:3000/api/product?search=${searchInput}`)
-                : axios.get('http://localhost:3000/api/product')
+      const url = searchInput ?  productService.search(searchInput)
+                : productService.getProducts()
             const res = await url
             setFilteredProducts(res.data.data);
         }catch(e){
@@ -178,7 +161,7 @@ export const Products = () => {
     <>
     <Navbar onSearch={handleSearch} cartItemsCount={cartItemsCount}/>
     <div className='px-[100px] py-[40px] '>
-      <div className="flex px-[100px] flex-wrap gap-3 pb-[50px]">
+      <div className="flex px-[40px] flex-wrap gap-3 pb-[50px]">
             <select
               className="cursor-pointer text-black border-[2px] border-[#FA4A0C] w-[200px] h-[50px] rounded-xl p-2"
               value={selectedTag || ""}
@@ -195,15 +178,15 @@ export const Products = () => {
       </div>
       <div className='flex gap-[40px] flex-wrap justify-center   '>
           {filteredProducts.map((product) => (
-              <div key={product._id} className=' flex'>
-                  <div className='w-[350px] h-[600px] border-black shadow rounded-3xl flex flex-col transition-all duration-700 ease-in-out'>
-                      <img src={getImageUrl ? getImageUrl(product.image_url) : Image} crossOrigin="anonymous" className='w-full h-[300px] rounded-t-3xl object-cover' />
+              <div key={product._id} className=' flex shadow-slate-600'>
+                  <div className='w-[270px] h-[450px] border-black shadow rounded-3xl flex flex-col transition-all duration-700 ease-in-out'>
+                      <img src={getImageUrl ? getImageUrl(product.image_url) : Image} crossOrigin="anonymous" className='w-full h-[200px] rounded-t-3xl object-cover' />
                       <div className='flex-grow px-[20px] py-[20px] flex flex-col'>
-                          <h1 className=' text-[20px] font-bold pb-[10px]  text-center'>{product.name}</h1>
-                          <p className='text-[15px] pb-[4px] font-poppins text-justify justify-center'>{product.description}</p>
+                          <h1 className=' text-[18px] font-bold pb-[10px] text-center'>{product.name}</h1>
+                          <p className='text-[13px] pb-[4px] font-poppins text-center justify-center'>{product.tags.map((tag, index) => (index ? `, ${tag.name}` : tag.name))}</p>
                           <div className='mt-auto flex pb-[10px] items-center justify-between'>
-                              <p className='text-[20px] ml-[20px] font-semibold'>{formatPrice(product.price)}</p>
-                              <div className='mr-[20px] flex items-center pt-[5px]'>
+                              <p className='text-[18px] font-semibold'>{formatPrice(product.price)}</p>
+                              <div className='flex items-center pt-[5px]'>
                                   <button className='w-[100px] font-semibold border-[#FA4A0C] border-[2px] text-[#FA4A0C] rounded-2xl h-[40px] ' onClick={() => addToCart(product._id)}>Add to Cart</button>
                               </div>
                           </div>

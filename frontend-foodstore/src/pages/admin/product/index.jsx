@@ -6,6 +6,7 @@
     import Multiselect from 'multiselect-react-dropdown';
     import Navbar from "../../../components/Navbar";
     import { SideBar } from "../../../components/Sidebar";
+import TableProducts from "../../../components/tables/TableProducts";
 
     const ListProduct = () => {
         const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -234,10 +235,12 @@
     return (
         <div className="flex flex-row sm:flex-row">
             <SideBar />
-            <div className="mx-72 flex-1 justify-center pt-3  md:pt-20 lg:pt-24">
+            <div className="mx-52 flex-1 justify-center pt-3  md:pt-20 lg:pt-24">
                 <div className="w-full  ">
-                    <h1 className="text-center pb-3 font-poppins font-bold text-xl md:text-2xl lg:text-3xl">List Products</h1>
-                        <table className="w-full">
+                    <h1 className="text-center pb-3 font-poppins font-bold text-xl md:text-2xl lg:text-3xl">List Product</h1>
+                        <TableProducts/>
+                        
+                        {/* <table className="w-full">
                                     <thead>
                                         <tr>
                                             <th className="border">No.</th>
@@ -364,7 +367,7 @@
                                         </tr>
                                     ))}
                                     </tbody>
-                        </table>
+                        </table> */}
                         <div className="pagination pt-2 gap-1">
                             <button className="bg-blue-600 text-white h-[25px] px-[10px] rounded-md" onClick={prevPage} disabled={currentPage === 1}>Prev</button>
                         {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (

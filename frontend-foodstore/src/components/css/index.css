@@ -1,0 +1,20 @@
+.sidebar{
+    width: 5rem;
+    transition: width 0.3s;
+    overflow: hidden;
+}
+
+.sidebar:hover{
+    width: 18rem;
+}
+
+.sidebar-text{
+    display: none;
+    transition: opacity 0.3s;
+    opacity: 0;
+}
+
+.sidebar:hover .sidebar-text{
+    display: inline;
+    opacity: 1;
+}

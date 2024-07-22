@@ -6,10 +6,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Register from './pages/register/index.jsx'
 import { Login } from './pages/login/index.jsx'
 import { AccountDetails } from './pages/detailAccount/index.jsx'
-import { Address } from './pages/address/index.jsx'
-import { NewAddress } from './pages/address/NewAddress.jsx'
+
 import { Cart } from './pages/cart/index.jsx'
-import { Checkout } from './pages/cart/Checkout.jsx'
 import { OrderData } from './pages/order/index.jsx'
 import { Invoice } from './pages/invoice/index.jsx'
 import AddCategories from './pages/admin/category/index.jsx'
@@ -19,6 +17,9 @@ import PaymentPage from './pages/cart/Payment-page.jsx'
 import { SideBar } from './components/Sidebar.jsx'
 import ListProduct from './pages/admin/product/index.jsx'
 import AddProduct from './pages/admin/product/Add-Product.jsx'
+import { NewAddress } from './pages/address/NewAddress.jsx'
+import { Address } from './pages/address/index.jsx'
+import { Checkout } from './pages/cart/Checkout.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
