@@ -87,7 +87,7 @@ const ListProduct = () => {
             if(res.status === 200){
                 setProducts(
                     products.map((p) =>
-                    p._id === productId ? { ...p, ...updatedProduct} : p
+                        p._id === productId ? { ...p, ...updatedProduct} : p
                     )
                 )
             }

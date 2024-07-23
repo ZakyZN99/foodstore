@@ -8,8 +8,7 @@ import { EditTag } from './EditTag';
 
 const AddTag = () => {
     const [tagData, setTagData] = useState([])
-    const [addTagName, setAddTagName] = useState([])
-    const [editTagId, setEditTagId] = useState(null);
+    const [addTagName, setAddTagName] = useState('')
     const [editTag, setEditTag] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false)
 
@@ -27,9 +26,13 @@ const AddTag = () => {
         fetchTags()
     },[])
 
+    const formatTagName = (name) => {
+        return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    };
+    
     const handleAddTag = async () => {
-        const normalizedTag = addTagName.trim().toLowerCase();
-        if (normalizedTag.length < 3 || normalizedTag.length > 21) {
+        const formattedTagName = formatTagName(addTagName.trim());
+        if (formattedTagName.length < 3 || formattedTagName.length > 21) {
             Swal.fire({
                 icon: 'error',
                 title: 'Invalid Tag Length',
@@ -37,7 +40,7 @@ const AddTag = () => {
             });
             return;
         }
-        if (tagData.some(tag => tag.name.toLowerCase() === normalizedTag)) {
+        if (tagData.some(tag => tag.name.toLowerCase() === formattedTagName.toLowerCase())) {
             Swal.fire({
                 icon: 'error',
                 title: 'Duplicate Tag',
@@ -46,7 +49,7 @@ const AddTag = () => {
             return;
         }
         try {
-            const response = await tagService.storeTag(addTagName.trim())
+            const response = await tagService.storeTag(formattedTagName)
             setTagData([...tagData, response.data]);
             setAddTagName("");
             Swal.fire({
@@ -63,7 +66,7 @@ const AddTag = () => {
 
     const handleEditTag = async (tagId, e) => {
         e.preventDefault();
-        const newTag = tagData.map((t) => t._id === tagId)
+        const newTag = tagData.find((tag) => tag._id === tagId)
         if(newTag){
             setEditTag(newTag)
             setShowEditModal(true)
@@ -71,61 +74,72 @@ const AddTag = () => {
             console.error('tag not found');
         }
     }
-    //  const handleEditTag = async (e) => {
-    //     e.preventDefault();
-    //     const normalizedTag = editTagName.trim().toLowerCase();
-    //     if (normalizedTag.length < 3 || normalizedTag.length > 21) {
-    //         alert("Tag name must be between 3 and 20 characters");
-    //         return;
-    //     }
-    //     if (tagData.some(tag => tag.name.toLowerCase() === normalizedTag)) {
-    //         alert("Tag name already exists");
-    //         return;
-    //     }
-    //     try {
-    //         const response = await tagService.putTag(editTagId,  editTagName.trim())
-    //         console.log(`Updated Tag: ${response    }`);
-    //         setTagData((prevTags) =>
-    //             prevTags.map((tag) =>
-    //                 tag._id === editTagId ? response.data : tag
-    //             )
-    //         );
-    //         setEditTagId(null);
-    //         setEditTagName("");
-    //     } catch (e) {
-    //         console.error(e);
-    //     }
-    // };
+
+    const handleSaveEditTag= async(tagId, updatedTag) => {
+        try {
+            const res = await tagService.putTag(tagId, updatedTag.name)
+            if(res === 200){
+                setTagData(
+                    tagData.map((tag) => 
+                        tag._id === tagId ? { ...tag, ...updatedTag} : tag
+                    )
+                )
+            }
+            setEditTag(null)
+            setShowEditModal(false)
+            Swal.fire({
+                title: "Success!",
+                text: "Tag Edited!",
+                icon: "success"
+            }).then(() => {
+                window.location.reload(); // Reload the page after the user clicks "OK"
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     const handleDeleteTags = async (tagId) => {
-        if (window.confirm("Are you sure you want to delete this tag?")) {
-            try {
-                await tagService.deleteTag(tagId)
-                setTagData((prevCategories) =>
-                    prevCategories.filter((tag) => tag._id !== tagId)
-                );
-            alert("Category deleted successfully.");
-        } catch (error) {
-            console.error("Error deleting category:", error);
-        }
-        }
-    };
-
-   
-
-    const handleCancelEdit = () => {
-        setEditTagId(null);
-        setEditTagName("");
-    };
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        }).then(async (result) => {
+            if(result.isConfirmed){
+                try {
+                    await tagService.deleteTag(tagId)
+                    setTagData(tagData.filter((tag) => tag._id !== tagId))
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your tag has been deleted.",
+                        icon: "success",
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } catch (err) {
+                    console.error(err);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "An error occurred while deleting the product.",
+                        icon: "error",
+                    });
+                }
+            }
+        })
+    }
 
 return (
     <div className="flex flex-row sm:flex-row">
         <SideBar/>
-        <div className= "flex justify-center pt-10  md:pt-20 lg:pt-24 h-screen mx-auto">
-            <div className="">
+        <div className=" mx-24 flex-1 justify-center pt-3  md:pt-20 lg:pt-24">
+            <div className="w-full flex flex-col items-center">
                 <h1 className="text-center pb-3 font-poppins font-bold text-xl md:text-2xl lg:text-3xl">Tags</h1>
                 <div className='mb-4 flex gap-5 justify-between'>
-                    <label className="block text-sm font-medium text-gray-700">Tag Name:</label>
+                    <label className="block w-[18%] text-sm font-medium text-gray-700">Tag name:</label>
                     <input
                         type="text"
                         name="nama"
@@ -135,62 +149,9 @@ return (
                     />
                     <PrimaryButton onClick={handleAddTag}>Add Tag</PrimaryButton>
                 </div>
-                <TableTags tags={tagData} onEditTag={handleEditTag}/>
-                    {/* <div className=" p-2 flex  justify-center gap-1 rounded-md">
-                            <form>
-                            <div>
-                                <table className="w-full border-collapse">
-                                <tbody>
-                                {paginatedTagData.map((tag, index)=> (
-                                        <tr key={tag._id}>
-                                        <td className="p-2">{indexOfFirstTag  + index +1}</td>
-                                        <td className="p-2">
-                                            {editTagId === tag._id ? (
-                                            <input
-                                            type="text"
-                                            className="text-black border-b border-gray-700"
-                                            value={editTagName}
-                                            onChange={(e) =>
-                                                setEditTagName(e.target.value)
-                                            }
-                                            />
-                                        ) : (
-                                            tag.name
-                                        )}
-                                        </td>
-                                        <td className="p-2">
-                                        {editTagId === tag._id ? (
-                                            <>
-                                                <button type="button" className="hover:bg-[#FA4A0C] hover:text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal bg-{#fff} text-[#FA4A0C] h-[30px] px-[10px]"
-                                                    onClick={handleEditTag}>Update</button>
-                                                <span> </span>
-                                                <button type="button" className="bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal hover:bg-white hover:text-[#FA4A0C] h-[30px] px-[10px]"
-                                                    onClick={handleCancelEdit}>Cancel</button>
-                                            </>
-                                            
-                                        ) : (
-                                            <>
-                                                <button type="button" className="hover:bg-[#FA4A0C] hover:text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal bg-{#fff} text-[#FA4A0C] h-[30px] px-[10px]"
-                                                onClick={() => {
-                                                setEditTagId(tag._id);
-                                                setEditTagName(tag.name);
-                                                }}>Edit</button>
-                                                <span> </span>
-                                                <button className="bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal hover:bg-white hover:text-[#FA4A0C] h-[30px] px-[10px]"   
-                                                onClick={() => handleDeleteTags(tag._id)}>Delete</button>
-                                            </>
-                                        )}
-                                        </td>
-                                    </tr>
-                                    ))}
-                                </tbody>
-                                </table>
-                                
-                            </div>
-                            </form>
-                            
-                        </div>
-                    </div> */}
+                <div className="w-full max-w-4xl flex justify-center">
+                    <TableTags tags={tagData} onEditTag={handleEditTag} onDeleteTag={handleDeleteTags} />
+                </div>
             </div>
 
         </div>
@@ -198,7 +159,9 @@ return (
             showEditModal &&(
                 <EditTag
                     tagData = {editTag}
-
+                    existingTags={tagData}
+                    onSave = {handleSaveEditTag}
+                    onClose = {()=> setShowEditModal(false)}
                 />
             )
         }

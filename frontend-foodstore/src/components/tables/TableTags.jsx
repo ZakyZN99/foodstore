@@ -5,7 +5,7 @@ import 'datatables.net-dt/css/dataTables.dataTables.css'
 import PrimaryActionButton from '../button/PrimaryActionButton'
 import SecondaryActionButton from '../button/SecondaryActionButton'
 
-export const TableTags = ({tags, onEditTag, onDeleteTag}) => {
+export const TableTags = ({onEditTag, onDeleteTag, tags }) => {
     useEffect(() => {
         if (tags.length > 0) {
             if (!$.fn.dataTable.isDataTable('#example')) {
@@ -21,7 +21,7 @@ export const TableTags = ({tags, onEditTag, onDeleteTag}) => {
     }, [tags])
 
     return (
-        <div className=' table-container w-full mx-auto ' >
+        <div className=' overflow-y-auto table-container w-full mx-auto ' >
             <table id='example' className=' display min-w-full' style={{ width: '100%', margin: 'auto', borderCollapse: 'collapse' }}>
                 <thead className='bg-gray-50' >
                     <tr>
