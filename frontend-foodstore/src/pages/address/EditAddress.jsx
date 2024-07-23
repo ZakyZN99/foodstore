@@ -1,5 +1,5 @@
 import React, { useState, useEffect  } from 'react'
-import { Dropdown, DropdownMenu, DropdownToggle, useAccordionButton } from 'react-bootstrap';
+import { Dropdown, DropdownMenu, DropdownToggle } from 'react-bootstrap';
 import addressService from '../../services/addressService';
 
 const EditAddress = ({ address, onClose, onSave }) => {
@@ -96,21 +96,21 @@ const EditAddress = ({ address, onClose, onSave }) => {
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">Name</label>
                         <input
-                        type="text"
-                        name="nama"
-                        value={editedAddress.nama}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border-b border-gray-500 shadow-sm p-2"
+                            type="text"
+                            name="nama"
+                            value={editedAddress.nama}
+                            onChange={handleChange}
+                            className="mt-1 block w-full border-b border-gray-500 shadow-sm p-2"
                         />
                     </div>
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700">Detail Address</label>
                         <textarea
-                        type="text"
-                        name="detail"
-                        value={editedAddress.detail}
-                        onChange={handleChange}
-                        className="mt-1 px-2 pt-2 pb-[100px] block w-100 border-1 border-gray-500 rounded-md shadow-sm"
+                            type="text"
+                            name="detail"
+                            value={editedAddress.detail}
+                            onChange={handleChange}
+                            className="mt-1 px-2 pt-2 pb-[100px] block w-100 border-1 border-gray-500 rounded-md shadow-sm"
                         />
                     </div>
                 </div>

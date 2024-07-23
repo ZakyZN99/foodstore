@@ -5,7 +5,7 @@ import addressService from "../../services/addressService";
 import authService from "../../services/authService";
 
 
-export const NewAddress = ({ address, onClose, onSave }) => {
+export const NewAddress = ({onClose, onSave }) => {
   const [addedAddress, setAddedAddress] = useState({ nama: '',
         detail: '',
         provinsi: '',

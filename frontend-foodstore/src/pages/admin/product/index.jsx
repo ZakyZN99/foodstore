@@ -1,187 +1,142 @@
-    import axios from "axios";
-    import { useEffect, useState } from "react";
-    import { useNavigate } from "react-router-dom";
-    import { formatPrice } from "../../../utils";
-    import Image from "../../../assets/img/Image.jpg";
-    import Multiselect from 'multiselect-react-dropdown';
-    import Navbar from "../../../components/Navbar";
-    import { SideBar } from "../../../components/Sidebar";
-    import TableProducts from "../../../components/tables/TableProducts";
+import { useEffect, useState } from "react";
+import { SideBar } from "../../../components/Sidebar";
+import TableProducts from "../../../components/tables/TableProducts";
 import { PrimaryButton } from "../../../components/button/PrimaryButton";
+import categoryService from "../../../services/categoryService";
+import tagService from "../../../services/tagService";
+import AddProduct from "./Add-Product";
+import productService from "../../../services/productService";
+import Swal from 'sweetalert2'
+import EditProduct from "./EditProduct";
 
-    const ListProduct = () => {
-        const [editProductId, setEditProductId] = useState(null);
+const ListProduct = () => {
+    const [showAddModal, setShowAddModal] = useState(false)
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [editProduct, setEditProduct] = useState(null)
+    const [products, setProducts] = useState([])
+    const [categories, setCategories] = useState([]);
+    const [tags, setTags] = useState([]);
 
-        const [products, setProducts] = useState([])
-        const [categories, setCategories] = useState([]);
-        const [tags, setTags] = useState([]);
 
-
-        const [editProductNam, setEditProductNam] = useState("");
-        const [editProductDesc, setEditProductDesc] = useState("");
-        const [editProductPrice, setEditProductPrice] = useState("");
-        const [editProductImage, setEditProductImage] = useState("");
-        const [editProductCatg, setEditProductCatg] = useState("");
-        const [editProductTag, setEditProductTag] = useState("");
-
-        const [productName, setProductName] = useState("");
-        const [productDescription, setProductDescription] = useState("");
-        const [productPrice, setProductPrice] = useState("");
-        const [productCategory, setProductCategory] = useState("");
-        // const [productTag, setProductTag] = useState([]);
-        const [selectedTags, setSelectedTags] = useState([]);
-        const [productImage, setProductImage] = useState(null);
-
-        useEffect(()=> {
-            //CATEGORIES
-            const fetchCategories = async () => {
-                try {
-                    const res = await axios.get('http://localhost:3000/api/categories', {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-                    setCategories(res.data);
-                } catch (error) {
-                    console.error(error);
-                }
-            };
-            //TAGS
-            const fetchTags = async () => {
-                try {
-                    const token = localStorage.getItem('token');
-                    const res = await axios.get('http://localhost:3000/api/tags', {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-                    setTags(res.data);
-                } catch (error) {
-                    console.error(error);
-                }
-            };
-
-            fetchTags()
-            fetchCategories()
-        },[])
-
-        const handleEditPrice = (event) => {
-            const value = event.target.value;
-            const numericValue = value.replace(/\D/g, "");
-            setEditProductPrice(numericValue);
-        };
-
-        const handleAddProduct = async () => {
-            const token = localStorage.getItem('token');
-            
+    useEffect(() => {
+        const fetchProduct = async () => {
             try {
-                const formData = new FormData(); // Create a new FormData object
-                        formData.append('name', productName);
-                        formData.append('description', productDescription);
-                        formData.append('price', productPrice);
-                        formData.append('category', productCategory);
-
-                        const tagNames = selectedTags ? selectedTags.map(tag => tag.name) : [];
-
-                        tagNames.forEach((tagName,index) => {
-                            formData.append(`tags[${index}]`, tagName);
-                        }); // Convert tags array to a comma-separated string
-                        if (productImage && productImage.name) {
-                            formData.append('image_url', productImage, productImage.name);
-                        }
-        
-                const response = await axios.post(
-                    "http://localhost:3000/api/product/",
-                    formData,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            'Content-Type': 'multipart/form-data', 
-                        },
-                    }
-                );
-                console.log(`New Data: ${response.data}`);
-                setProducts([...products, response.data]);
-                setProductName("");
-                setProductDescription("");
-                setProductPrice("");
-                setProductCategory("");
-                setSelectedTags([]);
-                setProductImage(null);
-                alert("Successfully add product ")
-            } catch (e) {
-                console.error(e)
+                const res = await productService.getProducts()
+                setProducts(res.data.data)
+            } catch (err) {
+                console.error(err)
+            }
+        }
+        const fetchCategories = async() => {
+            try {
+                const res  = await categoryService.getCategories()
+                setCategories(res.data)
+            } catch (err) {
+                console.error(err);
             }
         }
 
-        const handleDeleteProduct = async (productId) => {
-            if (window.confirm("Are you sure you want to delete this product?")) {
-                try {
-                    const token = localStorage.getItem("token");
-                    await axios.delete(
-                    `http://localhost:3000/api/product/${productId}`,
-                    {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    }
-                );
-            setProducts((prevCategories) =>
-            prevCategories.filter((prod) => prod._id !== productId)
-            );
-                alert("Product deleted successfully.");
-            } catch (error) {
-                console.error("Error deleting product:", error);
+        const fetchTags = async() => {
+            try {
+                const res = await tagService.getTags()
+                setTags(res.data)
+            } catch (err) {
+                console.error(err);
             }
-            }
-        };
+        }
 
-        const handleEditProduct = async () => {
-        const token = localStorage.getItem("token");
+        fetchProduct()
+        fetchCategories()
+        fetchTags()
+    },[])
+
+    const handleAddProduct = (e) => {
+        e.preventDefault();
+        setShowAddModal(true)
+    }
+
+    const handleSaveNewProduct = async (newProduct) => {
         try {
-            const formData = new FormData();
-            formData.append('name', editProductNam);
-            formData.append('description', editProductDesc);
-            formData.append('price', editProductPrice);
-            formData.append('category', editProductCatg);
-
-            const tagNames = Array.isArray(editProductTag) ? editProductTag.map(tag => tag.name) : [];
-
-            tagNames.forEach((tagName, index) => {
-                formData.append(`tags[${index}]`, tagName);
+            await productService.storeProduct(newProduct)
+            setShowAddModal(false);
+            Swal.fire({
+                title: "Success!",
+                text: "Add New Product!",
+                icon: "success"
+            }).then(() => {
+                window.location.reload(); // Reload the page after the user clicks "OK"
             });
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
-            if (editProductImage) {
-                formData.append('image_url', editProductImage, editProductImage.name);
+    const handleEditProduct = (productId, e) => {
+        e.preventDefault()
+        const newProduct = products.find((product) => product._id === productId)
+        if(newProduct){
+            setEditProduct(newProduct)
+            setShowEditModal(true)
+        }else{
+            console.error("Product not found");
+        }
+    }
+    const handleSaveEditProduct = async(productId, updatedProduct) => {
+        try {
+            const res = await productService.putProduct(productId, updatedProduct)
+            if(res.status === 200){
+                setProducts(
+                    products.map((p) =>
+                    p._id === productId ? { ...p, ...updatedProduct} : p
+                    )
+                )
             }
+            setEditProduct(null)
+            setShowEditModal(false)
+            Swal.fire({
+                title: "Success!",
+                text: "Product Edited!",
+                icon: "success"
+            }).then(() => {
+                window.location.reload(); // Reload the page after the user clicks "OK"
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
-            const response = await axios.put(
-                `http://localhost:3000/api/product/${editProductId}`,
-                formData,
-                {
-                headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'multipart/form-data', 
-                },
+    const handleDeleteProduct = async( productId) =>{
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        }).then(async (result) => {
+            if(result.isConfirmed){
+                try {
+                    await productService.deleteProduct(productId)
+                    setProducts(products.filter((prod) => prod._id !== productId));
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your product has been deleted.",
+                        icon: "success",
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } catch (err) {
+                    console.error(err);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "An error occurred while deleting the product.",
+                        icon: "error",
+                    });
+                }
             }
-        );
-        alert("Successfully update product ")
-        setProducts((prevCategories) =>
-            prevCategories.map((product) =>
-                product._id === editProductId ? response.data : product
-        )
-        );
-                setEditProductId(null);
-                setEditProductNam("");
-                setEditProductDesc("");
-                setEditProductPrice("");
-                setEditProductImage(null);
-                setEditProductCatg("");
-                setEditProductTag([]);
-        } catch (e) {
-            console.error(e);
-            }
-        };
+        })
+    }
 
     return (
         <div className="flex flex-row sm:flex-row">
@@ -189,10 +144,30 @@ import { PrimaryButton } from "../../../components/button/PrimaryButton";
             <div className=" mx-24 flex-1 justify-center pt-3  md:pt-20 lg:pt-24">
                 <div className="w-full  ">
                     <h1 className="text-center pb-3 font-poppins font-bold text-xl md:text-2xl lg:text-3xl">List Products</h1>
-                        <PrimaryButton>Add Product</PrimaryButton>
-                        <TableProducts/>
+                    <PrimaryButton onClick={handleAddProduct} >Add Product</PrimaryButton>
+                    <TableProducts onEditProduct={handleEditProduct} onDeleteProduct={handleDeleteProduct} products={products} />
                 </div>  
             </div>
+            {
+                showAddModal &&(
+                    <AddProduct
+                        onSave={handleSaveNewProduct}
+                        onClose={() => setShowAddModal(false)}
+                        categories={categories}
+                        tags={tags}
+                    />
+                )
+            }{
+                showEditModal && (
+                    <EditProduct
+                        product = {editProduct}
+                        categories={categories}
+                        tags={tags}
+                        onSave = {handleSaveEditProduct}
+                        onClose = {()=> setShowEditModal(false)}
+                    />
+                )
+            }
         </div>
     )};
 

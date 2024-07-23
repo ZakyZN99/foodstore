@@ -19,6 +19,10 @@ const navigationPage = () => {
         navigate('/login')
     }
 
+    const productNavigation = () => {
+        navigate('/product')
+    }
+
     
 
     //ADD SMT
@@ -44,6 +48,7 @@ const navigationPage = () => {
         orderNavigation,
         cartNavigation,
         loginNavigation,
+        productNavigation,
 
         addCategoryNavigation,
         addTagNavigation,

@@ -7,7 +7,7 @@ import authService from '../services/authService';
 import '../components/css/index.css'
 
 export const SideBar = () => {
-    const[open, setOpen] = useState(true)
+    // const[open, setOpen] = useState(true)
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userData, setUserData] = useState([])
 
@@ -29,7 +29,7 @@ export const SideBar = () => {
     },[])
 
     return (
-        <div className="sidebar fixed top-0 left-0 h-screen p-4 pt-8 duration-300 bg-[#FA4A0C]  flex flex-col justify-between">
+        <div className="sidebar fixed  overflow-y-auto inset-0 top-0 left-0 h-full p-4 pt-8 duration-300 bg-[#FA4A0C]  flex flex-col justify-between">
           {/* <FaChevronLeft className={`absolute cursor-pointer rounded-full -right-4 top-9 w-7 p-1 h-7 border-1 border-[#000] bg-white ${!open && 'rotate-180'}`} onClick={() => setOpen(!open)} /> */}
             <div className='flex gap-x-4 items-center'>
                 <Link to="/" className={location.pathname === "/" ? "text-[#FFF]" : ""}>

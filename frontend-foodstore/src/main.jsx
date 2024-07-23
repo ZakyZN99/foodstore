@@ -17,9 +17,9 @@ import PaymentPage from './pages/cart/Payment-page.jsx'
 import { SideBar } from './components/Sidebar.jsx'
 import ListProduct from './pages/admin/product/index.jsx'
 import AddProduct from './pages/admin/product/Add-Product.jsx'
-import { NewAddress } from './pages/address/NewAddress.jsx'
 import { Address } from './pages/address/index.jsx'
 import { Checkout } from './pages/cart/Checkout.jsx'
+import { NewAddress } from './pages/address/NewAddress.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

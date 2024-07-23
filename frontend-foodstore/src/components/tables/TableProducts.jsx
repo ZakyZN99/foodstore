@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import productService from '../../services/productService'
 import 'datatables.net'
 import $ from 'jquery'
 import 'datatables.net-dt/css/dataTables.dataTables.css'
@@ -8,31 +7,14 @@ import Image from '../../assets/img/Image.jpg'
 import PrimaryActionButton from '../button/PrimaryActionButton'
 import SecondaryActionButton from '../button/SecondaryActionButton'
 
-const TableProducts = () => {
-    const [products, setProducts] = useState([])
-    
-    useEffect(() => {
-
-        const fetchProduct = async () => {
-            try {
-                const res = await productService.getProducts()
-                setProducts(res.data.data)
-            } catch (err) {
-                console.error(err)
-            }
-        }
-        fetchProduct()
-    },[])
-
+const TableProducts = ({ onEditProduct, onDeleteProduct, products  }) => {
     useEffect(() => {
         if (products.length > 0) {
-            // Initialize DataTable only after products are set
             if (!$.fn.dataTable.isDataTable('#example')) {
                 $('#example').DataTable()
             }
         }
 
-        // Clean up the DataTable on component unmount
         return () => {
             if ($.fn.dataTable.isDataTable('#example')) {
                 $('#example').DataTable().destroy()
@@ -42,7 +24,7 @@ const TableProducts = () => {
 
     const getImageUrl = (imageName) => {
         try {
-        if (imageName && imageName.trim() !== "") {
+        if (typeof imageName === 'string' && imageName.trim() !== "") {
             return `http://localhost:3000/public/images/product/${imageName}`;
         } else {
             return Image;
@@ -85,8 +67,8 @@ const TableProducts = () => {
                             </td>
                             <td>
                                 <div className='flex flex-row gap-2'>
-                                    <PrimaryActionButton>Edit</PrimaryActionButton>
-                                    <SecondaryActionButton>Delete</SecondaryActionButton>
+                                    <PrimaryActionButton onClick={(e) => onEditProduct(product._id, e)}>Edit</PrimaryActionButton>
+                                    <SecondaryActionButton onClick={() => onDeleteProduct(product._id)}>Delete</SecondaryActionButton>
                                 </div>
                             </td>
                         </tr>
