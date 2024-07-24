@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import categoryService from "../../../services/categoryService";
 import { SideBar } from "../../../components/Sidebar";
+import TableCategories from "../../../components/tables/TableCategories";
+import Swal from 'sweetalert2';
+
 
 const AddCategories = () => {
     const [categoryData, setCategoryData] = useState([])
     const [addCategoryName, setAddCategoryName] = useState([])
-    const [editCategoryId, setEditCategoryId] = useState(null);
-    const [editCategoryName, setEditCategoryName] = useState("");
 
     useEffect(()=> {
         const fetchCategories= async () => {
@@ -20,40 +21,113 @@ const AddCategories = () => {
         fetchCategories()
     },[])
 
+    const formatCatName = (name) => {
+        return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    };
+
     const handleAddCategory = async () => {
+        const formattedCatName = formatCatName(addCategoryName.trim())
+        if(formattedCatName.length <3 || formattedCatName.length > 21){
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Category Length',
+                text: 'Category name must be between 3 and 20 characters',
+            });
+            return;
+        }
+
+        if (categoryData.some(cat => cat.name.toLowerCase() === formattedCatName.toLowerCase())) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Category',
+                text: 'Category already exists',
+            });
+            return;
+        }
+
         try {
-            const response = await categoryService.storeCategory(addCategoryName)
+            const response = await categoryService.storeCategory(formattedCatName)
             setCategoryData([...categoryData, response.data]);
             setAddCategoryName("");
+            Swal.fire({
+                title: "Success!",
+                text: "New Category has been added!",
+                icon: "success"
+            }).then(() => {
+                window.location.reload(); // Reload the page after the user clicks "OK"
+            });
         } catch (e) {
             console.error(e)
         }
     }
 
     const handleDeleteCategory = async (categoryId) => {
-        if (window.confirm("Are you sure you want to delete this category?")) {
-            try {
-                await categoryService.deleteCategory(categoryId)
-                setCategoryData((prevCategories) =>
-                prevCategories.filter((cat) => cat._id !== categoryId)
-                );
-                alert("Category deleted successfully.");
-            } catch (error) {
-                console.error("Error deleting category:", error);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        }).then(async (result) => {
+            if(result.isConfirmed){
+                try {
+                    await categoryService.deleteCategory(categoryId)
+                    setCategoryData((prev) => prev.filter((cat) => cat._id !== categoryId))
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your category has been deleted.",
+                        icon: "success",
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } catch (err) {
+                    console.error();
+                    Swal.fire({
+                        title: "Error!",
+                        text: "An error occurred while deleting category.",
+                        icon: "error",
+                    });
+                }
             }
-        }
+        })
     };
 
-    const handleEditCategory = async () => {
+    const handleEditCategory = async (categoryId, categoryName) => {
     try {
-        const response = await categoryService.putCategory(editCategoryId, editCategoryName)
-        setCategoryData((prevCategories) =>
-            prevCategories.map((cat) =>
-            cat._id === editCategoryId ? response.data : cat
+        const formattedCatName = formatCatName(categoryName.trim());
+        if(formattedCatName.length < 3 || formattedCatName.length > 21) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Category Length',
+                text: 'Category name must be between 3 and 20 characters',
+            });
+            return;
+        }
+
+        if (categoryData.some(cat => cat.name.toLowerCase() === formattedCatName.toLowerCase() && cat._id !== categoryId)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Category',
+                text: 'Category already exists',
+            });
+            return;
+        }
+
+        const response = await categoryService.putCategory(categoryId, categoryName)
+        setCategoryData((prev) =>
+            prev.map((cat) =>
+                cat._id === categoryId ? response.data : cat
             )
-        );
-        setEditCategoryId(null);
-        setEditCategoryName("");
+        )
+        Swal.fire({
+            title: "Success!",
+            text: "Category Edited!",
+            icon: "success"
+        }).then(() => {
+            window.location.reload(); // Reload the page after the user clicks "OK"
+        });
     } catch (e) {
         console.error(e);
         }
@@ -62,69 +136,21 @@ const AddCategories = () => {
 return (
     <div className="flex flex-row sm:flex-row">
         <SideBar/>
-        <div className="flex justify-center pt-10  md:pt-20 lg:pt-24 h-screen mx-auto">
-            <div className="w-full">
-                <h1 className="text-center pb-3 font-poppins font-bold text-3xl md:text-4xl lg:text-5xl">Categories</h1>
-                <div className="border-1 border-[#000] p-2 flex gap-1 rounded-md">
-                    <div className="border-1 border-[#000] p-2 rounded-md">
-                        <form>
-                            <div className="pt-2">
-                                <label>Add Category: </label>
-                                <span> </span>
-                                <input className="w-[35%] text-black pl-2 border-b border-gray-600" type="text" placeholder="empty" value={addCategoryName} onChange={(e) => setAddCategoryName(e.target.value)}/>
-                                <span> </span>
-                                <button className=" bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal hover:bg-white hover:text-[#FA4A0C] h-[35px] w-[150px]" onClick={handleAddCategory}>Save</button>
-                            </div>
-                            <div>
-                                <table className="w-full border-collapse">
-                                <thead className=" border-b-2">
-                                    <tr>
-                                        <th className="p-2">No.</th>
-                                        <th className="p-2">Category Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {categoryData.map((catg, index)=> (
-                                    <tr key={catg._id}>
-                                    <td className="p-2">{index +1}</td>
-                                    <td className="p-2">
-                                        {editCategoryId === catg._id ? (
-                                        <input
-                                        type="text"
-                                        className="text-black border-b border-gray-700"
-                                        value={editCategoryName}
-                                        onChange={(e) =>
-                                            setEditCategoryName(e.target.value)
-                                        }
-                                        />
-                                    ) : (
-                                        catg.name
-                                    )}
-                                    </td>
-                                    <td className="p-2">
-                                    {editCategoryId === catg._id ? (
-                                        <button type="button" className="bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal hover:bg-white hover:text-[#FA4A0C] h-[30px] px-[10px]"
-                                        onClick={handleEditCategory}>Update</button>
-                                    ) : (
-                                        <>
-                                            <button type="button"  className="hover:bg-[#FA4A0C] hover:text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal bg-{#fff} text-[#FA4A0C] h-[30px] px-[10px]"
-                                            onClick={() => {
-                                            setEditCategoryId(catg._id);
-                                            setEditCategoryName(catg.name);
-                                            }}>Edit</button>
-                                            <span> </span>
-                                            <button className="bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal hover:bg-white hover:text-[#FA4A0C] h-[30px] px-[10px]"
-                                            onClick={() => handleDeleteCategory(catg._id)}>Delete</button>
-                                        </>
-                                    )}
-                                    </td>
-                                </tr>
-                                ))}
-                                </tbody>
-                                </table>
-                            </div>
-                        </form>
-                    </div>
+        <div className="mx-24 flex-1 justify-center pt-3  md:pt-20 lg:pt-24">
+            <div className="w-full flex flex-col items-center">
+                <h1 className="text-center pb-3 font-poppins font-bold text-xl md:text-2xl lg:text-3xl">Categories</h1>
+                <div className="mb-4 flex gap-5 justify-between">
+                    <label className="block w-[30%] text-sm font-medium text-gray-700">Category name:</label>
+                    <input 
+                        className="block w-[50%] border-b border-gray-500 shadow-sm p-1"
+                        type="text" 
+                        value={addCategoryName} 
+                        onChange={(e) => setAddCategoryName(e.target.value)}
+                    />
+                    <button className=" bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] font-poppins rounded-md font-normal hover:bg-white hover:text-[#FA4A0C] h-[35px] w-[150px]" onClick={handleAddCategory}>Save</button>
+                </div>
+                <div className="w-full max-w-4xl flex justify-center">
+                    <TableCategories cat={categoryData} onEditCat={handleEditCategory} onDeleteCat={handleDeleteCategory} />
                 </div>
             </div>
         </div>

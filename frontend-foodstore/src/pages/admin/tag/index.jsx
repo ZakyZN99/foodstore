@@ -124,7 +124,7 @@ const AddTag = () => {
                     console.error(err);
                     Swal.fire({
                         title: "Error!",
-                        text: "An error occurred while deleting the product.",
+                        text: "An error occurred while deleting tag.",
                         icon: "error",
                     });
                 }
