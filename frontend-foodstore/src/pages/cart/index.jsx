@@ -1,27 +1,22 @@
-/* eslint-disable no-unused-vars */
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 import { formatPrice } from "../../utils";
 import Navbar from "../../components/Navbar";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
+import cartService from "../../services/cartService";
+import authService from "../../services/authService";
+import navigationPage from "../../services/navigation";
 
 export const Cart = () => {
-  // const [count, setCount] = useState(1);
   const [carts, setCarts] = useState([]);
-  // const [cartItems, setCartItems] = useState([]);
+  const{checkoutNavigation} = navigationPage()
 
   useEffect(()=> {
     const fetchCarts = async() => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
-          const res = await axios.get("http://localhost:3000/api/carts", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const res = await cartService.getCarts()
           setCarts(res.data);
         }
       } catch (e) {
@@ -38,26 +33,17 @@ export const Cart = () => {
     setCarts(updatedCartItems);
 
     try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const payload = {
+      if (authService.getCurrentToken()) {
+        const itemsToUpdate = {
           items: updatedCartItems.map((item) => ({
             product: { _id: item.product._id },
             qty: item.qty,
           })),
         }
-        await axios.put(
-          `http://localhost:3000/api/carts`,
-          payload,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await cartService.updateCart(itemsToUpdate)
       }
-    } catch (error) {
-      console.error("Error updating quantity:", error);
+    } catch (err) {
+      console.error("Error updating quantity:", err);
     }
   };
 
@@ -67,27 +53,18 @@ export const Cart = () => {
     );
     setCarts(updatedCartItems);
     try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const payload = {
+      if (authService.getCurrentToken()) {
+        const itemsToUpdate = {
           items: updatedCartItems.map((item) => ({
             product: { _id: item.product._id },
             qty: item.qty,
           })),
         }
 
-        await axios.put(
-          `http://localhost:3000/api/carts`,
-          payload,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await cartService.updateCart(itemsToUpdate)
       }
-    } catch (error) {
-      console.error("Error updating quantity:", error);
+    } catch (err) {
+      console.error("Error updating quantity:", err);
     }
   };
 
@@ -96,13 +73,8 @@ export const Cart = () => {
     setCarts(updatedCartItems);
 
     try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        await axios.delete(`http://localhost:3000/api/carts/${itemId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      if (authService.getCurrentToken()) {
+        await cartService.deleteCart(itemId)
       }
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -128,19 +100,12 @@ export const Cart = () => {
     return totalPrice;
   };
 
-let navigate = useNavigate()
-  const checkout = () => {
-    navigate('/checkout')
-}
-
-
-
   return (
     <>
     <Navbar/>
-    <div className=" text-black px-[200px] mt-10">
-      <div className=" text-[#fff] rounded-3xl border-[2px] border-[#FA4A0C] bg-[#FA4A0C] mt-10 px-5 pb-5">
-        <h1 className=" text-[20px] py-4 text-left font-semibold font-poppins">
+    <div className=" text-black md:px-[200px] mt-3 px-10 md:mt-10">
+      <div className=" text-[#fff] rounded-3xl border-[2px] border-[#FA4A0C] bg-[#FA4A0C] md:mt-10 md:px-10 px-3 md:pb-5">
+        <h1 className="md:text-[20px] md:py-4 py-2  text-left font-semibold font-poppins">
           Shopping Cart
         </h1>
         <div className="border-1 p-3 rounded-xl border-[#fff] bg-[#fff] text-black gap-1">
@@ -190,7 +155,7 @@ let navigate = useNavigate()
                 </tbody>
               </table>
               <div className="px-[100px] py-[10px] flex items-center justify-center ">
-                <button className=" bg-[#FA4A0C] border-[2px] border-[#FA4A0C] text-[20px] font-medium text-[#fff] w-[700px] h-[50px] rounded-xl hover:text-[#FA4A0C] hover:bg-[#fff]" onClick={()=> checkout()}>Checkout</button>
+                <button className=" bg-[#FA4A0C] border-[2px] border-[#FA4A0C] text-[20px] font-medium text-[#fff] w-[700px] h-[50px] rounded-xl hover:text-[#FA4A0C] hover:bg-[#fff]" onClick={()=> checkoutNavigation()}>Checkout</button>
               </div>
             </form>
           </div>

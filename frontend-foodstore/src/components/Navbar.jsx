@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import {
   IoPersonCircleOutline,
   IoCart,
+  IoMenu,
+  IoClose,
 } from "react-icons/io5";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -9,6 +11,7 @@ import authService from "../services/authService";
 import navigationPage from "../services/navigation";
 import categoryService from "../services/categoryService";
 import cartService from "../services/cartService";
+import NaviLink from "./NaviLink";
 
 const Navbar = ({onSearch, cartItemsCount}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -18,6 +21,7 @@ const Navbar = ({onSearch, cartItemsCount}) => {
   const [cartItems, setCartItems] = useState([]);
   const [isCategorySelected, setIsCategorySelected] = useState(false);
   const {loginNavigation, cartNavigation, profileNavigation } = navigationPage()
+  const [isOpen, setIsOpen] = useState(false)
 
     
     const checkLoginStatus = async () => {
@@ -56,28 +60,8 @@ const Navbar = ({onSearch, cartItemsCount}) => {
             console("Error fetching categories:", e);
         }
     };
-
-    const fetchCartItems = async () => {
-        try {
-            if (authService.getCurrentToken()) {
-                const res = await cartService.getCarts()
-                setCartItems(res.data);
-            } else {
-                loginNavigation()
-            }
-        } catch (e) {
-            console("Error fetching cart items:", e);
-        }
-    };
-
     fetchCategories();
-    fetchCartItems();
 }, []);
-
-  //create search product
-  const handleSearch = async (e) => {
-    onSearch(e.target.value)
-  }
 
   const handleLogout = async () => {
       if (authService.getCurrentToken()) {
@@ -92,72 +76,127 @@ const Navbar = ({onSearch, cartItemsCount}) => {
     }
   };
 
-  const totalCartItems = cartItems.reduce((total, item) => total + item.qty, 0);
   const handleCategoryClick = () => {
     setIsCategorySelected(true); 
   };
 
   return (
-    <div className="flex justify-between items-center bg-[#FA4A0C] h-20 mx-auto text-black px-[100px] ">
-      <div className="flex items-center text-center font-poppins  text-[17px] font-semibold gap-4">
-        <Link to="/" className={location.pathname === "/" ? "text-[#FFF]" : ""}><h1 className=" font-poppins font-medium  text-[28px] text-[#FFF]">CravePizza</h1></Link>
-        {categories.map((category) => (
-          <Link key={category._id} onClick={()=> handleCategoryClick()}   className={location.pathname === `/products/${category._id}` ? "text-[#FFF]" : "text-[#000]"}  to={`/products/${category._id}`}><h1 className="text-[17px] font-poppins font-semibold">{category.name}</h1></Link>
-            ))}
-      </div>
-      
-      <div className="flex justify-between items-center gap-3">
-      {(
-        <>
-        <div className="flex gap-3">
-          <input type="text" placeholder="Find in FoodStore" className=" border-[1px] border-[#000] rounded-lg w-[250px] h-[35px] p-[10px] text-black"
-            onChange={handleSearch}
-          />
+    <div className="bg-[#FA4A0C] sticky top-0 z-20 ">
+      <div className="md:flex justify-between items-center bg-[#FA4A0C] md:px-24 py-2 px-10">
+        <div className="md:flex items-center gap-4">
+            <div className="flex items-center pb-3">
+              <Link to="/" className={location.pathname === "/" ? "text-[#FFF]" : ""}>
+                <h1 className=" font-poppins font-medium border-1 p-2 text-[28px] text-[#FFF]">C</h1>
+              </Link> 
+            </div>
+            <div className={`md:flex gap-4 hidden  md:items-center  bg-[#FA4A0C] transition-all z-1 duration-500 ease-in ${isOpen ? 'top-20 ':'hidden'}`}>
+              {categories.map((category) => (
+                <Link key={category._id} onClick={()=> handleCategoryClick()}
+                  className={location.pathname === `/products/${category._id}` ? "text-[#FFF]" : "text-[#000]"} 
+                  to={`/products/${category._id}`}>
+                      <h1 className="text-[17px] md:flex  items-center font-poppins font-semibold sm:pb-3 md:pb-0 ">{category.name}</h1>
+                </Link>
+              ))}
+            </div>
         </div>
-        <button>
-          
-          {cartItemsCount > 0 && (
-            <span className=" border-[#FFF] border-[2px] text-[#FFF] font-poppins font-medium rounded-2xl w-5 h-5 text-xs flex items-end justify-center">
-              {cartItemsCount ? cartItemsCount : totalCartItems}
-            </span>
-          )}
-          <IoCart size={35} 
-          color="#FFF"
-          onClick={cartNavigation} />
-        </button>
-        </>
-      )}
-        {isLoggedIn ? (
-          <button
-            className="flex items-center gap-1 bg-red"
-            onClick={toggleDropdown}
-            aria-expanded={isDropdownOpen}
-          >
-            <IoPersonCircleOutline
-              size={40}
-              title="Nama"
-              color="#FFF"
-            />
-            <span className=" text-[16px] text-[#fff] font-poppins font-medium" >{userData.fullName}</span>
-          </button>
-        )  : <button onClick={checkLoginStatus}><IoPersonCircleOutline
-              size={35}
-              title="Nama"
-              color="#FFF"
-            /></button>}
-        {isDropdownOpen && isLoggedIn &&(
-          <div className="absolute right-[0%] mt-[160px] w-40 bg-white border border-gray-200 shadow-lg rounded-md z-10 text-black bg-transparent">
-            <ul className="py-1">
-              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={profileNavigation}>
-                Profile
-              </li>
-              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
-                Logout
-              </li>
-            </ul>
+        <div onClick={()=> setIsOpen(!isOpen)}>
+            {
+              !isOpen ?  <IoMenu
+            className="absolute right-8 top-6 md:hidden" size={32}
+          ></IoMenu> :<IoClose  className="absolute right-8 top-6 md:hidden" size={32}></IoClose>
+            }
+        </div>
+        <div className={`md:flex items-center gap-4 hidden bg-[#FA4A0C ]  transition-all z-1 duration-500 ease-in ${isOpen ? 'top-48 ':'hidden'}`}>
+          <NaviLink search= {onSearch} cartItemsCount={cartItemsCount} isOpen={isOpen}/>
+          <div className="pt-3 md:pt-0  bg-[#FA4A0C] h-full">
+            { isLoggedIn ? (
+              <button
+                className="flex items-center gap-1"
+                onClick={toggleDropdown}
+                aria-expanded={isDropdownOpen}
+              >
+                <IoPersonCircleOutline
+                  size={40}
+                  title="Nama"
+                  color="#FFF"
+                />
+                <span className="text-[16px] text-[#fff] font-poppins font-medium">{userData.fullName}</span>
+              </button>
+            )  : <button onClick={checkLoginStatus}><IoPersonCircleOutline
+                size={35}
+                title="Nama"
+                color="#FFF"
+              /></button>
+            }
+            {isDropdownOpen && isLoggedIn &&(
+              <div className="absolute md-right-3 md:mt-2 w-40 bg-white border border-gray-200 shadow-lg rounded-md z-10 text-black">
+                <ul className="py-1">
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={profileNavigation}>
+                    Profile
+                  </li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
+                    Logout
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
-        )}
+        </div>
+
+
       </div>
+
+      {/* Small view */}
+      {isOpen ? (
+        <div className={`transition-all ml-10 pb-3 space-y-2 z-1 duration-500 ease-in ${isOpen ? 'top-20 ':'top-[-490px]'}`}>
+          <div className={`md:hidden gap-4 flex-col  md:items-center  bg-[#FA4A0C] `}>
+                {categories.map((category) => (
+                  <Link key={category._id} onClick={()=> handleCategoryClick()}
+                    className={location.pathname === `/products/${category._id}` ? "text-[#FFF]" : "text-[#000]"} 
+                    to={`/products/${category._id}`}>
+                        <h1 className="text-[17px] md:flex items-center font-poppins font-semibold sm:pb-3 md:pb-0 ">{category.name}</h1>
+                  </Link>
+                ))}
+          </div>
+          <div className={`md:hidden items-center flex-col bg-[#FA4A0C]  transition-all z-1 duration-500 ease-in ${isOpen ? 'top-48 ':'hidden'}`}>
+          <NaviLink search= {onSearch} cartItemsCount={cartItemsCount} isOpen={isOpen}/>
+          <div className="pt-3 md:pt-0">
+            { isLoggedIn ? (
+              <button
+                className="flex items-center gap-1"
+                onClick={toggleDropdown}
+                aria-expanded={isDropdownOpen}
+              >
+                <IoPersonCircleOutline
+                  size={40}
+                  title="Nama"
+                  color="#FFF"
+                />
+                <span className="text-[16px] text-[#fff] font-poppins font-medium">{userData.fullName}</span>
+              </button>
+            )  : <button onClick={checkLoginStatus}><IoPersonCircleOutline
+                size={35}
+                title="Nama"
+                color="#FFF"
+              /></button>
+            }
+            {isDropdownOpen && isLoggedIn &&(
+              <div className="absolute md-right-3 mt-1 md:mt-2 w-40 bg-white border border-gray-200 shadow-lg rounded-md z-10 text-black">
+                <ul className="py-1">
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={profileNavigation}>
+                    Profile
+                  </li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
+                    Logout
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+        </div>
+        
+      ): null}
     </div>
   );
 };

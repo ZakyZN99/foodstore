@@ -9,6 +9,7 @@ import authService from "../../services/authService";
 import productService from "../../services/productService";
 import tagService from "../../services/tagService";
 import cartService from "../../services/cartService";
+import { PrimaryButton } from "../../components/button/PrimaryButton";
 
 export const Products = () => {
   const { categoryId } = useParams();
@@ -158,44 +159,44 @@ export const Products = () => {
 }
 
   return (
-    <>
-    <Navbar onSearch={handleSearch} cartItemsCount={cartItemsCount}/>
-    <div className='px-[100px] py-[40px] '>
-      <div className="flex px-[40px] flex-wrap gap-3 pb-[50px]">
-            <select
-              className="cursor-pointer text-black border-[2px] border-[#FA4A0C] w-[200px] h-[50px] rounded-xl p-2"
-              value={selectedTag || ""}
-              onChange={(e) => setSelectedTag(e.target.value || null)}>
-                <option className="text-black" value="">Choose Tags</option>
-                {tags.map((tag) => (
-                  <option key={tag._id} value={tag._id} className="text-black">
-                    {tag.name}
-                  </option>
-                ))}
-            </select>
-            <button className="bg-[#FA4A0C] text-white px-2 rounded-xl w-[150px]"
-          onClick={handleResetFilter}>Reset Filter</button>
-      </div>
-      <div className='flex gap-[40px] flex-wrap justify-center   '>
-          {filteredProducts.map((product) => (
-              <div key={product._id} className=' flex shadow-slate-600'>
-                  <div className='w-[270px] h-[450px] border-black shadow rounded-3xl flex flex-col transition-all duration-700 ease-in-out'>
-                      <img src={getImageUrl ? getImageUrl(product.image_url) : Image} crossOrigin="anonymous" className='w-full h-[200px] rounded-t-3xl object-cover' />
-                      <div className='flex-grow px-[20px] py-[20px] flex flex-col'>
-                          <h1 className=' text-[18px] font-bold pb-[10px] text-center'>{product.name}</h1>
-                          <p className='text-[13px] pb-[4px] font-poppins text-center justify-center'>{product.tags.map((tag, index) => (index ? `, ${tag.name}` : tag.name))}</p>
-                          <div className='mt-auto flex pb-[10px] items-center justify-between'>
-                              <p className='text-[18px] font-semibold'>{formatPrice(product.price)}</p>
-                              <div className='flex items-center pt-[5px]'>
-                                  <button className='w-[100px] font-semibold border-[#FA4A0C] border-[2px] text-[#FA4A0C] rounded-2xl h-[40px] ' onClick={() => addToCart(product._id)}>Add to Cart</button>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          ))}  
+    <div>
+      <Navbar onSearch={handleSearch} cartItemsCount={cartItemsCount}/>
+      <div className=' px-2 sm:px-4 lg:px-14 py-4'>
+        <div className="flex flex-wrap gap-3 pb-8 md:mx-20 mx-10">
+              <select
+                className="cursor-pointer text-black border-[2px] border-[#FA4A0C] md:w-[200px] md:text-[18px] text-[12px] w-34 h-10 md:h-[40px] rounded-xl p-1"
+                value={selectedTag || ""}
+                onChange={(e) => setSelectedTag(e.target.value || null)}>
+                  <option className="text-black " value="">Choose Tags</option>
+                  {tags.map((tag) => (
+                    <option key={tag._id} value={tag._id} className="text-black">
+                      {tag.name}
+                    </option>
+                  ))}
+              </select>
+              <PrimaryButton className="bg-[#FA4A0C] text-white px-1 rounded-xl w-[130px]"
+            onClick={handleResetFilter}>Reset Filter</PrimaryButton>
+        </div>
+        <div className='flex flex-wrap gap-3 justify-normal mx-10 md:mx-20'>
+            {filteredProducts.map((product) => (
+                <div key={product._id} className=' flex shadow-slate-600'>
+                    <div className='md:w-[270px] w-32 md:h-[450px]  border-black  shadow rounded-lg flex flex-col transition-all duration-700 ease-in-out'>
+                        <img src={getImageUrl ? getImageUrl(product.image_url) : Image} crossOrigin="anonymous" className='w-full md:h-[200px] h-24 rounded-t-lg object-cover' />
+                        <div className='flex-grow px-2 md:px-[20px] py-2 md:py-[20px] flex flex-col'>
+                            <h1 className=' md:text-[18px] text-[10px] font-bold pb-[10px] text-center'>{product.name}</h1>
+                            <p className='md:text-[13px] text-[8px] md:pb-[4px] pb-2 font-poppins text-center justify-center'>{product.tags.map((tag, index) => (index ? `, ${tag.name}` : tag.name))}</p>
+                            <div className='mt-auto flex md:pb-[10px] pb-2 items-center justify-between'>
+                                <p className='md:text-[18px] text-[8px] font-semibold'>{formatPrice(product.price)}</p>
+                                <div className='flex items-center md:pt-[5px] pt-1'>
+                                    <button className='md:w-[100px] w-14 md:text-[16px] text-[8px] font-semibold border-[#FA4A0C] border-[2px] text-[#FA4A0C] rounded-2xl md:h-[40px] h-5 ' onClick={() => addToCart(product._id)}>Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ))}  
+        </div>
       </div>
     </div>
-    </>
   );
 };

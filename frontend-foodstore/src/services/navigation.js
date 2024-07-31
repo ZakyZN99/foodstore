@@ -18,9 +18,15 @@ const navigationPage = () => {
     const loginNavigation = () => {
         navigate('/login')
     }
+    const registerNavigation = () => {
+        navigate('/register')
+    }
 
     const productNavigation = () => {
         navigate('/product')
+    }
+    const checkoutNavigation = () => {
+        navigate('/checkout')
     }
 
     
@@ -48,7 +54,9 @@ const navigationPage = () => {
         orderNavigation,
         cartNavigation,
         loginNavigation,
+        registerNavigation,
         productNavigation,
+        checkoutNavigation,
 
         addCategoryNavigation,
         addTagNavigation,
