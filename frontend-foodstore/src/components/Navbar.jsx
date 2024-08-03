@@ -81,7 +81,7 @@ const Navbar = ({onSearch, cartItemsCount}) => {
   };
 
   return (
-    <div className="bg-[#FA4A0C] sticky top-0 z-20 ">
+    <div className="bg-[#FA4A0C] sticky top-0 z-20 right-0 w-auto">
       <div className="md:flex justify-between items-center bg-[#FA4A0C] md:px-24 py-2 px-10">
         <div className="md:flex items-center gap-4">
             <div className="flex items-center pb-3">
@@ -106,9 +106,9 @@ const Navbar = ({onSearch, cartItemsCount}) => {
           ></IoMenu> :<IoClose  className="absolute right-8 top-6 md:hidden" size={32}></IoClose>
             }
         </div>
-        <div className={`md:flex items-center gap-4 hidden bg-[#FA4A0C ]  transition-all z-1 duration-500 ease-in ${isOpen ? 'top-48 ':'hidden'}`}>
+        <div className={`md:flex items-center mr-6 truncate gap-4 hidden bg-[#FA4A0C ]  transition-all z-1 duration-500 ease-in ${isOpen ? 'top-48 ':'hidden'}`}>
           <NaviLink search= {onSearch} cartItemsCount={cartItemsCount} isOpen={isOpen}/>
-          <div className="pt-3 md:pt-0  bg-[#FA4A0C] h-full">
+          <div className=" bg-[#FA4A0C] h-full right-0">
             { isLoggedIn ? (
               <button
                 className="flex items-center gap-1"

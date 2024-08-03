@@ -7,6 +7,9 @@ import addressService from "../../services/addressService";
 import navigationPage from "../../services/navigation";
 import EditAddress from "./EditAddress";
 import { NewAddress } from "./NewAddress";
+import { PrimaryButton } from "../../components/button/PrimaryButton";
+import PrimaryActionButton from "../../components/button/PrimaryActionButton";
+import SecondaryActionButton from "../../components/button/SecondaryActionButton";
 
 export const Address = () => {
   const [address, setAddress] = useState([])
@@ -96,7 +99,7 @@ const handleEditAddress = (addressId, event) => {
             <div className="border-1 border-[#000] p-2 rounded-md">
               <form>
                 <div className="pt-2">
-                  <button className="bg-[#FA4A0C] text-[#fff] border-1 border-[#FA4A0C] font-poppins px-[10px] py-1 w-[120px] h-[35px] rounded-md font-medium transition duration-200 ease-in-out hover:bg-white hover:text-[#FA4A0C] hover:translate-y-1" onClick={handleNewAdrress}>Add New</button>
+                  <PrimaryButton onClick={handleNewAdrress}>Add New</PrimaryButton>
                 </div>
                 <div>
                     <table className="w-full border-collapse">
@@ -112,9 +115,9 @@ const handleEditAddress = (addressId, event) => {
                               <td className="p-2">{editAddressId === address._id ? <input type="text" className="text-black" value={address.nama} onChange={(e) => setAddress(address.map(a => a._id === address._id ? { ...a, nama: e.target.value } : a))} /> : address.nama}</td>
                               <td className="p-2">{editAddressId === address._id ? <input type="text" className="text-black" value={address.detail} onChange={(e) => setAddress(address.map(a => a._id === address._id ? { ...a, detail: e.target.value } : a))} /> : `${address.detail} ${address.kelurahan}, ${address.kecamatan}, ${address.kabupaten}, ${address.provinsi}`}</td>
                               <td className="p-2">
-                                <button className="bg-blue-600 text-[#fff] border-1 border-blue-600 px-[10px] py-1 rounded-md font-medium transition duration-200 ease-in-out hover:bg-[#fff] hover:text-blue-600 hover:translate-y-1" onClick={(e) => handleEditAddress(address._id, e)}>Edit</button>
+                                <PrimaryActionButton onClick={(e) => handleEditAddress(address._id, e)}>Edit</PrimaryActionButton>
                                 <span> </span>
-                                <button className="bg-red-600 text-[#fff] border-1 border-red-600 px-[10px] py-1 rounded-md font-medium transition duration-200 ease-in-out hover:text-red-600 hover:bg-[#fff] hover:translate-y-1" onClick={() => handleDeleteAddress(address._id)}>Delete</button>
+                                <SecondaryActionButton onClick={() => handleDeleteAddress(address._id)}>Delete</SecondaryActionButton>
                               </td>
                             </tr>
                           ))}

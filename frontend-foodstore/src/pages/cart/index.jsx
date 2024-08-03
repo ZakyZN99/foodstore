@@ -6,6 +6,7 @@ import { FaXmark } from "react-icons/fa6";
 import cartService from "../../services/cartService";
 import authService from "../../services/authService";
 import navigationPage from "../../services/navigation";
+import { PrimaryButton } from "../../components/button/PrimaryButton";
 
 export const Cart = () => {
   const [carts, setCarts] = useState([]);
@@ -103,31 +104,29 @@ export const Cart = () => {
   return (
     <>
     <Navbar/>
-    <div className=" text-black md:px-[200px] mt-3 px-10 md:mt-10">
-      <div className=" text-[#fff] rounded-3xl border-[2px] border-[#FA4A0C] bg-[#FA4A0C] md:mt-10 md:px-10 px-3 md:pb-5">
-        <h1 className="md:text-[20px] md:py-4 py-2  text-left font-semibold font-poppins">
+    <div className="flex flex-col md:mx-24 mt-3 mx-10 md:mt-10 overflow-x-auto">
+      <div className=" text-[#fff] rounded-2xl border-[2px] border-[#FA4A0C] bg-[#FA4A0C] md:mt-10 mt-2 md:px-10 px-2 md:pb-5 inline-block min-w-full overflow-hidden">
+        <h1 className="md:text-[20px] md:py-4 py-2 text-[15px]  text-left font-semibold font-poppins">
           Shopping Cart
         </h1>
-        <div className="border-1 p-3 rounded-xl border-[#fff] bg-[#fff] text-black gap-1">
-          <div className="flex flex-col w-full pb-4 text-[20px] font-bold">
+        <div className="border-1 p-3 md:p-3 rounded-xl border-[#fff] bg-[#fff] text-black gap-1 overflow-x-auto">
+          <div className="flex flex-col w-full pb-4 text-[15px] md:text-[20px] font-bold">
             <span>Total Price: {formatPrice(calculateTotalPrice())}</span>
           </div>
-          <div className="border-1 p-2 border-[#FA4A0C] rounded-xl w-full">
-            <form>
-              <table className="w-full border-collapse border-[#FA4A0C] items-center text-center">
+              <table className="min-w-full divide-y divide-gray-300 border-[#FA4A0C] border-1 items-center text-center">
                 <thead>
-                  <tr className="border-b border-[#FA4A0C] ">
-                    <th className="p-2">No.</th>
-                    <th className="p-2">Gambar</th>
-                    <th className="p-2">Nama Barang</th>
-                    <th className="p-2">Harga</th>
-                    <th className="p-2">Qty</th>
-                    <th className="p-2">Total Harga</th>
+                  <tr className="border-b border-[#FA4A0C] md:text-[16px] text-[12px] ">
+                    <th className="md:p-2 p-1">No.</th>
+                    <th className="md:p-2 p-1">Gambar</th>
+                    <th className="md:p-2 p-1">Nama Barang</th>
+                    <th className="md:p-2 p-1">Harga</th>
+                    <th className="md:p-2 p-1">Qty</th>
+                    <th className="md:p-2 p-1">Total Harga</th>
                   </tr>
                 </thead>
                 <tbody>
                 {carts.map((item, index) => (
-                  <tr key={item._id} className="border-b ">
+                  <tr key={item._id} className="border-b text-[10px] md:text-[14px] ">
                     <td className="p-2">{index + 1}</td>
                     <td className=" flex p-2 justify-center items-center text-center"><img
                       alt={item.name}
@@ -155,13 +154,11 @@ export const Cart = () => {
                 </tbody>
               </table>
               <div className="px-[100px] py-[10px] flex items-center justify-center ">
-                <button className=" bg-[#FA4A0C] border-[2px] border-[#FA4A0C] text-[20px] font-medium text-[#fff] w-[700px] h-[50px] rounded-xl hover:text-[#FA4A0C] hover:bg-[#fff]" onClick={()=> checkoutNavigation()}>Checkout</button>
+                <PrimaryButton onClick={()=> checkoutNavigation()}>Checkout</PrimaryButton>
               </div>
-            </form>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

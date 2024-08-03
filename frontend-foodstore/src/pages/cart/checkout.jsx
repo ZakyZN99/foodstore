@@ -1,18 +1,21 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { formatPrice } from "../../utils";
-import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import { FaArrowLeft } from "react-icons/fa6";
+import addressService from "../../services/addressService";
+import cartService from "../../services/cartService";
+import orderService from "../../services/orderService";
+import navigationPage from "../../services/navigation";
+import { SecondaryButton } from "../../components/button/SecondaryButton";
+import { PrimaryButton } from "../../components/button/PrimaryButton";
+import Swal from 'sweetalert2';
 
 export const Checkout = () => {
   const [showAddressOptions, setShowAddressOptions] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState("");
-
   const [addresses, setAddresses] = useState([]);
   const [cartsPrice, setCartsPrice] = useState([]);
   const [selectedDeliveryFee, setSelectedDeliveryFee] = useState();
+  const {cartNavigation, homeNavigation} = navigationPage()
 
   const data = {
     delivery_address: selectedAddress,
@@ -26,32 +29,20 @@ export const Checkout = () => {
 
   useEffect(() => {
     const fetchAddresses = async () => {
-    const token = localStorage.getItem('token');
       try {
-        const response = await axios.get("http://localhost:3000/api/delivery-address/",{
-          headers: {
-            Authorization: `Bearer ${token}`,
-          }
-        });
-        setAddresses(response.data); // Assuming the API response contains an 'addresses' array
-      } catch (error) {
-        console.error("Error fetching addresses:", error);
+        const res = await addressService.getAddress()
+        setAddresses(res.data);
+      } catch (err) {
+        console.error("Error fetching addresses:", err);
       }
     };
 
     const fetchCartData = async () => {
-      const token = localStorage.getItem('token');
       try {
-        const res = await axios.get("http://localhost:3000/api/carts", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        // Assuming cartResponse.data contains subtotal, shippingCost, and total
+        const res = await cartService.getCarts()
         setCartsPrice(res.data);
-        console.log(res.data);
-      } catch (error) {
-        console.error("Error fetching cart data:", error);
+      } catch (err) {
+        console.error("Error fetching cart data:", err);
       }
     };
     fetchCartData()
@@ -67,13 +58,40 @@ export const Checkout = () => {
     setSelectedDeliveryFee(parseInt(fee));
   };
 
-  let navigate = useNavigate()
-
-
-
-  const backToCart = () => {
-    navigate('/carts')
+  const handleBayar = async (event) => {
+    event.preventDefault(); 
+    if(!selectedAddress){
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select an address!"
+      });
+      return
+    }
+    if(!selectedDeliveryFee){
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select an shipping fee!"
+      });
+      return
+    }
+    try {
+      const res = await orderService.storeOrders(data)
+      const orderId = res.data._id; // Assuming the order ID is returned in the response
+      const invoiceUrl = `/invoice/${orderId}`;
+      window.open(invoiceUrl, '_blank')
+      homeNavigation()
+    } catch (e) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select address and shipping fee!"
+      });
+      console.error(e)
+    }
   }
+
   const calculateSubTotalPrice = () => {
     let totalPrice = 0;
     cartsPrice.forEach((item) => {
@@ -82,48 +100,29 @@ export const Checkout = () => {
     return totalPrice;
   };
 
-  const handleBayar = async (event) => {
-    event.preventDefault(); 
-    const token = localStorage.getItem('token');
-    try {
-      const res = await axios.post("http://localhost:3000/api/order", data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(res.data);
-      const orderId = res.data._id; // Assuming the order ID is returned in the response
-      const invoiceUrl = `/invoice/${orderId}`;
-      window.open(invoiceUrl, '_blank')
-      navigate('/')
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
   const calculateTotalPrice = () => {
       const subTotal = calculateSubTotalPrice();
       const shippingCost = data.delivery_fee;
       const totalPrice = subTotal + shippingCost;
-      return totalPrice
+      return isNaN(totalPrice) ? subTotal : totalPrice;
   }
 
   return (
     <>
       <Navbar/>
-      <div className="text-black px-[200px] mt-10">
-        <div className="text-[#fff] rounded-3xl border-[2px] border-[#FA4A0C] bg-[#FA4A0C] mt-10 px-5 pb-5">
-          <h1 className="  text-[20px] py-4 text-left font-semibold font-poppins">Checkout</h1>
+      <div className="md:mx-24 mt-3 mx-10 md:mt-10">
+        <div className="text-[#fff] rounded-2xl border-[2px] border-[#FA4A0C] bg-[#FA4A0C] md:mt-10 mt-2 md:px-10 px-2 md:pb-5">
+          <h1 className="md:text-[20px] md:py-4 py-2 p-2 text-[15px]  text-left font-semibold font-poppins">Checkout</h1>
           <div className="border-1 p-3 rounded-xl border-[#fff] bg-[#fff] text-black gap-1">
-            <div className="flex flex-col w-full pb-4 text-[20px] font-bold">
+            <div className="flex flex-col w-full pb-4 text-[15px] md:text-[20px] font-bold">
               <span>Order Confirmation</span>
             </div>
-            <div className="px-[100px] w-[100%]">
-              <form className="p-[20px] font-poppins ">
-                <div className="pb-3 px-[100px] flex gap-[200px] items-center">
+            <div className="md:px-[100px] px-4">
+              <form className="p-1 font-poppins flex flex-col ">
+                <div className="pb-3 md:mx-72 flex md:gap-[200px] gap-5 items-center md:text-[16px] text-[12px]">
                   <span className="font-semibold">Address</span>
                   <select
-                    className="cursor-pointer shadow-md w-[550px]  px-2 h-[35px] rounded-lg"
+                    className="cursor-pointer shadow-md md:w-[550px] w-3/4  px-2 h-[35px] rounded-lg"
                     value={selectedAddress}
                     onChange={(e) => handleAddressChange(e.target.value)}
                   >
@@ -136,14 +135,14 @@ export const Checkout = () => {
                   </select>
                 </div>
                 <div>
-                  <div className="pb-3 px-[100px] flex gap-[200px] items-center">
+                  <div className="pb-3 md:mx-72 flex md:gap-[200px] gap-5 items-center md:text-[16px] text-[12px]">
                     <span className="font-semibold">SubTotal</span>
                     <span className="">{formatPrice(calculateSubTotalPrice())}</span>
                   </div>
-                  <div className="pb-3 px-[100px] flex gap-[160px] items-center">
+                  <div className="pb-3 md:mx-72 md:px-[100px] px-0 flex md:gap-[200px] gap-3 items-center md:text-[16px] text-[12px]">
                     <span className="font-semibold">Shipping Fee</span>
                     <select
-                      className="cursor-pointer shadow-md p-2 h-[40px] rounded-lg"
+                      className="cursor-pointer shadow-md p-2 md:h-[40px] h-[35px] rounded-lg"
                       value={selectedDeliveryFee}
                       onChange={(e) => handleDeliveryFeeChange(e.target.value)}
                     >
@@ -155,14 +154,14 @@ export const Checkout = () => {
                       ))}
                     </select>
                   </div>
-                  <div className="pb-3 px-[100px] flex gap-[230px] items-center">
+                  <div className="pb-3 flex md:gap-[82px] md:mx-72 gap-16 items-center md:text-[16px] text-[12px]">
                     <span className="font-semibold">Total</span>
-                    <span className="">{formatPrice(calculateTotalPrice())}</span>
+                    <span >{formatPrice(calculateTotalPrice())}</span>
                   </div>
                 </div>
-                <div className="mt-4 flex justify-between px-[20px]">
-                  <button className="bg-[#FA4A0C] flex items-center justify-center gap-[10px] border-[2px] border-[#FA4A0C] font-semibold text-[#fff] h-[35px] rounded-xl w-[120px] hover:bg-[#FFF] hover:text-[#FA4A0C]" onClick={backToCart}><FaArrowLeft /> Back</button>
-                  <button className="bg-[#FA4A0C] items-center justify-center border-[2px] border-[#FA4A0C] font-semibold text-[#fff] h-[35px] rounded-xl w-[120px] hover:bg-[#FFF] hover:text-[#FA4A0C]" onClick={handleBayar}>Pay Now</button>
+                <div className="mt-4 flex justify-between md:px-[20px] px-4">
+                  <SecondaryButton onClick={()=> cartNavigation()}> Back</SecondaryButton>
+                  <PrimaryButton onClick={handleBayar}>Pay Now</PrimaryButton>
                 </div>
               </form>
             </div>

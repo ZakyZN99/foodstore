@@ -7,6 +7,10 @@ const navigationPage = () => {
         navigate('/me')
     }
 
+    const homeNavigation = () => {
+        navigate('/')
+    }
+
     const orderNavigation = () => {
         navigate('/orders')
     }
@@ -51,6 +55,7 @@ const navigationPage = () => {
 
     return {
         profileNavigation,
+        homeNavigation,
         orderNavigation,
         cartNavigation,
         loginNavigation,

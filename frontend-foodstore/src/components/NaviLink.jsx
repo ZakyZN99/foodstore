@@ -35,14 +35,14 @@ const NaviLink = ({search, cartItemsCount} ) => {
 
 
     return (
-        <div className={`md:flex items-center gap-4`}>
+        <div className={`md:flex items-center gap-4 `}>
             <input 
                 type="text" 
                 placeholder="Find in FoodStore" 
-                className="border-[1px] border-[#000] rounded-lg w-[250px] h-[35px] p-[10px] text-black"
+                className="border-[1px] border-[#000] rounded-lg w-[250px] h-[35px] p-[10px] text-black " 
                 onChange={handleSearch}
             />
-            <div className='pt-3 md:pt-0' >
+            <div className=' cursor-pointer' >
                 {cartItemsCount > 0 && (
                 <span className=" border-[#FFF] border-[2px] text-[#FFF] font-poppins font-medium rounded-2xl w-5 h-5 text-xs flex items-center justify-center">
                     {cartItemsCount ? cartItemsCount : totalCartItems}
