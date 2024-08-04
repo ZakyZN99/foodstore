@@ -82,11 +82,11 @@ const Navbar = ({onSearch, cartItemsCount}) => {
 
   return (
     <div className="bg-[#FA4A0C] sticky top-0 z-20 right-0 w-auto">
-      <div className="md:flex justify-between items-center bg-[#FA4A0C] md:px-24 py-2 px-10">
+      <div className="md:flex justify-between items-center bg-[#FA4A0C] md:px-18 py-3 px-10">
         <div className="md:flex items-center gap-4">
-            <div className="flex items-center pb-3">
+            <div className="flex items-center ">
               <Link to="/" className={location.pathname === "/" ? "text-[#FFF]" : ""}>
-                <h1 className=" font-poppins font-medium border-1 p-2 text-[28px] text-[#FFF]">C</h1>
+                <h1 className=" font-poppins flex items-center font-medium border-1 p-2 text-[28px] text-[#FFF]">C</h1>
               </Link> 
             </div>
             <div className={`md:flex gap-4 hidden  md:items-center  bg-[#FA4A0C] transition-all z-1 duration-500 ease-in ${isOpen ? 'top-20 ':'hidden'}`}>

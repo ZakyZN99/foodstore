@@ -38,36 +38,37 @@ export const Invoice = () => {
   }
 
   return (
-    <div className=" bg-[#FA4A0C] px-20 max-w-[1440px] mx-auto border-1 border-[#000] rounded-2xl p-4 mt-10" > 
-        <div className=" text-white flex flex-col w-full font-poppins pb-4 text-[28px] font-bold">
+    <div className="flex flex-col mx-2">
+      <div className=" bg-[#FA4A0C] flex flex-col items-center justify-center mx-auto border-1 border-[#000] rounded-2xl md:p-4 p-2 mt-10" > 
+        <div className=" text-white flex flex-col w-full font-poppins md:pb-4 pb-2 md:text-[28px] text-[18px] font-bold">
           <span>Invoice</span>
         </div>
         <div className="border-1 border-[#000] rounded-xl p-2 w-[100%] bg-white">
-          <table className="w-full border-collapse items-center font-poppins   text-center">
-          <tbody >
+          <table className="border-collapse items-center font-poppins   text-center">
+          <tbody>
             <tr className="border-b text-justify">
-                <td className="p-2 font-semibold">Status</td>
-                <td className="p-2">{orderData.payment_status}</td>
+                <td className="p-2 font-semibold md:text-[17px] text-[13px]">Status</td>
+                <td className="p-2 md:text-[13px] text-[11px]">{orderData.payment_status}</td>
             </tr>
             <tr className="border-b text-justify">
-                <td className="p-2  font-semibold">Order ID</td>
-                <td className="p-2">{orderData1.order_number}</td>
+                <td className="p-2 font-semibold md:text-[17px] text-[13px]">Order ID</td>
+                <td className="p-2 md:text-[13px] text-[11px]">{orderData1.order_number}</td>
             </tr>
             <tr className="border-b text-justify">
-                <td className="p-2 font-semibold">Total Amount</td>
-                <td className="p-2 ">{formatPrice(orderData.total)}</td>
+                <td className="p-2 font-semibold md:text-[17px] text-[13px]">Total Amount</td>
+                <td className="p-2 md:text-[13px] text-[11px]">{formatPrice(orderData.total)}</td>
             </tr>
             <tr className="border-b ">
-                <td className="p-2 font-semibold text-justify">Billed To</td>
-                <td className="p-2 ">
+                <td className="p-2 font-semibold text-justify md:text-[17px] text-[13px]">Billed To</td>
+                <td className="p-2 md:text-[13px] text-[11px]">
                     <div className=" text-justify">{userData.fullName}</div>
                     <div className=" text-justify">{userData.email}</div>
                     <div className=" text-justify">{deliveryAddress.detail} {deliveryAddress.kelurahan} {deliveryAddress.kecamatan}, {deliveryAddress.kabupaten}, {deliveryAddress.provinsi}</div>
                 </td>
             </tr>
             <tr className="">
-                <td className="p-2 text-justify font-semibold">Payment To</td>
-                <td className="p-2 ">
+                <td className="p-2 text-justify font-semibold md:text-[17px] text-[13px]">Payment To</td>
+                <td className="p-2 md:text-[13px] text-[11px]">
                     <div className=" text-justify">Zaky Zamani Noor</div>
                     <div className=" text-justify">Zakyzn1999@gmail.com</div>
                     <div className=" text-justify">BNI</div>
@@ -80,14 +81,7 @@ export const Invoice = () => {
               <button className="bg-green-500 w-[100px]" >Cetak</button>
             </div> */}
         </div>
+      </div>
     </div>
   );
 };
-
-const formatPrice = (price) => {
-  const parts = price.toString().split(".");
-  const formattedPrice =
-      parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
-      (parts[1] ? "," + parts[1] : "");
-  return `Rp. ${formattedPrice}`;
-};  

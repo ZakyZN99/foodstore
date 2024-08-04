@@ -4,6 +4,7 @@ import { SideBar } from "../../components/Sidebar";
 import orderService from "../../services/orderService";
 import authService from "../../services/authService";
 import DetailOrderItems from "./detailOrderItems";
+import { PrimaryButton } from "../../components/button/PrimaryButton";
 
 export const OrderData = () => {
     const [orderData, setOrderData] = useState([])
@@ -45,30 +46,30 @@ export const OrderData = () => {
     return (
     <div className="flex flex-row xs:flex-row">
         <SideBar/>
-        <div className="flex justify-center pt-10  md:pt-20 lg:pt-24 h-screen mx-auto">
+        <div className="flex justify-center pt-10  md:pt-20 lg:pt-24 mx-auto">
             <div className="w-full">
-                <h1 className="text-center pb-3 font-poppins font-bold text-3xl md:text-4xl lg:text-5xl">Order List</h1>
-                <table className="w-full border-1 border-[#000] border-collapse">
+                <h1 className="text-center pb-3 font-poppins font-bold text-2xl md:text-3xl lg:text-4xl">Order List</h1>
+                <table className="w-full border-1 border-[#000] md:ml-0 ml-24">
                     <thead >
-                        <tr className="border-1 border-[#000]">
-                            <th className="text-center pb-2 pt-2 px-4 "></th>
-                            <th className="text-center pb-2 pt-2 px-4">Order ID</th>
-                            <th className="text-center pb-2 pt-2 px-4">Ongkir</th>
-                            <th className="text-center pb-2 pt-2 px-4">Total</th>
-                            <th className="text-center pb-2 pt-2 px-4">Status</th>
-                            <th className="text-center pb-2 pt-2 px-4">Invoice</th>
+                        <tr className="border-1 border-[#000] md:text-[18px] text-[12px]">
+                            <th className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2"></th>
+                            <th className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2">Order ID</th>
+                            <th className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2">Ongkir</th>
+                            <th className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2">Total</th>
+                            <th className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2">Status</th>
+                            <th className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2">Invoice</th>
                         </tr>
                     </thead>
                     {orderData.map((order) =>(
                             <tbody key={order._id}>
-                                <tr className="border-b ">
-                                    <td  className="text-center pb-2 pt-2 px-4 "><DetailOrderItems order={order}/></td>
-                                    <td  className="text-center pb-2 pt-2 px-4">{order.order_number}</td>
-                                    <td  className="text-center pb-2 pt-2 px-4">{formatPrice(order.delivery_fee)}</td>
-                                    <td  className="text-center pb-2 pt-2 px-4">{formatPrice(calculateTotal(order))}</td>
-                                    <td  className="text-center pb-2 pt-2 px-4">{order.status}</td>
-                                    <td  className="text-center pb-2 pt-2 px-4">
-                                        <button className=" bg-[#FA4A0C] text-[#fff] font-medium border-1 pl-5 pr-5 pt-1 pb-1 rounded-lg border-[#FA4A0C] hover:bg-white hover:text-[#FA4A0C] " onClick={() => invoiceNavigation(order._id)}>Invoice</button>
+                                <tr className="border-b md:text-[15px] text-[10px] ">
+                                    <td  className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2 "><DetailOrderItems order={order}/></td>
+                                    <td  className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2">{order.order_number}</td>
+                                    <td  className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2">{formatPrice(order.delivery_fee)}</td>
+                                    <td  className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2">{formatPrice(calculateTotal(order))}</td>
+                                    <td  className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2">{order.status}</td>
+                                    <td  className="text-center md:pb-2 md:pt-2 md:px-4 pb-1 pt-1 px-2">
+                                        <PrimaryButton onClick={() => invoiceNavigation(order._id)}>Invoice</PrimaryButton>
                                     </td>
                                 </tr>
                             </tbody>

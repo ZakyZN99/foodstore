@@ -39,7 +39,7 @@ const NaviLink = ({search, cartItemsCount} ) => {
             <input 
                 type="text" 
                 placeholder="Find in FoodStore" 
-                className="border-[1px] border-[#000] rounded-lg w-[250px] h-[35px] p-[10px] text-black " 
+                className="border-[1px] border-[#000] rounded-lg min-w-44 md:w-[250px] h-[35px] p-[10px] text-black " 
                 onChange={handleSearch}
             />
             <div className=' cursor-pointer' >

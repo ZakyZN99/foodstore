@@ -1,6 +1,9 @@
 import React, { useState, useEffect  } from 'react'
 import { Dropdown, DropdownMenu, DropdownToggle } from 'react-bootstrap';
 import addressService from '../../services/addressService';
+import Swal from 'sweetalert2';
+import { SecondaryButton } from '../../components/button/SecondaryButton';
+import { PrimaryButton } from '../../components/button/PrimaryButton';
 
 const EditAddress = ({ address, onClose, onSave }) => {
     const [editedAddress, setEditedAddress] = useState({ ...address })
@@ -80,7 +83,37 @@ const EditAddress = ({ address, onClose, onSave }) => {
         setEditedAddress((prev) => ({...prev, [name]: value}))
     }
 
+    const validate = () => {
+        const errors = {};
+        if (!editedAddress.nama) errors.nama = "Name is required";
+        if (!editedAddress.detail) errors.detail = "Detail is required";
+        if (!editedAddress.provinsi) errors.provinsi = "Provinces is required";
+        if (!editedAddress.kabupaten) errors.kabupaten = "Regencies is required";
+        if (!editedAddress.kecamatan) errors.kecamatan = "District is required";
+        if (!editedAddress.kelurahan) errors.kelurahan = "Villages is required";
+        return errors;
+    }
+    const showValidationErrors = (errors) => {
+        let errorMsg = "";
+        for (const key in errors){
+            if(errors.hasOwnProperty(key)){
+                errorMsg += `<p>${errors[key]}</p>`;
+            }
+        }
+    Swal.fire({
+        icon: 'error',
+        title: 'Validation Errors',
+        html: errorMsg,
+        confirmButtonText: 'OK'
+    })
+    }
     const handleSave = (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+        showValidationErrors(validationErrors);
+        return;
+    }
         onSave(editedAddress._id, editedAddress)
         onClose();
     }
@@ -88,40 +121,40 @@ const EditAddress = ({ address, onClose, onSave }) => {
 
     return (
     <div className="absolute inset-0 flex justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-6 rounded-md shadow-md w-full max-w-lg my-14">
-            <h2 className="text-2xl mb-4">Edit Address</h2>
+        <div className="bg-white p-6 rounded-md shadow-md md:w-full max-w-lg my-5">
+            <h2 className="md:text-2xl text-xl mb-4">Edit Address</h2>
             <form>
             <div className='flex gap-4 flex-col'>
                 <div className='flex flex-col'>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Name</label>
+                        <label className="block md:text-sm text-[12px] font-medium text-gray-700">Name</label>
                         <input
                             type="text"
                             name="nama"
                             value={editedAddress.nama}
                             onChange={handleChange}
-                            className="mt-1 block w-full border-b border-gray-500 shadow-sm p-2"
+                            className="mt-1 block w-full  md:text-sm text-[12px] border-b border-gray-500 shadow-sm p-2"
                         />
                     </div>
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">Detail Address</label>
+                    <div >
+                        <label className="block  md:text-sm text-[12px] font-medium text-gray-700">Detail Address</label>
                         <textarea
                             type="text"
                             name="detail"
                             value={editedAddress.detail}
                             onChange={handleChange}
-                            className="mt-1 px-2 pt-2 pb-[100px] block w-100 border-1 border-gray-500 rounded-md shadow-sm"
+                            className="mt-1  md:text-sm text-[12px] px-2 pt-2 pb-[100px] block w-100 border-1 border-gray-500 rounded-md shadow-sm"
                         />
                     </div>
                 </div>
                 <div className='flex flex-col '>
                     <div className='mb-3'>
-                        <label className="block text-sm font-medium text-gray-700">Provinces</label>
+                        <label className="block md:text-sm text-[12px] font-medium text-gray-700">Provinces</label>
                         <Dropdown show={dropdownOpen.province} onToggle={() => toggleDropdown('province')}>
-                            <DropdownToggle className="w-full flex justify-between items-center font-normal ">
+                        <DropdownToggle className=" bg-[#FA4A0C] hover:bg-[#FFF] border-2 hover:text-[#FA4A0C] border-[#FA4A0C] hover:border-[#FA4A0C] rounded-md w-full flex justify-between md:text-sm text-[12px] items-center font-normal">
                                 {editedAddress.provinsi ? editedAddress.provinsi : "Select"}
                             </DropdownToggle>
-                            <DropdownMenu className='text-[15px]'>
+                            <DropdownMenu className='md:text-sm text-[12px] bg-[#FA4A0C] hover:text-[#FA4A0C] hover:bg-[#fff]'>
                                 {provAddress.map((province) => (
                                     <button
                                         key={province.id}
@@ -133,7 +166,7 @@ const EditAddress = ({ address, onClose, onSave }) => {
                                                 provinsiId: province.id}))
                                             toggleDropdown('province')
                                         }}
-                                        className="dropdown-item"
+                                        className="dropdown-item bg-[#FA4A0C] text-[#fff] hover:text-[#FA4A0C] hover:bg-[#fff]"
                                     >
                                         {province.name}
                                     </button>
@@ -142,12 +175,12 @@ const EditAddress = ({ address, onClose, onSave }) => {
                         </Dropdown>
                     </div>
                     <div className='mb-3'>
-                        <label className="block text-sm font-medium text-gray-700">Regencies</label>
-                        <Dropdown show={dropdownOpen.regency} onToggle={() => toggleDropdown('regency')}>
-                            <DropdownToggle className="w-full flex justify-between items-center font-normal ">
+                        <label className="block md:text-sm text-[12px] font-medium text-gray-700">Regencies</label>
+                        <Dropdown className="bg-[#FA4A0C]  rounded-md hover:text-[#FA4A0C] hover:bg-[#fff]" show={dropdownOpen.province} onToggle={() => toggleDropdown('province')}>
+                            <DropdownToggle className=" bg-[#FA4A0C] hover:bg-[#FFF] border-2 hover:text-[#FA4A0C] border-[#FA4A0C] hover:border-[#FA4A0C] rounded-md w-full flex justify-between md:text-sm text-[12px] items-center font-normal">
                                 {editedAddress.kabupaten ? editedAddress.kabupaten : "Select"}
                             </DropdownToggle>
-                            <DropdownMenu className='text-[15px]'>
+                            <DropdownMenu className='md:text-sm text-[12px] bg-[#FA4A0C] hover:text-[#FA4A0C] hover:bg-[#fff]'>
                                 {regAddress.map((regency) => (
                                     <button
                                         key={regency.id}
@@ -159,7 +192,7 @@ const EditAddress = ({ address, onClose, onSave }) => {
                                                 kabupatenId: regency.id}))
                                             toggleDropdown('regency')
                                         }}
-                                        className="dropdown-item"
+                                        className="dropdown-item bg-[#FA4A0C] text-[#fff] hover:text-[#FA4A0C] hover:bg-[#fff]"
                                     >
                                         {regency.name}
                                     </button>
@@ -168,12 +201,12 @@ const EditAddress = ({ address, onClose, onSave }) => {
                         </Dropdown>
                     </div>
                     <div className='mb-3'>
-                        <label className="block text-sm font-medium text-gray-700">District</label>
-                        <Dropdown show={dropdownOpen.district} onToggle={() => toggleDropdown('district')}>
-                            <DropdownToggle className="w-full flex justify-between items-center font-normal ">
+                        <label className="blockmd:text-sm text-[12px] font-medium text-gray-700">District</label>
+                        <Dropdown className="bg-[#FA4A0C]  rounded-md hover:text-[#FA4A0C] hover:bg-[#fff]" show={dropdownOpen.district} onToggle={() => toggleDropdown('district')}>
+                            <DropdownToggle className=" bg-[#FA4A0C] hover:bg-[#FFF] border-2 hover:text-[#FA4A0C] border-[#FA4A0C] hover:border-[#FA4A0C] rounded-md w-full flex justify-between md:text-sm text-[12px] items-center font-normal">
                                 {editedAddress.kecamatan ? editedAddress.kecamatan : "Select"}
                             </DropdownToggle>
-                            <DropdownMenu className='text-[15px]'>
+                            <DropdownMenu className='md:text-sm text-[12px] bg-[#FA4A0C] hover:text-[#FA4A0C] hover:bg-[#fff]'>
                                 {districtAddress.map((district) => (
                                     <button
                                         key={district.id}
@@ -186,7 +219,7 @@ const EditAddress = ({ address, onClose, onSave }) => {
                                             }))
                                             toggleDropdown('district')
                                         }}
-                                        className="dropdown-item"
+                                        className="dropdown-item bg-[#FA4A0C] text-[#fff] hover:text-[#FA4A0C] hover:bg-[#fff]"
                                     >
                                         {district.name}
                                     </button>
@@ -195,12 +228,12 @@ const EditAddress = ({ address, onClose, onSave }) => {
                         </Dropdown>
                     </div>
                     <div className='mb-3'>
-                        <label className="block text-sm font-medium text-gray-700">Villages</label>
+                        <label className="block md:text-sm text-[12px] font-medium text-gray-700">Villages</label>
                         <Dropdown show={dropdownOpen.village} onToggle={() => toggleDropdown('village')}>
-                            <DropdownToggle className="w-full flex justify-between items-center font-normal ">
+                            <DropdownToggle className=" bg-[#FA4A0C] hover:bg-[#FFF] border-2 hover:text-[#FA4A0C] border-[#FA4A0C] hover:border-[#FA4A0C] rounded-md w-full md:text-sm text-[12px] flex justify-between items-center font-normal">
                                 {editedAddress.kelurahan ? editedAddress.kelurahan : "Select"}
                             </DropdownToggle>
-                            <DropdownMenu className='text-[15px]'>
+                            <DropdownMenu className='md:text-sm text-[12px] bg-[#FA4A0C] hover:text-[#FA4A0C] hover:bg-[#fff]'>
                                 {villageAddress.map((village) => (
                                     <button
                                         key={village.id}
@@ -213,7 +246,7 @@ const EditAddress = ({ address, onClose, onSave }) => {
                                             }))
                                             toggleDropdown('village')
                                         }}
-                                        className="dropdown-item"
+                                        className="dropdown-item bg-[#FA4A0C] text-[#fff] hover:text-[#FA4A0C] hover:bg-[#fff]"
                                     >
                                         {village.name}
                                     </button>
@@ -223,21 +256,9 @@ const EditAddress = ({ address, onClose, onSave }) => {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center mt-3">
-                <button
-                type="button"
-                onClick={onClose}
-                className="mr-2 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
-                >
-                Cancel
-                </button>
-                <button
-                type="button"
-                onClick={handleSave}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                Save
-                </button>
+            <div className="flex justify-center mt-3 gap-3">
+                <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
+                <PrimaryButton onClick={handleSave}>Save</PrimaryButton>
             </div>
             </form>
         </div>

@@ -33,7 +33,7 @@ export const SideBar = () => {
           {/* <FaChevronLeft className={`absolute cursor-pointer rounded-full -right-4 top-9 w-7 p-1 h-7 border-1 border-[#000] bg-white ${!open && 'rotate-180'}`} onClick={() => setOpen(!open)} /> */}
             <div className='flex gap-x-4 items-center'>
                 <Link to="/" className={location.pathname === "/" ? "text-[#FFF]" : ""}>
-                    <h1 className=" font-poppins font-medium border-2 p-2  text-[28px] text-[#FFF]">C</h1>
+                    <h1 className=" font-poppins font-medium border-2 md:p-2 p-1  text-[28px] text-[#FFF]">C</h1>
                 </Link>
                 <h1 className={`font-poppins font-medium  text-[25px] text-[#000] sidebar-text duration-200 hidden`}>CravePizza</h1>
             </div>
